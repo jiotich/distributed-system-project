@@ -1,0 +1,24 @@
+<RCC>
+  <qresource prefix="images">
+    <file>images/add.png</file>
+    <file>images/angle-left.png</file>
+    <file>images/angle-right.png</file>
+    <file>images/arrow-down.png</file>
+    <file>images/cross.png</file>
+    <file>images/edit.png</file>
+    <file>images/filled-heart.png</file>
+    <file>images/heart.png</file>
+    <file>images/home.png</file>
+    <file>images/imago.png</file>
+    <file>images/login-background.jpg</file>
+    <file>images/maximize.png</file>
+    <file>images/menu-burger.png</file>
+    <file>images/minimize.png</file>
+    <file>images/picture.png</file>
+    <file>images/refresh.png</file>
+    <file>images/search.png</file>
+    <file>images/settings.png</file>
+    <file>images/user-add.png</file>
+    <file>images/user.png</file>
+  </qresource>
+</RCC>
