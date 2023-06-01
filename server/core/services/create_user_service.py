@@ -1,5 +1,6 @@
 import uuid
-from passlib.hash import sha256_crypt
+
+from passlib.hash  import sha256_crypt
 
 from core.database import DatabaseInterface
 from core.entities import User
