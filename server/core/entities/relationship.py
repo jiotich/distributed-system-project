@@ -1,4 +1,4 @@
-class new_relationship:
+class Relationship:
     def __init__(self):
         self._source_user      = None
         self._destination_user = None

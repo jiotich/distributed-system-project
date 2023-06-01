@@ -1,4 +1,4 @@
-class new_post():
+class Post():
     def __init__(self):
         self._owner       = None
         self._description = None

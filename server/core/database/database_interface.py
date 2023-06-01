@@ -9,22 +9,19 @@ class DatabaseInterface:
         pass
     
     def create_user(self, user: User):
-        try: 
-            id, username, password = user.get_user_info()
-            connection = DatabaseConnection("./core/database/database.db")
+        id, username, password = user.get_user_info()
+        connection = DatabaseConnection("./core/database/database.db")
             
-            cursor = connection.start_connection()
-            cursor.execute(queries.ADD_USER, [str(id), str(username), str(password)])
+        cursor = connection.start_connection()
+        cursor.execute(queries.ADD_USER, [str(id), str(username), str(password)])
             
-            connection.commit_operation()
-            connection.finish_connection()
+        connection.commit_operation()
+        connection.finish_connection()
         
-        except SQL.IntegrityError:
-            return 400 # Bad Request
-        else:
-            return 201 # Created
+        return True
+
     
-    def user_exists(self, username, password):
+    def user_exists(self, username):
         try: 
             connection = DatabaseConnection("./core/database/database.db")
 

@@ -17,6 +17,11 @@ class CreateUserService:
         new_user.create_user(id, username, password_hash)
         
         interface = DatabaseInterface()
-        response_code = interface.create_user(new_user)
         
-        return response_code
+        user_already_exists = interface.user_exists(username)
+        
+        if (user_already_exists):
+            return False
+        else:
+            interface.create_user(new_user)
+            return True
