@@ -1,1 +1,2 @@
 pip install passlib==1.7.4 
+pip install pyjwt==2.7.0
