@@ -1,8 +1,8 @@
 import uuid
 from passlib.hash import sha256_crypt
 
-from database import DatabaseInterface
-from entities import User
+from core.database import DatabaseInterface
+from core.entities import User
 
 class CreateUserService:
     def __init__(self):
@@ -16,6 +16,6 @@ class CreateUserService:
         new_user.create_user(id, username, password_hash)
         
         interface = DatabaseInterface()
-        code = interface.create_user(new_user)
+        response_code = interface.create_user(new_user)
         
-        return code
+        return response_code

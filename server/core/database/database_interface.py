@@ -1,8 +1,8 @@
 import sqlite3 as SQL
 
-from database import DatabaseConnection
-from database import queries
-from entities import User
+from core.database import DatabaseConnection
+from core.database import queries
+from core.entities import User
 
 class DatabaseInterface:
     def __init__(self):
@@ -10,7 +10,7 @@ class DatabaseInterface:
     def create_user(self, user: User):
         try: 
             id, username, password = user.get_user_info()
-            connection = DatabaseConnection("./database/database.db")
+            connection = DatabaseConnection("./core/database/database.db")
             
             cursor = connection.start_connection()
             cursor.execute(queries.ADD_USER, [str(id), str(username), str(password)])

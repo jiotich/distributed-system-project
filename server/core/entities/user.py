@@ -1,6 +1,3 @@
-import uuid
-from passlib.hash import sha256_crypt
-
 class User:
     def __init__(self):
         self._id        = None
