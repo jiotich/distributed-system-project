@@ -16,4 +16,6 @@ class CreateUserService:
         new_user.create_user(id, username, password_hash)
         
         interface = DatabaseInterface()
-        interface.create_user(new_user)
+        code = interface.create_user(new_user)
+        
+        return code
