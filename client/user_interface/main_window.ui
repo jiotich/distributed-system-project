@@ -322,7 +322,7 @@ border-bottom-color: rgb(0, 173, 103);</string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <widget class="QPushButton" name="pushButton_3">
+            <widget class="QPushButton" name="publish_page_button">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -361,8 +361,11 @@ border-bottom-color: rgb(0, 173, 103);</string>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QStackedWidget" name="stackedWidget">
-            <widget class="QWidget" name="page"/>
-            <widget class="QWidget" name="page_2"/>
+            <widget class="QWidget" name="feed_page"/>
+            <widget class="QWidget" name="profile_page"/>
+            <widget class="QWidget" name="publish_page"/>
+            <widget class="QWidget" name="search_page"/>
+            <widget class="QWidget" name="post_page"/>
            </widget>
           </item>
          </layout>
