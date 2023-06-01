@@ -1,9 +1,9 @@
-from core.services import CreateUserService
+from core.services import AuthUserService
 
-class CreateUserController:
+class AuthUserController:
     def handle(self, username, password):
-        createUserService = CreateUserService()
-        response = createUserService.execute(username, password)
+        authUserService = AuthUserService()
+        response = authUserService.execute(username, password)
         
         if (response):
             #gerar o JSON com a resposta positiva

@@ -9,4 +9,4 @@ class Post():
         self._owner       = owner_id
         self._description = description
         self._image       = image
-        self._upvotes     = 0
+        self._upvotes     = upvotes
