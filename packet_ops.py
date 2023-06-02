@@ -1,7 +1,12 @@
-def get_bytearray_from_file(path):
+import json
+import base64
+
+def get_bytearray_from_file(path, encode=False):
 	with open(path, "rb") as im:
 		byte_file = im.read()
 		file_ba = bytearray(byte_file)
+	if encode:
+		return base64.b64encode(file_ba)
 	return file_ba
 
 def slice_bytearray(ba, max_size=1024):
@@ -16,6 +21,10 @@ def join_sliced_bytearrays(sba):
 	for packet in sba:
 		joined += packet
 	return joined
+
+def bytearray_to_json(ba):
+	res = json.loads(ba)
+	return res
 
 def get_file_from_bytearray(ba):
 	with open("newImage.png", "wb") as im:

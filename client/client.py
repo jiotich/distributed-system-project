@@ -1,6 +1,7 @@
 import socket
 import packet_ops as pops
 import json
+import base64
 
 class Client:
 	def __init__(self):
@@ -16,9 +17,11 @@ class Client:
 		self.connect()
 		# lembrar que sendall() precisa do parametro encoding="utf-8"
 		# caso se esteja trabalhando com texto ao inves de bytes 
+		print("> Sending: ", message[0:100])
 		self.socket.sendall(message)
+		print("> Sent")
 		data = self.socket.recv(1024)
-
+		print(11,data)
 		return data
 	
 	def send_image(self, image_path):
@@ -28,23 +31,25 @@ class Client:
 		if response["response"] == -1:
 			print("> Server refused to recieve image.")
 			return
-		print(1)
 		message = {
 			"operation": response["response"],
-			"image_bytes": pops.get_bytearray_from_file(image_path)
+			"image_bytes": pops.get_bytearray_from_file(image_path,encode=True).decode()
 		}
-		
+		print(message["image_bytes"])
 		message = bytearray(f"{message}",encoding='utf-8')
-		print(2)
-		self.send_to_server(b"%s" % message)
-		print(2)
+		packets = pops.slice_bytearray(message)
+		print("> Enviando bytearray")
+		for packet in packets:
+			packet = packet.decode('utf-8').replace("\'","\"").encode("utf-8")
+			self.send_to_server(b"%s" % packet)
+		print("> Bytearray enviado")
 		self.send_to_server(b"CONN_END")
 
 if __name__ == "__main__":
 	try:
 		x = Client()
 		x.send_image("image.png")
-		#x.send_to_server(b"CONN_END")
+		x.send_to_server(b"CONN_END")
 	except KeyboardInterrupt:
 		x.socket.close()
 
