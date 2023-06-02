@@ -155,11 +155,30 @@ class Ui_main_window(object):
         self.main_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.main_frame.setObjectName("main_frame")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.main_frame)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.stackedWidget = QtWidgets.QStackedWidget(self.main_frame)
         self.stackedWidget.setObjectName("stackedWidget")
         self.feed_page = QtWidgets.QWidget()
         self.feed_page.setObjectName("feed_page")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.feed_page)
+        self.verticalLayout_3.setContentsMargins(6, 6, 6, 6)
+        self.verticalLayout_3.setSpacing(6)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.scrollArea = QtWidgets.QScrollArea(self.feed_page)
+        self.scrollArea.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 674, 501))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout.setContentsMargins(6, 6, 20, -1)
+        self.gridLayout.setObjectName("gridLayout")
+        
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.verticalLayout_3.addWidget(self.scrollArea)
         self.stackedWidget.addWidget(self.feed_page)
         self.profile_page = QtWidgets.QWidget()
         self.profile_page.setObjectName("profile_page")
@@ -187,12 +206,14 @@ class Ui_main_window(object):
         main_window.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(main_window)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
     def retranslateUi(self, main_window):
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("main_window", "MainWindow"))
+        
         self.search_text.setPlaceholderText(_translate("main_window", "Search"))
+        
 import images_rc
 
 
