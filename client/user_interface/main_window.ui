@@ -69,6 +69,21 @@
           <enum>QFrame::Plain</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLineEdit" name="search_text">
             <property name="styleSheet">
@@ -91,6 +106,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
             <property name="icon">
              <iconset resource="images.qrc">
               <normaloff>:/images/images/search.png</normaloff>:/images/images/search.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -131,6 +149,21 @@ border-bottom-color: rgb(0, 173, 103);</string>
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QPushButton" name="minimize_button">
             <property name="text">
@@ -139,6 +172,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
             <property name="icon">
              <iconset resource="images.qrc">
               <normaloff>:/images/images/minimize.png</normaloff>:/images/images/minimize.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -151,6 +187,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
              <iconset resource="images.qrc">
               <normaloff>:/images/images/maximize.png</normaloff>:/images/images/maximize.png</iconset>
             </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -161,6 +200,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
             <property name="icon">
              <iconset resource="images.qrc">
               <normaloff>:/images/images/cross.png</normaloff>:/images/images/cross.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -272,6 +314,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
                <height>32</height>
               </size>
              </property>
+             <property name="flat">
+              <bool>true</bool>
+             </property>
             </widget>
             <widget class="QPushButton" name="profile_button">
              <property name="geometry">
@@ -294,6 +339,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
              </property>
             </widget>
            </widget>
@@ -343,6 +391,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
              </property>
             </widget>
            </widget>
@@ -499,7 +550,8 @@ border-bottom-color: rgb(0, 173, 103);</string>
                            <item>
                             <widget class="QPushButton" name="pushButton">
                              <property name="styleSheet">
-                              <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+                              <string notr="true">background-color: rgb(21, 21, 21);
+color: rgb(255, 255, 255);</string>
                              </property>
                              <property name="text">
                               <string>Username</string>
@@ -507,6 +559,9 @@ border-bottom-color: rgb(0, 173, 103);</string>
                              <property name="icon">
                               <iconset resource="images.qrc">
                                <normaloff>:/images/images/user.png</normaloff>:/images/images/user.png</iconset>
+                             </property>
+                             <property name="flat">
+                              <bool>true</bool>
                              </property>
                             </widget>
                            </item>
@@ -558,12 +613,15 @@ border-bottom-color: rgb(0, 173, 103);</string>
                           <layout class="QVBoxLayout" name="verticalLayout_5">
                            <item>
                             <widget class="QTextBrowser" name="textBrowser">
+                             <property name="styleSheet">
+                              <string notr="true">color: rgb(255, 255, 255);</string>
+                             </property>
                              <property name="html">
                               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Description&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Noto Sans';&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                              </property>
                             </widget>
                            </item>

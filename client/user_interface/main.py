@@ -71,8 +71,9 @@ class Window(QMainWindow):
         self.main_window.setWindowTitle("Imago")
         #Minimize window button
         self.ui.minimize_button.clicked.connect(lambda: self.main_window.showMinimized())
+        self.is_maximized = False
         #Maximize window button
-        self.ui.maximize_button.clicked.connect(lambda: self.main_window.showMaximized())
+        self.ui.maximize_button.clicked.connect(self.maximize)
         #Close window button
         self.ui.close_button.clicked.connect(lambda: self.main_window.close())
         #Search button
@@ -86,6 +87,14 @@ class Window(QMainWindow):
         self.post_number = 0
         self.feed_posts = []
         self.main_window.show()
+
+    def maximize(self):
+        if (self.is_maximized):
+            self.main_window.showNormal()
+            self.is_maximized = False
+        else:
+            self.main_window.showMaximized()
+            self.is_maximized = True
 
     def search(self):
         search = self.ui.search_text.text()
@@ -105,7 +114,6 @@ class Window(QMainWindow):
         mh.publish_click()
 
     def create_feed_post(self):
-        feed_post = []
         self.post_frame = QtWidgets.QFrame(self.ui.scrollAreaWidgetContents)
         self.post_frame.setMaximumSize(QtCore.QSize(16777215, 700))
         self.post_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -136,10 +144,11 @@ class Window(QMainWindow):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.post_user_frame)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.pushButton = QtWidgets.QPushButton(self.post_user_frame)
-        self.pushButton.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.pushButton.setStyleSheet("background-color: rgb(21, 21, 21);\ncolor: rgb(255, 255, 255);")
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap(":/images/images/user.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton.setIcon(icon5)
+        self.pushButton.setFlat(True)
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout_6.addWidget(self.pushButton)
         self.verticalLayout_4.addWidget(self.post_user_frame)
@@ -160,6 +169,7 @@ class Window(QMainWindow):
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.post_description_frame)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.textBrowser = QtWidgets.QTextBrowser(self.post_description_frame)
+        self.textBrowser.setStyleSheet("color: rgb(255, 255, 255);")
         self.textBrowser.setObjectName("textBrowser")
         self.verticalLayout_5.addWidget(self.textBrowser)
         self.verticalLayout_4.addWidget(self.post_description_frame)
@@ -189,10 +199,6 @@ class Window(QMainWindow):
         for frame in self.feed_posts:
             frame.deleteLater()
             self.feed_posts = self.feed_posts[:-1]
-
-class Feed_Posts():
-    def __init__(self, ):
-        pass          
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
