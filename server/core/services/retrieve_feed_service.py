@@ -2,6 +2,8 @@ from core.repositories import PostRepository
 from core.repositories import UserRepository
 from core.repositories import RelationshipRepository
 
+#TODO: fazer os posts virem em ordem de data
+
 class RetrieveFeedService:
     def execute(self, username):
         
@@ -20,7 +22,10 @@ class RetrieveFeedService:
             for index in range(len(followed_users)):
                 response.append(post_repository.find(followed_users[0][index]))
             
-            return response[0]
+            if (response):
+                return response[0]
+            else:
+                return False
         else:
             return False
         

@@ -114,21 +114,17 @@ class RelationshipRepository:
                 queries.CREATE_RELATIONSHIP, 
                 [
                     str(relationship.id), 
-                    str(relationship.source_user),    
-                    str(relationship.destination_user),
-                    str(relationship.type)
+                    str(relationship.followed),    
+                    str(relationship.follower)
                 ]
             )
             
             connection.commit_operation()
-            
-            retrived_data = cursor.fetchone()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
         else:
-            return retrived_data
+            return True
         
     def find(self, user_id):
         try:
@@ -136,13 +132,10 @@ class RelationshipRepository:
         
             cursor = connection.start_connection()
             
-            # retorna os ids dos usuarios que o usuário que foi fornecido o id segue
-            
             cursor.execute(
                 queries.FETCH_RELATIONSHIPS, 
                 [
-                    str(user_id),
-                    str("follow")
+                    str(user_id)
                 ]
             )
             
@@ -155,3 +148,24 @@ class RelationshipRepository:
             return False
         else:
             return retrived_data
+    
+    def delete(self, followed_id, follower_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            cursor.execute(
+                queries.REMOVE_FOLLOWER, 
+                [
+                    str(followed_id),
+                    str(follower_id)
+                ]
+            )
+            
+            connection.commit_operation()
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return True

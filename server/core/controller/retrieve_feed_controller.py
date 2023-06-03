@@ -5,7 +5,6 @@ class RetrieveFeedController:
         retrieve_feed_service = RetrieveFeedService()
         response = retrieve_feed_service.execute(username)
         
-        
         if (response):
             #gerar o JSON com a resposta positiva
             pass

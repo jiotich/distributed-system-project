@@ -1,9 +1,9 @@
-from core.services import FollowUserService
+from core.services import RemoveFollowerService
 
-class FollowUserController:
+class RemoveFollowerController:
     def handle(self, followed_username, follower_username):
-        follow_user_service = FollowUserService()
-        response = follow_user_service.execute(followed_username, follower_username)
+        remove_follower_service = RemoveFollowerService()
+        response = remove_follower_service.execute(followed_username, follower_username)
         
         if (response):
             #gerar o JSON com a resposta positiva
