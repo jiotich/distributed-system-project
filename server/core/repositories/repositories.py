@@ -66,7 +66,7 @@ class UserRepository:
             connection = DatabaseConnection()
         
             cursor = connection.start_connection()
-            cursor.execute(queries.ADD_USER, [str(user.id), str(user.username), str(user.password)])
+            cursor.execute(queries.CREATE_USER, [str(user.id), str(user.username), str(user.password)])
             connection.commit_operation()
             
             retrived_data = cursor.fetchone()
