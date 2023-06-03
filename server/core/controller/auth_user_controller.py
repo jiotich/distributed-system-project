@@ -1,3 +1,5 @@
+import json
+
 from core.services import AuthUserService
 
 class AuthUserController:
@@ -6,8 +8,9 @@ class AuthUserController:
         response = authUserService.execute(username, password)
         
         if (response):
+            json.dumps({"status_code": 200, "token": response})
+            
             #gerar o JSON com a resposta positiva
-            pass
         else:
             #gerar o JSON com a resposta negativa
-            pass
+            json.dumps({"status_code": 400, "token": 0000})
