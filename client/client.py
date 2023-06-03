@@ -89,8 +89,8 @@ if __name__ == "__main__":
 	try:
 		print("> Starting client operations")
 		#x.send_image("image.png")
-		x.login("marcelinho","mengao123")
-		#x.register_user("thaix","minax")
-		x.send_image("image.png")
+		#x.login("marcelinho","mengao123")
+		x.register_user("thaix","minax")
+		#x.send_image("image.png")
 	except KeyboardInterrupt:
 		x.socket.close()

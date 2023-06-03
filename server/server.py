@@ -1,3 +1,11 @@
+import sys
+sys.dont_write_bytecode = True
+from core.controller import CreateUserController
+from core.controller import CreatePostController
+from core.controller import FollowUserController
+from core.controller import RetrieveFeedController
+from core.controller import RemoveFollowerController
+from core.controller import RemoveFollowedController
 import socket
 import packet_ops as pops
 import json
@@ -98,18 +106,17 @@ class Server:
 
 		loaded_json = pops.bytearray_to_json(data)
 		
-		# Arquivo de texto usado para propositos de teste
-		# TODO: utilizar o db SQL de fato
-		# TODO: armazenar hashes das senhas ao inves das senhas em si
-		all_users = {}
-		with open("users.json", "r") as db:
+		dba = CreateUserController()
+
+		dba.handle(loaded_json["username"],loaded_json["password"])
+		"""with open("users.json", "r") as db:
 			all_users = json.loads(db.read())
 		
 		if loaded_json["username"] not in all_users:
 			all_users[loaded_json["username"]] = loaded_json["password"]
 		
 		with open("users.json", "w") as file:
-			json.dump(all_users,file)
+			json.dump(all_users,file)"""
 
 	def auth_user(self):
 		# TODO: Verificacao de credenciais no banco de dados
