@@ -1,6 +1,8 @@
 import sqlite3 as SQL
 
 from core.entities import Post
+from core.entities import User
+
 from core.database import DatabaseConnection
 from core.database import queries
 
@@ -43,7 +45,28 @@ class UserRepository:
             connection = DatabaseConnection()
         
             cursor = connection.start_connection()
-            cursor.execute(queries.VERIFY_USER_EXISTS, [str(username)])
+            cursor.execute(
+                queries.VERIFY_USER_EXISTS, 
+                [
+                    str(username)
+                ]
+            )
+            connection.commit_operation()
+            
+            retrived_data = cursor.fetchone()
+
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
+    
+    def create(self, user: User):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            cursor.execute(queries.ADD_USER, [str(user.id), str(user.username), str(user.password)])
             connection.commit_operation()
             
             retrived_data = cursor.fetchone()

@@ -2,16 +2,18 @@ import jwt
 
 from passlib.hash import sha256_crypt
 
-from core.database import DatabaseInterface
+from core.repositories import UserRepository
 
 class AuthUserService:
     def __init__(self):
         self._jwt_secret    = "segredo"
         self._jwt_algorithm = "HS256"
 
-    def execute(self, username, password):        
-        interface = DatabaseInterface()
-        user_exists = interface.user_exists(username, password)
+    def execute(self, username, password):  
+        
+        user_repository = UserRepository()
+              
+        user_exists = user_repository.find_one(username)
 
         if (user_exists):
             id            = user_exists[0]

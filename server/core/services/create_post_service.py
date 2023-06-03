@@ -1,7 +1,6 @@
 import uuid
 from datetime          import datetime
 
-from core.database     import DatabaseInterface
 from core.repositories import PostRepository
 from core.repositories import UserRepository
 from core.entities     import Post
@@ -9,7 +8,6 @@ from core.entities     import Image
 
 class CreatePostService:
     def execute(self, username, description, image):
-        
         
         user_repository = UserRepository()
         post_repository = PostRepository()
