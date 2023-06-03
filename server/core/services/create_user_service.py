@@ -6,8 +6,6 @@ from core.database import DatabaseInterface
 from core.entities import User
 
 class CreateUserService:
-    def __init__(self):
-        pass
     def execute(self, username, password):
         
         id = uuid.uuid4()

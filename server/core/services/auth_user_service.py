@@ -14,13 +14,14 @@ class AuthUserService:
         user_exists = interface.user_exists(username, password)
 
         if (user_exists):
-            username      = user_exists[0]
-            password_hash = user_exists[1]
+            id            = user_exists[0]
+            username      = user_exists[1]
+            password_hash = user_exists[2]
 
             password_match = sha256_crypt.verify(secret=password, hash=password_hash)
             
             if (password_match):
-                token = jwt.encode({"username": username}, self._jwt_secret, algorithm=self._jwt_algorithm)
+                token = jwt.encode({"id": id, "username": username}, self._jwt_secret, algorithm=self._jwt_algorithm)
 
                 return token
             else:

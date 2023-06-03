@@ -14,8 +14,19 @@ def get_bytearray_from_file(path):
 		file_ba = bytearray(byte_file)
 	return file_ba
 
+def get_file_from_bytearray(ba):
+	with open("newImage.png", "wb") as im:
+		im.write(ba)
+
 
 from core.controller import CreateUserController
+from core.controller import CreatePostController
+a = get_bytearray_from_file("example_img.jpg")
 
-createUserController = CreateUserController()
-createUserController.handle("Joao", "batata")
+
+b = CreatePostController()
+b.handle("Joao", "batata", a)
+
+
+# createUserController = CreateUserController()
+# createUserController.handle("Joao", "batata")

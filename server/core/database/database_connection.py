@@ -1,25 +1,17 @@
 import sqlite3 as SQL
 
 class DatabaseConnection:
-    def __init__(self, database):
+    def __init__(self, database="./core/database/database.db"):
         self._database = database
         self._connection = None
         
     
     def start_connection(self):
-        # try:
-        #     _connection = SQL.connect(self._database)
-        #     cursor = _connection.cursor()
-        # except SQL.DatabaseError:
-        #     print("")
-        # except SQL.Warning:
-        #     print("")
-        # else:
-        #     return cursor
-        
             self._connection = SQL.connect(self._database)
             cursor = self._connection.cursor()
+            
             return cursor
+    
     def commit_operation(self):
         # adicionar tratamento de excessões
         self._connection.commit()
