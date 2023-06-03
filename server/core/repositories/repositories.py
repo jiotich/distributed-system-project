@@ -40,6 +40,31 @@ class PostRepository:
         connection.commit_operation()
         connection.finish_connection()
 
+    def find(self, user_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            cursor.execute(
+                queries.FETCH_POSTS, 
+                [
+                    str(user_id)
+                ]
+            )
+            connection.commit_operation()
+            
+            retrived_data = cursor.fetchall()
+
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            if (len(retrived_data) == 0):
+                return False
+            else:
+                return retrived_data
+        
+        
 class UserRepository:
     def find_one(self, username):
         try:
@@ -98,6 +123,32 @@ class RelationshipRepository:
             connection.commit_operation()
             
             retrived_data = cursor.fetchone()
+
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
+        
+    def find(self, user_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            # retorna os ids dos usuarios que o usuário que foi fornecido o id segue
+            
+            cursor.execute(
+                queries.FETCH_RELATIONSHIPS, 
+                [
+                    str(user_id),
+                    str("follow")
+                ]
+            )
+            
+            connection.commit_operation()
+            
+            retrived_data = cursor.fetchall()
 
             connection.finish_connection()
         except SQL.IntegrityError:

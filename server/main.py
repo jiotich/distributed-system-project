@@ -2,6 +2,16 @@ import sys
 sys.dont_write_bytecode = True
 
 
+
+
+
+# TODO: NAO PERMITIR MAIS DE UM RELACIONAMENTO ENTRE OS MESMOS USUÁRIOS: SEGUIR DUAS VEZES PELO MESMO USUÁRIO
+
+
+
+
+
+
 def get_bytearray_from_file(path):
 	with open(path, "rb") as im:
 		byte_file = im.read()
@@ -13,18 +23,28 @@ def get_file_from_bytearray(ba):
 		im.write(ba)
 
 
+imagem = get_bytearray_from_file("example_img.jpg")
+
+
 from core.controller import CreateUserController
 from core.controller import CreatePostController
+from core.controller import FollowUserController
+from core.controller import RetrieveFeedController
 
+create_user_controller 	 = CreateUserController()
+create_post_controller   = CreatePostController()
+follow_user_controller   = FollowUserController()
+retrieve_feed_controller = RetrieveFeedController()
 
-createUserController = CreateUserController()
+# criando usuário 
 
-# a = get_bytearray_from_file("example_img.jpg")
+# create_user_controller.handle("icaro", "icaro")
+# create_user_controller.handle("tome", "tome")
 
+# create_post_controller.handle("icaro", "imagem_aleatoria", imagem)
+# create_post_controller.handle("tome", "imagem_aleatoria2", imagem)
 
-# b = CreatePostController()
-# b.handle("Joao", "batata", a)
+# create_relationship_controller.handle("icaro", "tome")
 
+retrieve_feed_controller.handle("icaro")
 
-# createUserController = CreateUserController()
-createUserController.handle("leao", "batata")

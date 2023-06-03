@@ -1,9 +1,9 @@
-from core.services import CreateRelationshipService
+from core.services import FollowUserService
 
-class CreateUserController:
+class FollowUserController:
     def handle(self, follower_username, followed_username):
-        create_relationship_service = CreateRelationshipService()
-        response = create_relationship_service.execute(follower_username, followed_username)
+        follow_user_service = FollowUserService
+        response = follow_user_service.execute(follower_username, followed_username)
         
         if (response):
             #gerar o JSON com a resposta positiva
