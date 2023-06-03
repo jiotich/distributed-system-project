@@ -2,6 +2,7 @@ import sqlite3 as SQL
 
 from core.entities import Post
 from core.entities import User
+from core.entities import Relationship
 
 from core.database import DatabaseConnection
 from core.database import queries
@@ -67,6 +68,33 @@ class UserRepository:
         
             cursor = connection.start_connection()
             cursor.execute(queries.CREATE_USER, [str(user.id), str(user.username), str(user.password)])
+            connection.commit_operation()
+            
+            retrived_data = cursor.fetchone()
+
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
+        
+class RelationshipRepository:
+    def create(self, relationship: Relationship):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            cursor.execute(
+                queries.CREATE_RELATIONSHIP, 
+                [
+                    str(relationship.id), 
+                    str(relationship.source_user),    
+                    str(relationship.destination_user),
+                    str(relationship.type)
+                ]
+            )
+            
             connection.commit_operation()
             
             retrived_data = cursor.fetchone()
