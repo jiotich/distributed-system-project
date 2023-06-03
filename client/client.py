@@ -89,20 +89,8 @@ if __name__ == "__main__":
 	try:
 		print("> Starting client operations")
 		#x.send_image("image.png")
-		#x.login("marcelinho","mengao123")
+		x.login("marcelinho","mengao123")
 		#x.register_user("thaix","minax")
-
+		x.send_image("image.png")
 	except KeyboardInterrupt:
 		x.socket.close()
-
-'''
-to_send = get_image_packets(PATH)
-for i in to_send:
-	send_to_server(i)
-
-send_to_server(b"CONN_END")
-
-
-while True:
-	send_to_server(input("Manda: "))
-'''

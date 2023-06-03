@@ -2,6 +2,7 @@ import socket
 import packet_ops as pops
 import json
 import base64
+from os import path
 
 class Server:
 	def __init__(self):
@@ -13,6 +14,7 @@ class Server:
 		self.socket.listen()
 		self.current_connections = {}
 		self.authed_users = {}
+	
 	def wait_requests(self):
 		data = None
 		while True:
@@ -26,14 +28,13 @@ class Server:
 
 				data = conn.recv(1024)
 				operation = json.loads(data.decode())
-				if operation["operation_request"] in ["send_image","load_profile"] and not self.verify_auth(addr[0]):
+				if operation["operation_request"] not in ["register_user","login"] and not self.verify_auth(addr[0]):
 					conn.sendall(b'{"code":"DENIED",\n "response":-1}')
 					continue
 				else:
 					self.current_connections[addr[0]] = operation
 					conn.sendall(b'{"code":"OK",\n "response":1234}')
 				
-
 				# addr[0] tem o valor do ip, addr[1] o numero da conexao
 				# dicionario dentro de dicionario
 				if self.current_connections[addr[0]]["operation_request"] == "send_image":
@@ -50,9 +51,6 @@ class Server:
 					print(f"Registrando novo usuario: {addr[0]}")
 					self.register_user()
 					self.operation_finish(addr[0])
-
-				elif not self.verify_auth(addr[0]):
-					pass
 
 				data = conn.recv(1024)
 				if data == b"CONN_END":
@@ -83,10 +81,13 @@ class Server:
 				packets.append(data)
 				conn.sendall(bytes("> Got Packet",encoding='utf-8'))
 		
-		# get_file_from_bytearray() salva o arquivo no diretorio
-		# no futuro, os bytes provavelmente serão armazenados no db
 		loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-		pops.get_file_from_bytearray(base64.b64decode(loaded_json["image_bytes"]))
+		with open(f"{self.authed_users[addr[0]]}_images.csv","a") as file:
+			if path.getsize(f"{self.authed_users[addr[0]]}_images.csv") == 0:
+				file.write("%s" % loaded_json["image_bytes"])
+			else:
+				file.write(",%s" % loaded_json["image_bytes"])
+		#pops.get_file_from_bytearray(base64.b64decode(loaded_json["image_bytes"]))
 	
 	def register_user(self):
 		conn, addr, = self.socket.accept()
