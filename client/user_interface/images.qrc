@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="images">
+    <file>images/verify.png</file>
     <file>images/add.png</file>
     <file>images/angle-left.png</file>
     <file>images/angle-right.png</file>
