@@ -1,5 +1,6 @@
 import sys
 sys.dont_write_bytecode = True
+from core.controller import AuthUserController
 from core.controller import CreateUserController
 from core.controller import CreatePostController
 from core.controller import FollowUserController
@@ -22,7 +23,15 @@ class Server:
 		self.socket.listen()
 		self.current_connections = {}
 		self.authed_users = {}
-	
+
+		self.auth_ops = AuthUserController()
+		self.user_ops = CreateUserController()
+		self.post_ops = CreatePostController()
+		self.follow_ops = FollowUserController()
+		self.feed_ops = RetrieveFeedController()
+		self.remove_folower_ops = RemoveFollowerController()
+		self.remove_followed_ops = RemoveFollowedController()
+
 	def wait_requests(self):
 		data = None
 		while True:
@@ -64,13 +73,6 @@ class Server:
 				if data == b"CONN_END":
 					conn.sendall(bytes("> Transaction ended",encoding='utf-8'))
 					break
-				
-
-				#packets.append(data)
-				#conn.sendall(bytes("> Got Packet",encoding='utf-8'))
-
-		#resp = pops.join_sliced_bytearrays(packets).decode()
-		#print(json.loads(resp))
 
 	def recieve_image(self):
 		packets = []
@@ -106,35 +108,35 @@ class Server:
 
 		loaded_json = pops.bytearray_to_json(data)
 		
-		dba = CreateUserController()
-
-		dba.handle(loaded_json["username"],loaded_json["password"])
-		"""with open("users.json", "r") as db:
-			all_users = json.loads(db.read())
+		self.user_ops.handle(loaded_json["username"],loaded_json["password"])
 		
-		if loaded_json["username"] not in all_users:
-			all_users[loaded_json["username"]] = loaded_json["password"]
-		
-		with open("users.json", "w") as file:
-			json.dump(all_users,file)"""
-
 	def auth_user(self):
 		# TODO: Verificacao de credenciais no banco de dados
-
 		conn, addr, = self.socket.accept()
 		data = b""
 		with conn:
 			print(f'> Validando credenciais para {addr}')
 			data = conn.recv(1024)
 
-		loaded_json = pops.bytearray_to_json(data)
-		self.authed_users[addr[0]] = loaded_json["username"]
+			loaded_json = pops.bytearray_to_json(data)
+			user_token = json.loads(self.auth_ops.handle(loaded_json["username"],loaded_json["password"]))
+			print(loaded_json)
+			if user_token["token"] != "-1":
+				self.authed_users[addr[0]] = loaded_json["username"]
+
+			user_token = json.dumps(user_token)		
+			conn.sendall(b"%s" % user_token.encode())
 
 	def operation_finish(self,ip):
 		self.current_connections[ip]["operation_request"] = None
 	
 	def verify_auth(self,ip):
 		return 1 if ip in self.authed_users else 0
+	
+	def fix_quotes(self,message):
+		# obviamente tem um jeito melhor de fazer isso
+		# mas estou sem tempo
+		return message.replace("\'","\"")
 	
 
 if __name__ == "__main__":

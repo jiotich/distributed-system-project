@@ -8,6 +8,7 @@ class Client:
 		self.HOST = '127.0.0.1'
 		self.PORT = 42069
 		self.socket = None
+		self.token = None
 
 	def connect(self):
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -15,9 +16,8 @@ class Client:
 
 	def send_to_server(self,message):
 		self.connect()
-		print("> Sending message to server")
+		print(f"> Sending message [{message}] to server")
 		self.socket.sendall(message)
-		print("> Sent")
 		data = self.socket.recv(1024)
 		return data
 	
@@ -58,8 +58,10 @@ class Client:
 		message = bytearray(f"{message}",encoding='utf-8')
 		message = self.fix_quotes(message)
 
-		self.send_to_server(message)
-	
+		answer = self.send_to_server(message)
+		loaded_json = json.loads(answer)
+		self.token = loaded_json["token"]
+
 	def register_user(self,username,password):
 		response_bytes = self.send_to_server(b'{"operation_request":"register_user"}')
 		response = json.loads(response_bytes)
@@ -88,9 +90,9 @@ if __name__ == "__main__":
 	x = Client()
 	try:
 		print("> Starting client operations")
-		#x.send_image("image.png")
-		#x.login("marcelinho","mengao123")
-		x.register_user("thaix","minax")
+		x.send_image("image.png")
+		#x.login("icaro","icaro")
+		#x.register_user("thaix","minax")
 		#x.send_image("image.png")
 	except KeyboardInterrupt:
 		x.socket.close()
