@@ -1,3 +1,4 @@
+import json
 from core.services import CreatePostService
 
 class CreatePostController:
@@ -5,11 +6,9 @@ class CreatePostController:
         create_post_service = CreatePostService()
         response = create_post_service.execute(username, description, image)
         
-        print(response)
-        
         if (response):
-            #gerar o JSON com a resposta positiva
+            return json.dumps({"status_code": "200"})
             pass
         else:
-            #gerar o JSON com a resposta negativa
+            return json.dumps({"status_code": "400"})
             pass

@@ -38,7 +38,7 @@ class Server:
 			conn, addr, = self.socket.accept()
 			with conn:
 				print(f'Conectado por {addr}')
-
+				# addr[0] é o ip conectado
 				if addr[0] not in self.current_connections.keys():
 					print(f"> Realizando a primera conexao para {addr[0]}")
 					self.current_connections[addr[0]] = None
@@ -51,8 +51,7 @@ class Server:
 				else:
 					self.current_connections[addr[0]] = operation
 					conn.sendall(b'{"code":"OK",\n "response":1234}')
-				
-				# addr[0] tem o valor do ip, addr[1] o numero da conexao
+
 				# dicionario dentro de dicionario
 				if self.current_connections[addr[0]]["operation_request"] == "send_image":
 					print(f"> Realizando operacao de recepcao de imagem para {addr[0]}")
@@ -67,6 +66,16 @@ class Server:
 				elif self.current_connections[addr[0]]["operation_request"] == "register_user":
 					print(f"Registrando novo usuario: {addr[0]}")
 					self.register_user()
+					self.operation_finish(addr[0])
+
+				elif self.current_connections[addr[0]]["operation_request"] == "follow_user":
+					print("> Recebida operacao de follow")
+					self.establish_follow()
+					self.operation_finish(addr[0])
+
+				elif self.current_connections[addr[0]]["operation_request"] == "retrieve_feed":
+					print("> Zumzum")
+					self.retrieve_feed()
 					self.operation_finish(addr[0])
 
 				data = conn.recv(1024)
@@ -86,19 +95,16 @@ class Server:
 				print(f'Conectado por {addr}')
 				data = conn.recv(1024)
 				if data == b"CONN_END":
-					conn.sendall(bytes("> Transaction ended",encoding='utf-8'))
+					loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
+					return_code = self.post_ops.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
+					print(return_code)
+					conn.sendall(b"%s" % return_code.encode())
 					break
 				packets.append(data)
 				conn.sendall(bytes("> Got Packet",encoding='utf-8'))
 		
-		loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-		with open(f"{self.authed_users[addr[0]]}_images.csv","a") as file:
-			if path.getsize(f"{self.authed_users[addr[0]]}_images.csv") == 0:
-				file.write("%s" % loaded_json["image_bytes"])
-			else:
-				file.write(",%s" % loaded_json["image_bytes"])
-		#pops.get_file_from_bytearray(base64.b64decode(loaded_json["image_bytes"]))
-	
+		
+
 	def register_user(self):
 		conn, addr, = self.socket.accept()
 		data = b""
@@ -106,10 +112,11 @@ class Server:
 			print(f'> Registrando usuario para {addr}')
 			data = conn.recv(1024)
 
-		loaded_json = pops.bytearray_to_json(data)
+			loaded_json = pops.bytearray_to_json(data)
 		
-		self.user_ops.handle(loaded_json["username"],loaded_json["password"])
-		
+			return_code = self.user_ops.handle(loaded_json["username"],loaded_json["password"])
+			conn.sendall(b"%s" % return_code.encode())
+
 	def auth_user(self):
 		# TODO: Verificacao de credenciais no banco de dados
 		conn, addr, = self.socket.accept()
@@ -120,24 +127,38 @@ class Server:
 
 			loaded_json = pops.bytearray_to_json(data)
 			user_token = json.loads(self.auth_ops.handle(loaded_json["username"],loaded_json["password"]))
-			print(loaded_json)
+			#print(loaded_json)
 			if user_token["token"] != "-1":
 				self.authed_users[addr[0]] = loaded_json["username"]
 
 			user_token = json.dumps(user_token)		
 			conn.sendall(b"%s" % user_token.encode())
+	
+	def establish_follow(self):
+		conn, addr, = self.socket.accept()
+		data = b""
+		with conn:
+			data = conn.recv(1024)
+
+			loaded_json = pops.bytearray_to_json(data)
+			print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
+			# TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
+			return_code = self.follow_ops.handle(self.authed_users[addr[0]],loaded_json["username"])
+			conn.sendall(b"%s" % return_code.encode())
+
+	def retrieve_feed(self):
+		conn, addr, = self.socket.accept()
+		data = b""
+		with conn:
+			data = conn.recv(1024)
+			loaded_json = pops.bytearray_to_json(data)
+			self.feed_ops.handle(loaded_json["username"])
 
 	def operation_finish(self,ip):
 		self.current_connections[ip]["operation_request"] = None
 	
 	def verify_auth(self,ip):
-		return 1 if ip in self.authed_users else 0
-	
-	def fix_quotes(self,message):
-		# obviamente tem um jeito melhor de fazer isso
-		# mas estou sem tempo
-		return message.replace("\'","\"")
-	
+		return 1 if ip in self.authed_users else 0	
 
 if __name__ == "__main__":
 	x = Server()

@@ -1,3 +1,4 @@
+import json
 from core.services import CreateUserService
 
 class CreateUserController:
@@ -6,8 +7,8 @@ class CreateUserController:
         response = create_user_service.execute(username, password)
         
         if (response):
-            #gerar o JSON com a resposta positiva
-            pass
+            return json.dumps({"status_code": "200"})
+            
         else:
-            #gerar o JSON com a resposta negativa
-            pass
+            return json.dumps({"status_code": "400"})
+            
