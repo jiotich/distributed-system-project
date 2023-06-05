@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 from main_window import *
 import event_handlers.main_handler as mh
 from frame_loaders.feed_loader import *
 from frame_loaders.self_profile_loader import *
+from frame_loaders.publish_loader import *
 
 def change_to_main_window(window):
     window.main_window = QtWidgets.QMainWindow()
@@ -69,7 +69,7 @@ def self_profile(window):
 
 def publish_page(window):
     window.ui.stackedWidget.setCurrentIndex(3)
-    mh.publish_click()
+    load_publish_page(window)
     
     
 def search(window):

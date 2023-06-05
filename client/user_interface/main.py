@@ -1,11 +1,10 @@
 import sys
 sys.dont_write_bytecode = True
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
 from login_window import *
 from main_window import *
 import event_handlers.login_handler as lh
-import event_handlers.main_handler as mh
 from frame_loaders.main_window_loader import change_to_main_window
 
 class Window(QMainWindow):
@@ -42,6 +41,8 @@ class Window(QMainWindow):
         self.is_maximized = False
         self.username = ""
         self.description = ""
+        self.is_followed = False
+        self.image_path = ""
 
     def login(self):
         username = self.ui.login_username.text()

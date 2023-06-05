@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 from main_window import *
 import event_handlers.main_handler as mh
+from frame_loaders.profile_loader import *
 
 def clear_feed(window):
     for frame in window.feed_posts:
@@ -27,8 +28,9 @@ def create_feed_post(window, username, description, likes, post_id):
     window.horizontalLayout_6.addWidget(window.frame_7)
     window.post_main_frame = QtWidgets.QFrame(window.post_frame)
     window.post_main_frame.setMaximumSize(QtCore.QSize(700, 16777215))
+    window.post_main_frame.setStyleSheet("background-color: rgb(34, 34, 34); border-radius: 8px;")
     window.post_main_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-    window.post_main_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+    window.post_main_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
     window.post_main_frame.setObjectName("post_main_frame")
     window.verticalLayout_4 = QtWidgets.QVBoxLayout(window.post_main_frame)
     window.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
@@ -42,8 +44,7 @@ def create_feed_post(window, username, description, likes, post_id):
     window.verticalLayout_6 = QtWidgets.QVBoxLayout(window.post_user_frame)
     window.verticalLayout_6.setObjectName("verticalLayout_6")
     window.feed_username_button = QtWidgets.QPushButton(window.post_user_frame)
-    window.feed_username_button.setStyleSheet("background-color: rgb(21, 21, 21);\n"
-"color: rgb(255, 255, 255);")
+    window.feed_username_button.setStyleSheet("background-color: rgb(34, 34, 34); color: rgb(255, 255, 255)")
     window.feed_username_button.clicked.connect(lambda: post_profile_clicked(window, username))
     icon5 = QtGui.QIcon()
     icon5.addPixmap(QtGui.QPixmap(":/images/images/user.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -57,7 +58,7 @@ def create_feed_post(window, username, description, likes, post_id):
     window.post_image_frame.setMinimumSize(QtCore.QSize(0, 300))
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
-    window.post_image_frame.setStyleSheet("image: url(:/images/images/picture.png);")
+    window.post_image_frame.setStyleSheet("image: url(/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg);")
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")
@@ -136,7 +137,7 @@ def create_feed_post(window, username, description, likes, post_id):
     window.feed_posts.append(window.post_frame)
     
 def post_profile_clicked(window, username):
-    print(username)
+    load_profile(window, username)
     
 def post_comments_clicked(window, post_id):
     print(post_id)
