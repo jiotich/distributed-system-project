@@ -32,6 +32,7 @@ from core.controller import FollowUserController
 from core.controller import RetrieveFeedController
 from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
+from core.controller import AuthUserController
 
 create_user_controller 	   = CreateUserController()
 create_post_controller     = CreatePostController()
@@ -39,6 +40,7 @@ follow_user_controller     = FollowUserController()
 retrieve_feed_controller   = RetrieveFeedController()
 remove_follower_controller = RemoveFollowerController()
 remove_followed_controller = RemoveFollowedController()
+auth_user_controller	   = AuthUserController()
 
 # criando usuário 
 
@@ -48,9 +50,11 @@ remove_followed_controller = RemoveFollowedController()
 # create_post_controller.handle("icaro", "imagem_aleatoria", imagem)
 # create_post_controller.handle("tome", "imagem_aleatoria2", imagem)
 
-follow_user_controller.handle("icaro", "tome")
+# follow_user_controller.handle("icaro", "tome")
 
 # retrieve_feed_controller.handle("icaro")
 
 # remove_follower_controller.handle("icaro", "tome")
 # remove_followed_controller.handle("tome", "icaro")
+
+auth_user_controller.handle("icaro", "icaro")
