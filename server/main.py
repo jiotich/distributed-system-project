@@ -23,7 +23,7 @@ def get_file_from_bytearray(ba):
 		im.write(ba)
 
 
-imagem = get_bytearray_from_file("example_img.jpg")
+# imagem = get_bytearray_from_file("example_img.jpg")
 
 
 from core.controller import CreateUserController
@@ -34,6 +34,8 @@ from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
 from core.controller import AuthUserController
 
+from core.middlewares import EnsureAuthenticated
+
 create_user_controller 	   = CreateUserController()
 create_post_controller     = CreatePostController()
 follow_user_controller     = FollowUserController()
@@ -41,6 +43,8 @@ retrieve_feed_controller   = RetrieveFeedController()
 remove_follower_controller = RemoveFollowerController()
 remove_followed_controller = RemoveFollowedController()
 auth_user_controller	   = AuthUserController()
+
+ensure_authenticated 	   = EnsureAuthenticated()
 
 # criando usuário 
 
@@ -57,4 +61,11 @@ auth_user_controller	   = AuthUserController()
 # remove_follower_controller.handle("icaro", "tome")
 # remove_followed_controller.handle("tome", "icaro")
 
-auth_user_controller.handle("icaro", "icaro")
+# auth_user_controller.handle("icaro", "icaro")
+# ensure_authenticated.handle("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFlMjI1NjhjLWQ0ZmUtNGM3Zi05ZmUxLTFlMmE1MTRjZWI3OCIsInVzZXJuYW1lIjoiaWNhcm8ifQ.GscNQVqK8gzu1BGlVf85Hy1FeiHj1RCeohtNAkb71WU", "batata", "a")
+
+def soma(a,b):
+	return a+b
+def imprime(a):
+	print(a)
+imprime(soma(1,2))

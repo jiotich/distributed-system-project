@@ -81,7 +81,7 @@ class Server:
 				data = conn.recv(1024)
 				if data == b"CONN_END":
 					conn.sendall(bytes("> Transaction ended",encoding='utf-8'))
-					break
+					# breakestablish_follow
 
 	def recieve_image(self):
 		packets = []
