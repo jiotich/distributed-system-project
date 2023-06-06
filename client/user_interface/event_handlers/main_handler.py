@@ -1,7 +1,14 @@
-def search_click(search):
-    print("Search: ",search)
+def search_click(user, search):
+    #FAZ REQUISIÇÃO DO(S) USUÁRIO(S) QUE TEM MATCH COM A STRING SEARCH
+    #RETORNA UMA LISTA DE USUÁRIOS
+    #ABAIXO UM PLACEHOLDER
+    users = []
+    users.append(["Username1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."])
+    users.append(["Username2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."])
+    users.append(["Username3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."])
+    return users
 
-def home_click(username):
+def home_click(user):
     #FAZ REQUISIÇÃO DOS POSTS PARA O FEED
     #ABAIXO UM PLACEHOLDER
     posts = []
@@ -43,10 +50,12 @@ def profile_click(user, username):
 def follow_user(user, username):
     #O USER (QUE ESTÁ USANDO O CLIENTE) VAI DAR FOLLOW NO USERNAME
     #FAZER REQUISIÇÃO AO SERVIDOR
+    print(user, "deu follow no ",username)
     pass
 
 def unfollow_user(user, username):
     #O USER (QUE ESTÁ USANDO O CLIENTE) VAI DAR UNFOLLOW NO USERNAME
     #FAZER REQUISIÇÃO AO SERVIDOR
+    print(user, "deu unfollow no ",username)
     pass
     

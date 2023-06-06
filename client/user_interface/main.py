@@ -43,6 +43,7 @@ class Window(QMainWindow):
         self.description = ""
         self.is_followed = False
         self.image_path = ""
+        self.other_user = ""
 
     def login(self):
         username = self.ui.login_username.text()

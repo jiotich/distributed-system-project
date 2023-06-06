@@ -428,7 +428,7 @@ border-bottom-color: rgb(0, 173, 103);</string>
           <item>
            <widget class="QStackedWidget" name="stackedWidget">
             <property name="currentIndex">
-             <number>3</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="feed_page">
              <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -460,8 +460,8 @@ border-bottom-color: rgb(0, 173, 103);</string>
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>681</width>
-                   <height>513</height>
+                   <width>551</width>
+                   <height>472</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_feed">
@@ -1084,8 +1084,8 @@ p, li { white-space: pre-wrap; }
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>681</width>
-                   <height>363</height>
+                   <width>100</width>
+                   <height>30</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_self_profile">
@@ -1337,8 +1337,8 @@ p, li { white-space: pre-wrap; }
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>681</width>
-                   <height>363</height>
+                   <width>100</width>
+                   <height>30</height>
                   </rect>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_user">

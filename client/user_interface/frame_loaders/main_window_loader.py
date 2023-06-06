@@ -4,6 +4,8 @@ import event_handlers.main_handler as mh
 from frame_loaders.feed_loader import *
 from frame_loaders.self_profile_loader import *
 from frame_loaders.publish_loader import *
+from frame_loaders.search_loader import *
+from frame_loaders.profile_loader import *
 
 def change_to_main_window(window):
     window.main_window = QtWidgets.QMainWindow()
@@ -38,6 +40,8 @@ def change_to_main_window(window):
     window.ui.confirm_edit_button.clicked.connect(lambda: confirm_edit(window))
     #Cancel edit button
     window.ui.cancel_edit_button.clicked.connect(lambda: cancel_edit(window))
+    #User follow button
+    window.ui.add_button.clicked.connect(lambda: follow(window, window.other_user))
     window.ui.textEdit.setReadOnly(True)
     window.main_window.show()
     home(window)
@@ -77,4 +81,4 @@ def search(window):
     if (search == ""):
         return
     window.ui.stackedWidget.setCurrentIndex(4)
-    mh.search_click(search)
+    load_search_page(window, search)

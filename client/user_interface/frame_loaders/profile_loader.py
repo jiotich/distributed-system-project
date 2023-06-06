@@ -11,14 +11,15 @@ def clear_profile(window):
 
 def load_profile(window, username):
     clear_profile(window)
+    window.ui.profile_username.setText(username)
+    window.other_user = username
     window.ui.stackedWidget.setCurrentIndex(2)
     info = mh.profile_click(window.username, username)
     description = info[0]
     window.is_followed = info[1]
     posts = info[2]
     window.ui.textBrowser_2.setText(description)
-    window.ui.profile_username.setText(username)
-    if(window.is_followed):
+    if(window.is_followed == True):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/images/images/cross.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
@@ -28,9 +29,8 @@ def load_profile(window, username):
         icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Follow")
-    window.ui.add_button.clicked.connect(lambda: follow(window, username))
     for post in posts:
-        load_profile_post(window, username, post[0], post[1], post[2])
+        load_profile_post(window, window.other_user, post[0], post[1], post[2])
         
 def load_profile_post(window, username, description, likes, post_id):
     window.post_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_profile)
@@ -158,7 +158,7 @@ def load_profile_post(window, username, description, likes, post_id):
     window.user_posts.append(window.post_frame)
 
 def follow(window, username):
-    if(window.is_followed):
+    if(window.is_followed == True):
         mh.unfollow_user(window.username, username)
         window.is_followed = False
         icon = QtGui.QIcon()
