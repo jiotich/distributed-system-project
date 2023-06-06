@@ -8,6 +8,7 @@ def clear_profile(window):
         frame.deleteLater()
         window.user_posts = window.user_posts[:-1]
     window.user_post_number = 0
+    window.user_profile_likes = []
 
 def load_profile(window, username):
     clear_profile(window)
@@ -19,7 +20,7 @@ def load_profile(window, username):
     window.is_followed = info[1]
     posts = info[2]
     window.ui.textBrowser_2.setText(description)
-    if(window.is_followed == True):
+    if(window.is_followed):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/images/images/cross.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
@@ -30,9 +31,11 @@ def load_profile(window, username):
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Follow")
     for post in posts:
-        load_profile_post(window, window.other_user, post[0], post[1], post[2])
+        load_profile_post(window, window.other_user, post[0], post[1], post[2], post[3], post[4])
         
-def load_profile_post(window, username, description, likes, post_id):
+def load_profile_post(window, username, description, likes, post_id, is_liked, img_path):
+    current_index = window.user_post_number
+    window.user_profile_likes.append([is_liked, likes])
     window.post_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_profile)
     window.post_frame.setMaximumSize(QtCore.QSize(16777215, 700))
     window.post_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -79,7 +82,7 @@ def load_profile_post(window, username, description, likes, post_id):
     window.post_image_frame.setMinimumSize(QtCore.QSize(0, 300))
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
-    window.post_image_frame.setStyleSheet("image: url(/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg);")
+    window.post_image_frame.setStyleSheet("image: url("+img_path+");")
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")
@@ -136,12 +139,19 @@ def load_profile_post(window, username, description, likes, post_id):
     window.verticalLayout_22.setObjectName("verticalLayout_22")
     window.like_button = QtWidgets.QPushButton(window.frame_18)
     window.like_button.setStyleSheet("color: rgb(255, 255, 255);")
-    icon7 = QtGui.QIcon()
-    icon7.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-    window.like_button.setIcon(icon7)
+    icon1 = QtGui.QIcon()
+    icon1.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon2 = QtGui.QIcon()
+    icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    if(window.user_profile_likes[current_index][0]):
+        window.like_button.setIcon(icon2)
+    else:
+        window.like_button.setIcon(icon1)
     window.like_button.setFlat(True)
     window.like_button.setObjectName("like_button")
-    window.like_button.setText("123")
+    window.like_button.setText(str(window.user_profile_likes[current_index][1]))
+    window.user_profile_likes[current_index].append(window.like_button)
+    window.like_button.clicked.connect(lambda: user_profile_like_button(window, current_index, window.user_profile_likes[current_index][2], post_id))
     window.verticalLayout_22.addWidget(window.like_button)
     window.horizontalLayout_10.addWidget(window.frame_18, 0, QtCore.Qt.AlignRight)
     window.verticalLayout_4.addWidget(window.frame_16)
@@ -158,7 +168,7 @@ def load_profile_post(window, username, description, likes, post_id):
     window.user_posts.append(window.post_frame)
 
 def follow(window, username):
-    if(window.is_followed == True):
+    if(window.is_followed):
         mh.unfollow_user(window.username, username)
         window.is_followed = False
         icon = QtGui.QIcon()
@@ -172,3 +182,21 @@ def follow(window, username):
         icon.addPixmap(QtGui.QPixmap(":/images/images/cross.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Unfollow")
+
+def user_profile_like_button(window, index, current_like_button, post_id):
+    icon1 = QtGui.QIcon()
+    icon1.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon2 = QtGui.QIcon()
+    icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    if(window.user_profile_likes[index][0]):
+        mh.unliked_post(window.username, post_id)
+        window.user_profile_likes[index][0] = False
+        current_like_button.setIcon(icon1)
+        window.user_profile_likes[index][1] -= 1
+        current_like_button.setText(str(window.user_profile_likes[index][1]))
+    else:
+        mh.liked_post(window.username, post_id)
+        window.user_profile_likes[index][0] = True
+        current_like_button.setIcon(icon2)
+        window.user_profile_likes[index][1] += 1
+        current_like_button.setText(str(window.user_profile_likes[index][1]))

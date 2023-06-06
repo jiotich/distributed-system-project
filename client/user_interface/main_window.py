@@ -450,7 +450,6 @@ class Ui_main_window(object):
         self.image_url_browser = QtWidgets.QTextBrowser(self.frame_26)
         self.image_url_browser.setMaximumSize(QtCore.QSize(150, 16777215))
         self.image_url_browser.setStyleSheet("color: rgb(255, 255, 255); background-color: rgb(34, 34, 34);")
-        self.image_url_browser.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.image_url_browser.setObjectName("image_url_browser")
         self.verticalLayout_26.addWidget(self.image_url_browser)
         self.horizontalLayout_11.addWidget(self.frame_26)
@@ -786,11 +785,6 @@ class Ui_main_window(object):
         self.add_button.setText(_translate("main_window", "Follow"))
         self.label_4.setText(_translate("main_window", "Share your art"))
         self.select_image_button.setText(_translate("main_window", "Select an image"))
-        self.image_url_browser.setHtml(_translate("main_window", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Ubuntu\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Image url</p></body></html>"))
         self.label_3.setText(_translate("main_window", "Give it a description"))
         self.publish_button.setText(_translate("main_window", "Publish Art"))
         self.label_2.setText(_translate("main_window", "Searching for \"search\""))

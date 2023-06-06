@@ -8,8 +8,11 @@ def clear_self_profile(window):
         frame.deleteLater()
         window.self_posts = window.self_posts[:-1]
     window.self_post_number = 0
+    window.self_profile_likes = []
 
-def load_self_profile(window, description, likes, post_id):
+def load_self_profile(window, description, likes, post_id, is_liked, img_path):
+    current_index = window.self_post_number
+    window.self_profile_likes.append([is_liked, likes])
     window.post_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_3)
     window.post_frame.setMaximumSize(QtCore.QSize(16777215, 700))
     window.post_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -56,7 +59,7 @@ def load_self_profile(window, description, likes, post_id):
     window.post_image_frame.setMinimumSize(QtCore.QSize(0, 300))
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
-    window.post_image_frame.setStyleSheet("image: url(/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg);")
+    window.post_image_frame.setStyleSheet("image: url("+img_path+");")
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")
@@ -113,12 +116,19 @@ def load_self_profile(window, description, likes, post_id):
     window.verticalLayout_22.setObjectName("verticalLayout_22")
     window.like_button = QtWidgets.QPushButton(window.frame_18)
     window.like_button.setStyleSheet("color: rgb(255, 255, 255);")
-    icon7 = QtGui.QIcon()
-    icon7.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-    window.like_button.setIcon(icon7)
+    icon1 = QtGui.QIcon()
+    icon1.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon2 = QtGui.QIcon()
+    icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    if(window.self_profile_likes[current_index][0]):
+        window.like_button.setIcon(icon2)
+    else:
+        window.like_button.setIcon(icon1)
     window.like_button.setFlat(True)
     window.like_button.setObjectName("like_button")
-    window.like_button.setText("123")
+    window.like_button.setText(str(window.self_profile_likes[current_index][1]))
+    window.self_profile_likes[current_index].append(window.like_button)
+    window.like_button.clicked.connect(lambda: self_profile_like_button(window, current_index, window.self_profile_likes[current_index][2], post_id))
     window.verticalLayout_22.addWidget(window.like_button)
     window.horizontalLayout_10.addWidget(window.frame_18, 0, QtCore.Qt.AlignRight)
     window.verticalLayout_4.addWidget(window.frame_16)
@@ -155,3 +165,21 @@ def cancel_edit(window):
     window.ui.cancel_edit_button.setEnabled(False)
     window.ui.textEdit.setReadOnly(True)
     window.ui.textEdit.setPlainText(window.description)
+
+def self_profile_like_button(window, index, current_like_button, post_id):
+    icon1 = QtGui.QIcon()
+    icon1.addPixmap(QtGui.QPixmap(":/images/images/heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    icon2 = QtGui.QIcon()
+    icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+    if(window.self_profile_likes[index][0]):
+        mh.unliked_post(window.username, post_id)
+        window.self_profile_likes[index][0] = False
+        current_like_button.setIcon(icon1)
+        window.self_profile_likes[index][1] -= 1
+        current_like_button.setText(str(window.self_profile_likes[index][1]))
+    else:
+        mh.liked_post(window.username, post_id)
+        window.self_profile_likes[index][0] = True
+        current_like_button.setIcon(icon2)
+        window.self_profile_likes[index][1] += 1
+        current_like_button.setText(str(window.self_profile_likes[index][1]))

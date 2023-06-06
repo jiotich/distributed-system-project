@@ -1,6 +1,6 @@
 import sys
 sys.dont_write_bytecode = True
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5 import QtCore, QtGui
 from login_window import *
 from main_window import *
@@ -44,31 +44,46 @@ class Window(QMainWindow):
         self.is_followed = False
         self.image_path = ""
         self.other_user = ""
+        self.feed_likes = []
+        self.self_profile_likes = []
+        self.user_profile_likes = []
 
     def login(self):
         username = self.ui.login_username.text()
         password = self.ui.login_password.text()
         if (username == "" or password == ""):
-            print("All fields must be filled")
+            self.pop_up("All fields must be filled.             ")
+            self.ui.login_username.setText("")
+            self.ui.login_password.setText("")
             return
         is_logged_in = lh.login_clicked(username, password)
         if (is_logged_in):
             self.username = username
             change_to_main_window(self)
         else:
-            print("Login error: invalid credentials")
+            self.pop_up("Login error: Invalid credentials.")
+            self.ui.login_username.setText("")
+            self.ui.login_password.setText("")
 
     def signin(self):
         username = self.ui.signin_username.text()
         password = self.ui.signin_password.text()
         password_confirmation = self.ui.signin_confirm_password.text()
         if (username == "" or password == "" or password_confirmation == ""):
-            print("All fields must be filled")
+            self.pop_up("All fields must be filled.             ")
             return
         if (password != password_confirmation):
-            print("Password confirmation error")
+            self.pop_up("Password confirmation error.        ")
             return
         lh.signin_clicked(username, password)
+
+    def pop_up(self, message):
+        msg = QMessageBox(parent=self)
+        msg.setWindowTitle("Message")
+        msg.setText(message)
+        msg.setIcon(QMessageBox.Warning)
+        msg.setStyleSheet("background-color: rgb(21, 21, 21);")
+        msg.exec()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

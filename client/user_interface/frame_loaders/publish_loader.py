@@ -15,7 +15,7 @@ def open_browser(window):
 
 def post_button(window):
     if(window.ui.image_url_browser.toPlainText() == "" or window.ui.publish_description_browser.toPlainText() == ""):
-        print("Everything must be filled")
+        window.pop_up("All fields must be filled.             ")
     else:
-        print("Published!")
+        window.pop_up("Published!                                    ")
         mh.publish_click(window.username, window.image_path, window.ui.publish_description_browser.toPlainText())
