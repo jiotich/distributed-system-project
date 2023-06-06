@@ -7,6 +7,8 @@ from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
 
 import packet_ops as pops
+import json
+
 
 class RequestHandler():
     def __init__(self):
@@ -18,11 +20,25 @@ class RequestHandler():
         self._remove_follower_controller = RemoveFollowerController()
         self._remove_followed_controller = RemoveFollowedController()
     
-    def auth_user(self, conn, addr):
-        pass
+    def auth_user(self, socket):
+        conn, addr, = socket.accept()
+        data = b""
+        with conn:
+            print(f'> Validando credenciais para {addr}')
+            data = conn.recv(1024)
+
+            loaded_json = pops.bytearray_to_json(data)
+            user_token = json.loads(self.auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
+
+            if user_token["token"] != "-1":
+                self.authed_users[addr[0]] = loaded_json["username"]
+
+            user_token = json.dumps(user_token)		
+            conn.sendall(b"%s" % user_token.encode())
     
-    
-    def create_user(self, conn, addr):
+    def create_user(self, socket):
+        conn, addr, = socket.accept()
+        
         data = b""
 
         with conn:
@@ -33,4 +49,43 @@ class RequestHandler():
 		
             return_code = self.create_user_controller.handle(loaded_json["username"],loaded_json["password"])
             conn.sendall(b"%s" % return_code.encode())
-  
+    
+    def follow_user(self, socket):
+        conn, addr, = socket.accept()
+        data = b""
+        with conn:
+            data = conn.recv(1024)
+
+            loaded_json = pops.bytearray_to_json(data)
+            print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
+            # TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
+            return_code = self.follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
+            conn.sendall(b"%s" % return_code.encode())
+            
+    def retrieve_feed(self, socket):
+        conn, addr, = socket.accept()
+        data = b""
+        with conn:
+            data = conn.recv(1024)
+            loaded_json = pops.bytearray_to_json(data)
+            self.retrieve_feed_controller.handle(loaded_json["username"])
+            
+    def create_post(self, socket):
+        packets = []
+        data = None
+        while True:
+            print("> Inicio do recepcao da imagem")
+            print("> Esperando aceitacao conexao por parte do cliente")
+            conn, addr, = socket.accept()
+            with conn:
+                print("> Conexao estabelecida")
+                print(f'Conectado por {addr}')
+                data = conn.recv(1024)
+                if data == b"CONN_END":
+                    loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
+                    return_code = self.create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
+                    print(return_code)
+                    conn.sendall(b"%s" % return_code.encode())
+                    break
+                packets.append(data)
+                conn.sendall(bytes("> Got Packet",encoding='utf-8'))

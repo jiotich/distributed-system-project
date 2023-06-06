@@ -23,11 +23,3 @@ class ThreadPool():
     def create_worker_thread(self, procedure, data):
         thread = NewThread(procedure, self.response_worker_thread, data)
         thread.start()
-
-
-
-def soma(a):
-    return a[0]+a[1]
-
-threadPool = ThreadPool()
-threadPool.create_worker_thread(soma, [1,2])
