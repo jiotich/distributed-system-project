@@ -24,13 +24,13 @@ class Server:
 		self.current_connections = {}
 		self.authed_users = {}
 
-		self.auth_ops = AuthUserController()
-		self.user_ops = CreateUserController()
-		self.post_ops = CreatePostController()
-		self.follow_ops = FollowUserController()
-		self.feed_ops = RetrieveFeedController()
-		self.remove_folower_ops = RemoveFollowerController()
-		self.remove_followed_ops = RemoveFollowedController()
+		self.auth_user_controller       = AuthUserController()
+		self.create_user_controller     = CreateUserController()
+		self.create_post_controller     = CreatePostController()
+		self.follow_user_controller     = FollowUserController()
+		self.retrieve_feed_controller   = RetrieveFeedController()
+		self.remove_follower_controller = RemoveFollowerController()
+		self.remove_followed_controller = RemoveFollowedController()
 
 	def wait_requests(self):
 		data = None
@@ -81,7 +81,7 @@ class Server:
 				data = conn.recv(1024)
 				if data == b"CONN_END":
 					conn.sendall(bytes("> Transaction ended",encoding='utf-8'))
-					break
+					# breakestablish_follow
 
 	def recieve_image(self):
 		packets = []
@@ -96,7 +96,7 @@ class Server:
 				data = conn.recv(1024)
 				if data == b"CONN_END":
 					loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-					return_code = self.post_ops.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
+					return_code = self.create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
 					print(return_code)
 					conn.sendall(b"%s" % return_code.encode())
 					break
@@ -114,7 +114,7 @@ class Server:
 
 			loaded_json = pops.bytearray_to_json(data)
 		
-			return_code = self.user_ops.handle(loaded_json["username"],loaded_json["password"])
+			return_code = self.create_user_controller.handle(loaded_json["username"],loaded_json["password"])
 			conn.sendall(b"%s" % return_code.encode())
 
 	def auth_user(self):
@@ -126,7 +126,7 @@ class Server:
 			data = conn.recv(1024)
 
 			loaded_json = pops.bytearray_to_json(data)
-			user_token = json.loads(self.auth_ops.handle(loaded_json["username"],loaded_json["password"]))
+			user_token = json.loads(self.auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
 			#print(loaded_json)
 			if user_token["token"] != "-1":
 				self.authed_users[addr[0]] = loaded_json["username"]
@@ -143,7 +143,7 @@ class Server:
 			loaded_json = pops.bytearray_to_json(data)
 			print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
 			# TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
-			return_code = self.follow_ops.handle(self.authed_users[addr[0]],loaded_json["username"])
+			return_code = self.follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
 			conn.sendall(b"%s" % return_code.encode())
 
 	def retrieve_feed(self):
@@ -152,7 +152,7 @@ class Server:
 		with conn:
 			data = conn.recv(1024)
 			loaded_json = pops.bytearray_to_json(data)
-			self.feed_ops.handle(loaded_json["username"])
+			self.retrieve_feed_controller.handle(loaded_json["username"])
 
 	def operation_finish(self,ip):
 		self.current_connections[ip]["operation_request"] = None

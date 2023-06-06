@@ -8,6 +8,7 @@ class AuthUserController:
         response = authUserService.execute(username, password)
         
         if (response):
+            print(response)
             return json.dumps({"status_code": "200", "token": f"{response}"})
 
         else:
