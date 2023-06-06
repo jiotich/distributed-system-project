@@ -8,9 +8,7 @@ class AuthUserController:
         response = authUserService.execute(username, password)
         
         if (response):
-            json.dumps({"status_code": 200, "token": response})
-            
-            #gerar o JSON com a resposta positiva
+            return json.dumps({"status_code": "200", "token": f"{response}"})
+
         else:
-            #gerar o JSON com a resposta negativa
-            json.dumps({"status_code": 400, "token": 0000})
+            return json.dumps({"status_code": "400", "token": "-1"})

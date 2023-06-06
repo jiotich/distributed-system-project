@@ -1,3 +1,4 @@
+import json
 from core.services import RemoveFollowedService
 
 class RemoveFollowedController:
@@ -6,8 +7,8 @@ class RemoveFollowedController:
         response = remove_followed_service.execute(follower_username, followed_username)
         
         if (response):
-            #gerar o JSON com a resposta positiva
-            pass
+            return json.dumps({"status_code": "200"})
+            
         else:
-            #gerar o JSON com a resposta negativa
-            pass
+            return json.dumps({"status_code": "400"})
+            
