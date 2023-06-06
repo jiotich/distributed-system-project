@@ -1,17 +1,15 @@
 import sys
 sys.dont_write_bytecode = True
-from core.controller import AuthUserController
-from core.controller import CreateUserController
-from core.controller import CreatePostController
-from core.controller import FollowUserController
-from core.controller import RetrieveFeedController
-from core.controller import RemoveFollowerController
-from core.controller import RemoveFollowedController
+
 import socket
 import packet_ops as pops
 import json
 import base64
 from os import path
+
+
+
+from request_handler import RequestHandler
 
 class Server:
 	def __init__(self):
@@ -23,14 +21,8 @@ class Server:
 		self.socket.listen()
 		self.current_connections = {}
 		self.authed_users = {}
-
-		self.auth_user_controller       = AuthUserController()
-		self.create_user_controller     = CreateUserController()
-		self.create_post_controller     = CreatePostController()
-		self.follow_user_controller     = FollowUserController()
-		self.retrieve_feed_controller   = RetrieveFeedController()
-		self.remove_follower_controller = RemoveFollowerController()
-		self.remove_followed_controller = RemoveFollowedController()
+  
+		self.request_handler = RequestHandler()
 
 	def wait_requests(self):
 		data = None
@@ -65,7 +57,10 @@ class Server:
 				
 				elif self.current_connections[addr[0]]["operation_request"] == "register_user":
 					print(f"Registrando novo usuario: {addr[0]}")
-					self.register_user()
+     
+					conn, addr, = self.socket.accept()
+     
+					self.request_handler.create_user(conn, addr)
 					self.operation_finish(addr[0])
 
 				elif self.current_connections[addr[0]]["operation_request"] == "follow_user":
@@ -102,20 +97,7 @@ class Server:
 					break
 				packets.append(data)
 				conn.sendall(bytes("> Got Packet",encoding='utf-8'))
-		
-		
 
-	def register_user(self):
-		conn, addr, = self.socket.accept()
-		data = b""
-		with conn:
-			print(f'> Registrando usuario para {addr}')
-			data = conn.recv(1024)
-
-			loaded_json = pops.bytearray_to_json(data)
-		
-			return_code = self.create_user_controller.handle(loaded_json["username"],loaded_json["password"])
-			conn.sendall(b"%s" % return_code.encode())
 
 	def auth_user(self):
 		# TODO: Verificacao de credenciais no banco de dados

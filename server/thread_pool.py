@@ -1,17 +1,9 @@
-from threading import Thread
-
-# from core.controller import AuthUserController
-# from core.controller import CreatePostController
-# from core.controller import CreateUserController
-# from core.controller import FollowUserController
-# from core.controller import RemoveFollowedController
-# from core.controller import RemoveFollowerController
-# from core.controller import RetrieveFeedController
+from threading       import Thread
+from request_handler import RequestHandler
 
 class NewThread(Thread):
-    def __init__(self, id, procedure, callback, *args, **kwargs):
+    def __init__(self, procedure, callback, *args, **kwargs):
         super().__init__()
-        self.thread_id = id
         self.procedure = procedure
         self.callback  = callback
         self.args      = args
@@ -24,14 +16,12 @@ class NewThread(Thread):
 
 class ThreadPool():
     def __init__(self):
-        self.threads = []
-        self.threads_results = []
-
+        pass
     def response_worker_thread(self, value):
         print(f"work_done, value: {value}")
 
     def create_worker_thread(self, procedure, data):
-        thread = NewThread(1, procedure, self.response_worker_thread, data)
+        thread = NewThread(procedure, self.response_worker_thread, data)
         thread.start()
 
 
