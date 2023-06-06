@@ -1,35 +1,160 @@
 import socket
-import adrs
-import image_ops as imo
+import packet_ops as pops
+import json
+import base64
 
-HOST = adrs.HOST
-PORT = adrs.PORT
+class Client:
+	def __init__(self):
+		self.HOST = '127.0.0.1'
+		self.PORT = 42069
+		self.socket = None
+		self.token = None
+		self.username = None
 
-PATH = "image.png"
+	def connect(self):
+		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.socket.connect((self.HOST,self.PORT))
 
-def get_image_packets(path):
-	img_ba = imo.get_bytearray_from_file(path)
-	packets = imo.slice_bytearray(img_ba)
-	return packets
+	def send_to_server(self,message):
+		self.connect()
+		#print(f"> Sending message [{message}] to server")
+		self.socket.sendall(message)
+		data = self.socket.recv(1024)
+		return data
+	
+	def send_image(self, image_path, description=""):
+		response_bytes = self.send_to_server(b'{"operation_request":"send_image"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		if response["response"] == -1:
+			print("> Server refused to recieve image.")
+			return
+		message = {
+			"operation": response["response"],
+			"image_bytes": pops.get_bytearray_from_file(image_path,encode=True).decode(),
+			"description": description
+		}
+		message = bytearray(f"{message}",encoding='utf-8')
+		packets = pops.slice_bytearray(message)
+		print("> Enviando bytearray")
+		for packet in packets:
+			packet = self.fix_quotes(packet)
+			self.send_to_server(b"%s" % packet)
+		print("> Bytearray enviado")
+		answer = self.send_to_server(b"CONN_END")
+		loaded_json = json.loads(answer)
+		if loaded_json["status_code"] == "200":
+			print(f"> Sucesso em seguir postar {image_path}")
+		else:
+			print(f"> Falha em postar {image_path}")
 
-def send_to_server(message):
-	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-		# lembrar que sendall() precisa do parametro encoding="utf-8"
-		# caso se esteja trabalhando com texto ao inves de bytes 
-		s.connect((HOST,PORT))
-		s.sendall(bytes(message))
+	def login(self,username,password):
+		response_bytes = self.send_to_server(b'{"operation_request":"login"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		
+		if response["response"] == -1:
+			print("> Server refused login.")
+			return
+		
+		message = {
+			"operation": response["response"],
+			"username": username,
+			"password": password
+		}
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
 
-		data = s.recv(1024)
-		print(f"Recieved {data}")
-		s.close()
+		answer = self.send_to_server(message)
+		loaded_json = json.loads(answer)
+		self.token = loaded_json["token"]
+		self.username = username
 
-to_send = get_image_packets(PATH)
-for i in to_send:
-	send_to_server(i)
+	def register_user(self,username,password):
+		response_bytes = self.send_to_server(b'{"operation_request":"register_user"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		
+		if response["response"] == -1:
+			print("> Server refused registration.")
+			return
+		
+		message = {
+			"operation": response["response"],
+			"username": username,
+			"password": password
+		}
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
 
-send_to_server(b"CONN_END")
+		answer = self.send_to_server(message)
+		loaded_json = json.loads(answer)
+		if loaded_json["status_code"] == "200":
+			print(f"> Sucesso na criacao do usuario {username}")
+		else:
+			print(f"> Registro do usuario {username} falhou. O nome provavelmente ja foi registrado, ou contem caracteres invalidos")
 
-"""
-while True:
-	send_to_server(input("Manda: "))
-"""
+	def follow_user(self,username):
+		response_bytes = self.send_to_server(b'{"operation_request":"follow_user"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		
+		if response["response"] == -1:
+			print("> Server refused follow.")
+			return
+		
+		message = {
+			"operation": response["response"],
+			"username": username
+		}
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
+
+		answer = self.send_to_server(message)
+		loaded_json = json.loads(answer)
+		if loaded_json["status_code"] == "200":
+			print(f"> Sucesso em seguir {username}")
+		else:
+			print(f"> Falha em seguir {username}. O usuario provavelmente nao existe.")
+	
+	def retrieve_feed(self):
+		response_bytes = self.send_to_server(b'{"operation_request":"retrieve_feed"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		
+		if response["response"] == -1:
+			print("> Server refused retrieve feed.")
+			return
+		
+		message = {
+			"operation": response["response"],
+			"username": self.username
+		}
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
+
+		self.send_to_server(message)
+
+	def fix_quotes(self,message):
+		# obviamente tem um jeito melhor de fazer isso
+		# mas estou sem tempo
+		return message.decode('utf-8').replace("\'","\"").encode("utf-8")
+
+if __name__ == "__main__":
+	x = Client()
+	try:
+		print("> Starting client operations")
+		x.send_image("image.png")
+		x.register_user("helio_kitty","mistoquente")
+		x.login("helio_kitty","mistoquente")
+		x.send_image("image.png")
+		x.follow_user("thaix")
+		#x.send_image("image.png")
+		#x.login("icaro","icaro")
+		#x.register_user("gaaaalego","portugues")
+		#x.send_image("image.png","imagem supimpa. daora demais")
+		#x.login("thaix","minax")
+		#x.follow_user("icaro")
+		#x.retrieve_feed()
+	except KeyboardInterrupt:
+		x.socket.close()
