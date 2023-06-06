@@ -6,6 +6,8 @@ from core.controller import RetrieveFeedController
 from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
 
+from core.middlewares import EnsureAuthenticated
+
 import packet_ops as pops
 import json
 
@@ -19,6 +21,10 @@ class RequestHandler():
         self._retrieve_feed_controller   = RetrieveFeedController()
         self._remove_follower_controller = RemoveFollowerController()
         self._remove_followed_controller = RemoveFollowedController()
+        
+        self._ensure_authenticated       = EnsureAuthenticated()
+        
+        self.authed_users = {}
     
     def auth_user(self, socket):
         conn, addr, = socket.accept()
@@ -28,10 +34,10 @@ class RequestHandler():
             data = conn.recv(1024)
 
             loaded_json = pops.bytearray_to_json(data)
-            user_token = json.loads(self.auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
+            user_token = json.loads(self._auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
 
-            if user_token["token"] != "-1":
-                self.authed_users[addr[0]] = loaded_json["username"]
+            # if user_token["token"] != "-1":
+            #     self.authed_users[addr[0]] = loaded_json["username"]
 
             user_token = json.dumps(user_token)		
             conn.sendall(b"%s" % user_token.encode())
@@ -47,7 +53,7 @@ class RequestHandler():
 
             loaded_json = pops.bytearray_to_json(data)
 		
-            return_code = self.create_user_controller.handle(loaded_json["username"],loaded_json["password"])
+            return_code = self._create_user_controller.handle(loaded_json["username"],loaded_json["password"])
             conn.sendall(b"%s" % return_code.encode())
     
     def follow_user(self, socket):
@@ -57,9 +63,13 @@ class RequestHandler():
             data = conn.recv(1024)
 
             loaded_json = pops.bytearray_to_json(data)
+            
+            
+            
+            
             print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
             # TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
-            return_code = self.follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
+            return_code = self._follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
             conn.sendall(b"%s" % return_code.encode())
             
     def retrieve_feed(self, socket):
@@ -68,7 +78,7 @@ class RequestHandler():
         with conn:
             data = conn.recv(1024)
             loaded_json = pops.bytearray_to_json(data)
-            self.retrieve_feed_controller.handle(loaded_json["username"])
+            self._retrieve_feed_controller.handle(loaded_json["username"])
             
     def create_post(self, socket):
         packets = []
@@ -83,7 +93,7 @@ class RequestHandler():
                 data = conn.recv(1024)
                 if data == b"CONN_END":
                     loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-                    return_code = self.create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
+                    return_code = self._create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
                     print(return_code)
                     conn.sendall(b"%s" % return_code.encode())
                     break

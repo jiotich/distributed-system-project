@@ -5,7 +5,7 @@ class EnsureAuthenticated:
         self._jwt_secret    = "segredo"
         self._jwt_algorithm = "HS256"
 
-    def handle(self, token, description, image):
+    def handle(self, token):
         try:
             decoded = jwt.decode(
                 jwt=token, 
@@ -17,4 +17,4 @@ class EnsureAuthenticated:
         except jwt.PyJWTError:
             return False
         else:
-            return username, description, image
+            return True
