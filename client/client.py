@@ -30,7 +30,7 @@ class Client:
 			print("> Server refused to recieve image.")
 			return
 		message = {
-			"operation": response["response"],
+			"origin": self.username,
 			"image_bytes": pops.get_bytearray_from_file(image_path,encode=True).decode(),
 			"description": description
 		}
@@ -104,7 +104,7 @@ class Client:
 			return
 		
 		message = {
-			"operation": response["response"],
+			"origin": self.username,
 			"username": username
 		}
 		message = bytearray(f"{message}",encoding='utf-8')
@@ -144,10 +144,13 @@ if __name__ == "__main__":
 	x = Client()
 	try:
 		print("> Starting client operations")
+		#x.register_user("sapoboi","boisapo")
+		x.login("sapoboi","boisapo")
+		#print(x.token,x.username)
 		x.send_image("image.png")
-		x.register_user("helio_kitty","mistoquente")
-		x.login("helio_kitty","mistoquente")
-		x.send_image("image.png")
+		#x.register_user("helio_kitty","mistoquente")
+		#x.login("helio_kitty","mistoquente")
+		#x.send_image("image.png")
 		x.follow_user("thaix")
 		#x.send_image("image.png")
 		#x.login("icaro","icaro")
@@ -155,6 +158,6 @@ if __name__ == "__main__":
 		#x.send_image("image.png","imagem supimpa. daora demais")
 		#x.login("thaix","minax")
 		#x.follow_user("icaro")
-		#x.retrieve_feed()
+		x.retrieve_feed()
 	except KeyboardInterrupt:
 		x.socket.close()

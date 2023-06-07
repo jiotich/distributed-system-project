@@ -1,17 +1,15 @@
 import sys
 sys.dont_write_bytecode = True
-from core.controller import AuthUserController
-from core.controller import CreateUserController
-from core.controller import CreatePostController
-from core.controller import FollowUserController
-from core.controller import RetrieveFeedController
-from core.controller import RemoveFollowerController
-from core.controller import RemoveFollowedController
+
 import socket
 import packet_ops as pops
 import json
 import base64
 from os import path
+
+
+
+from request_handler import RequestHandler
 
 class Server:
 	def __init__(self):
@@ -22,15 +20,9 @@ class Server:
 		self.socket.bind((self.HOST, self.PORT))
 		self.socket.listen()
 		self.current_connections = {}
-		self.authed_users = {}
 
-		self.auth_user_controller       = AuthUserController()
-		self.create_user_controller     = CreateUserController()
-		self.create_post_controller     = CreatePostController()
-		self.follow_user_controller     = FollowUserController()
-		self.retrieve_feed_controller   = RetrieveFeedController()
-		self.remove_follower_controller = RemoveFollowerController()
-		self.remove_followed_controller = RemoveFollowedController()
+  
+		self.request_handler = RequestHandler()
 
 	def wait_requests(self):
 		data = None
@@ -45,120 +37,45 @@ class Server:
 
 				data = conn.recv(1024)
 				operation = json.loads(data.decode())
-				if operation["operation_request"] not in ["register_user","login"] and not self.verify_auth(addr[0]):
-					conn.sendall(b'{"code":"DENIED",\n "response":-1}')
-					continue
-				else:
-					self.current_connections[addr[0]] = operation
-					conn.sendall(b'{"code":"OK",\n "response":1234}')
+				self.current_connections[addr[0]] = operation
+				conn.sendall(b'{"code":"OK",\n "response":1234}')
 
 				# dicionario dentro de dicionario
 				if self.current_connections[addr[0]]["operation_request"] == "send_image":
 					print(f"> Realizando operacao de recepcao de imagem para {addr[0]}")
-					self.recieve_image()
+					self.request_handler.create_post(self.socket)
 					self.operation_finish(addr[0])
-				
+    
 				elif self.current_connections[addr[0]]["operation_request"] == "login":
 					print(f"Logando usuario: {addr[0]}")
-					self.auth_user()
+					self.request_handler.auth_user(self.socket)
 					self.operation_finish(addr[0])
 				
 				elif self.current_connections[addr[0]]["operation_request"] == "register_user":
 					print(f"Registrando novo usuario: {addr[0]}")
-					self.register_user()
+					self.request_handler.create_user(self.socket)
 					self.operation_finish(addr[0])
 
 				elif self.current_connections[addr[0]]["operation_request"] == "follow_user":
 					print("> Recebida operacao de follow")
-					self.establish_follow()
+					self.request_handler.follow_user(self.socket)
 					self.operation_finish(addr[0])
 
 				elif self.current_connections[addr[0]]["operation_request"] == "retrieve_feed":
-					print("> Zumzum")
-					self.retrieve_feed()
+					print("> Recebida requisicao por captura do feed")
+					self.request_handler.retrieve_feed(self.socket)
 					self.operation_finish(addr[0])
+
+
 
 				data = conn.recv(1024)
 				if data == b"CONN_END":
 					conn.sendall(bytes("> Transaction ended",encoding='utf-8'))
 					# breakestablish_follow
 
-	def recieve_image(self):
-		packets = []
-		data = None
-		while True:
-			print("> Inicio do recepcao da imagem")
-			print("> Esperando aceitacao conexao por parte do cliente")
-			conn, addr, = self.socket.accept()
-			with conn:
-				print("> Conexao estabelecida")
-				print(f'Conectado por {addr}')
-				data = conn.recv(1024)
-				if data == b"CONN_END":
-					loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-					return_code = self.create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
-					print(return_code)
-					conn.sendall(b"%s" % return_code.encode())
-					break
-				packets.append(data)
-				conn.sendall(bytes("> Got Packet",encoding='utf-8'))
-		
-		
-
-	def register_user(self):
-		conn, addr, = self.socket.accept()
-		data = b""
-		with conn:
-			print(f'> Registrando usuario para {addr}')
-			data = conn.recv(1024)
-
-			loaded_json = pops.bytearray_to_json(data)
-		
-			return_code = self.create_user_controller.handle(loaded_json["username"],loaded_json["password"])
-			conn.sendall(b"%s" % return_code.encode())
-
-	def auth_user(self):
-		# TODO: Verificacao de credenciais no banco de dados
-		conn, addr, = self.socket.accept()
-		data = b""
-		with conn:
-			print(f'> Validando credenciais para {addr}')
-			data = conn.recv(1024)
-
-			loaded_json = pops.bytearray_to_json(data)
-			user_token = json.loads(self.auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
-			#print(loaded_json)
-			if user_token["token"] != "-1":
-				self.authed_users[addr[0]] = loaded_json["username"]
-
-			user_token = json.dumps(user_token)		
-			conn.sendall(b"%s" % user_token.encode())
-	
-	def establish_follow(self):
-		conn, addr, = self.socket.accept()
-		data = b""
-		with conn:
-			data = conn.recv(1024)
-
-			loaded_json = pops.bytearray_to_json(data)
-			print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
-			# TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
-			return_code = self.follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
-			conn.sendall(b"%s" % return_code.encode())
-
-	def retrieve_feed(self):
-		conn, addr, = self.socket.accept()
-		data = b""
-		with conn:
-			data = conn.recv(1024)
-			loaded_json = pops.bytearray_to_json(data)
-			self.retrieve_feed_controller.handle(loaded_json["username"])
 
 	def operation_finish(self,ip):
 		self.current_connections[ip]["operation_request"] = None
-	
-	def verify_auth(self,ip):
-		return 1 if ip in self.authed_users else 0	
 
 if __name__ == "__main__":
 	x = Server()
