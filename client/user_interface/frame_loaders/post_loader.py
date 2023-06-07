@@ -1,0 +1,1 @@
+#Pagina para ver um post individualmente e seus comentários. Por enquanto ainda não implementado
