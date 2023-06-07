@@ -20,7 +20,7 @@ class Server:
 		self.socket.bind((self.HOST, self.PORT))
 		self.socket.listen()
 		self.current_connections = {}
-		self.authed_users = {}
+
   
 		self.request_handler = RequestHandler()
 
@@ -37,17 +37,13 @@ class Server:
 
 				data = conn.recv(1024)
 				operation = json.loads(data.decode())
-				if operation["operation_request"] not in ["register_user","login"] and not self.verify_auth(addr[0]):
-					conn.sendall(b'{"code":"DENIED",\n "response":-1}')
-					continue
-				else:
-					self.current_connections[addr[0]] = operation
-					conn.sendall(b'{"code":"OK",\n "response":1234}')
+				self.current_connections[addr[0]] = operation
+				conn.sendall(b'{"code":"OK",\n "response":1234}')
 
 				# dicionario dentro de dicionario
 				if self.current_connections[addr[0]]["operation_request"] == "send_image":
 					print(f"> Realizando operacao de recepcao de imagem para {addr[0]}")
-					self.create_post(self.socket)
+					self.request_handler.create_post(self.socket)
 					self.operation_finish(addr[0])
     
 				elif self.current_connections[addr[0]]["operation_request"] == "login":
@@ -62,12 +58,12 @@ class Server:
 
 				elif self.current_connections[addr[0]]["operation_request"] == "follow_user":
 					print("> Recebida operacao de follow")
-					self.establish_follow()
+					self.request_handler.follow_user(self.socket)
 					self.operation_finish(addr[0])
 
 				elif self.current_connections[addr[0]]["operation_request"] == "retrieve_feed":
-					print("> Zumzum")
-					self.request_handler(self.socket)
+					print("> Recebida requisicao por captura do feed")
+					self.request_handler.retrieve_feed(self.socket)
 					self.operation_finish(addr[0])
 
 
@@ -80,9 +76,6 @@ class Server:
 
 	def operation_finish(self,ip):
 		self.current_connections[ip]["operation_request"] = None
-	
-	def verify_auth(self,ip):
-		return 1 if ip in self.authed_users else 0	
 
 if __name__ == "__main__":
 	x = Server()

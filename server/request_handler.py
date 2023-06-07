@@ -32,16 +32,16 @@ class RequestHandler():
         with conn:
             print(f'> Validando credenciais para {addr}')
             data = conn.recv(1024)
-
+            print(data)
             loaded_json = pops.bytearray_to_json(data)
             user_token = json.loads(self._auth_user_controller.handle(loaded_json["username"],loaded_json["password"]))
 
             # if user_token["token"] != "-1":
             #     self.authed_users[addr[0]] = loaded_json["username"]
-
+            print(user_token)
             user_token = json.dumps(user_token)		
             conn.sendall(b"%s" % user_token.encode())
-    
+
     def create_user(self, socket):
         conn, addr, = socket.accept()
         
@@ -64,12 +64,9 @@ class RequestHandler():
 
             loaded_json = pops.bytearray_to_json(data)
             
-            
-            
-            
-            print(f'> {self.authed_users[addr[0]]} requisita seguir {loaded_json["username"]}')
+            print(f'> {loaded_json["origin"]} requisita seguir {loaded_json["username"]}')
             # TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
-            return_code = self._follow_user_controller.handle(self.authed_users[addr[0]],loaded_json["username"])
+            return_code = self._follow_user_controller.handle(loaded_json["origin"],loaded_json["username"])
             conn.sendall(b"%s" % return_code.encode())
             
     def retrieve_feed(self, socket):
@@ -93,7 +90,8 @@ class RequestHandler():
                 data = conn.recv(1024)
                 if data == b"CONN_END":
                     loaded_json = pops.bytearray_to_json(pops.join_sliced_bytearrays(packets))
-                    return_code = self._create_post_controller.handle(self.authed_users[addr[0]], loaded_json["description"], loaded_json["image_bytes"])
+                    print(loaded_json)
+                    return_code = self._create_post_controller.handle(loaded_json["origin"], loaded_json["description"], loaded_json["image_bytes"])
                     print(return_code)
                     conn.sendall(b"%s" % return_code.encode())
                     break

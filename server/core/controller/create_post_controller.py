@@ -8,7 +8,6 @@ class CreatePostController:
         
         if (response):
             return json.dumps({"status_code": "200"})
-            pass
+
         else:
             return json.dumps({"status_code": "400"})
-            pass
