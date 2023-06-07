@@ -1,5 +1,4 @@
 from threading       import Thread
-from request_handler import RequestHandler
 
 class NewThread(Thread):
     def __init__(self, procedure, callback, *args, **kwargs):
