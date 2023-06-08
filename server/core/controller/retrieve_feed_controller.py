@@ -7,6 +7,6 @@ class RetrieveFeedController:
         response = retrieve_feed_service.execute(username)
         
         if (response):
-            return json.dumps({"status_code": "200"})
+            return json.dumps({"data": response, "status_code": "200"})
         else:
-            return json.dumps({"status_code": "400"})
+            return json.dumps({"data": "", "status_code": "400"})

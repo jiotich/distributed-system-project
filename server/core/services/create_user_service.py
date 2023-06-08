@@ -6,14 +6,14 @@ from core.repositories import UserRepository
 from core.entities     import User
 
 class CreateUserService:
-    def execute(self, username, password):
+    def execute(self, username, password, description):
         
         user_repository = UserRepository()
         
         id = uuid.uuid4()
         password_hash = sha256_crypt.hash(password)
         
-        new_user = User(id, username, password_hash)
+        new_user = User(id, username, password_hash, description)
         
         user_already_exists = user_repository.find_one(username)
         
