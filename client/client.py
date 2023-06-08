@@ -20,7 +20,7 @@ class Client:
 
 	def send_to_server(self,message):
 		self.connect()
-		#print(f"> Sending message [{message}] to server")
+		print(f"> Sending message [{message}] to server")
 		self.socket.sendall(message)
 		data = self.socket.recv(1024)
 		return data
@@ -115,6 +115,7 @@ class Client:
 
 		answer = self.send_to_server(message)
 		loaded_json = json.loads(answer)
+		print(loaded_json)
 		if loaded_json["status_code"] == "200":
 			print(f"> Sucesso em seguir {username}")
 		else:
@@ -133,11 +134,40 @@ class Client:
 			"operation": response["response"],
 			"username": self.username
 		}
+
 		message = bytearray(f"{message}",encoding='utf-8')
 		message = self.fix_quotes(message)
 
-		self.send_to_server(message)
+		packets = []
+		while True:
+			print(1)
+			resp = self.send_to_server(message)
+			if resp == b"CONN_END":
+				break
+			packets.append(resp)
 
+		print()
+		feed = pops.join_sliced_bytearrays(packets).decode()
+		feed = str(feed).replace("\\","")
+		#print(x)
+		depth = 0
+		all_images = []
+		image_jsons = []
+		current_image_b64 = ""
+		for letter in feed:
+			if letter == "[":
+				depth+=1
+			if depth == 2:
+				current_image_b64 += letter
+			if letter == "]" and depth == 2:
+				all_images.append(current_image_b64)
+				current_image_b64 = ""
+				depth-=1
+		print("Heyo: ",all_images[0])
+		# token, descricao, likes, data, hora, dados, dono
+		for item in all_images:
+			image_jsons.append(json.loads("{\"dados\":%s}" % item))
+		print(image_jsons[0]["dados"][6])
 	def fix_quotes(self,message):
 		# obviamente tem um jeito melhor de fazer isso
 		# mas estou sem tempo
@@ -147,20 +177,28 @@ if __name__ == "__main__":
 	x = Client()
 	try:
 		print("> Starting client operations")
-		x.register_user("teste12","abacate")
-		# x.login("sapoboi","boisapo")
-		#print(x.token,x.username)
-		# x.send_image("image.png")
-		#x.register_user("helio_kitty","mistoquente")
-		#x.login("helio_kitty","mistoquente")
+		#x.register_user("manovrau","qwerty")
+		#x.register_user("honey","qwerty")
+		#x.register_user("marcelo","qwerty")
+		#x.register_user("jones","qwerty")
+		x.login("manovrau","qwerty")
+		#x.follow_user("manovrau")
 		#x.send_image("image.png")
-		# x.follow_user("thaix")
+		#x.register_user("teste12","abacate")
+		#x.login("thaix","minax")
+		#print(x.token,x.username)
+		#x.send_image("image.png")
+		#x.follow_user("helio_kitty")
+		#x.login("helio_kitty","mistoquente")
+		#x.send_image("im.png")
+		#x.follow_user("icaro")
 		#x.send_image("image.png")
 		#x.login("icaro","icaro")
 		#x.register_user("gaaaalego","portugues")
 		#x.send_image("image.png","imagem supimpa. daora demais")
 		#x.login("thaix","minax")
 		#x.follow_user("icaro")
-		# x.retrieve_feed()
+		x.retrieve_feed()
+	
 	except KeyboardInterrupt:
 		x.socket.close()

@@ -1,7 +1,9 @@
 import json
 import base64
 
-def get_bytearray_from_file(path, encode=False):
+def get_bytearray_from_file(path, encode=False, no_path=False):
+	if no_path:
+		return bytearray(json.dumps(path),encoding='utf-8')
 	with open(path, "rb") as im:
 		byte_file = im.read()
 		file_ba = bytearray(byte_file)

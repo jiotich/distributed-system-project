@@ -73,15 +73,28 @@ class RequestHandler():
             # TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
             return_code = self._follow_user_controller.handle(loaded_json["origin"],loaded_json["username"])
             connection.sendall(b"%s" % return_code.encode())
-            
+    
+
+    def send_piece(self, piece, socket):
+        connection, address, = socket.accept()
+        with connection:
+            data = connection.recv(1024)
+            connection.sendall(piece)
+
     def retrieve_feed(self, socket):
         connection, address, = socket.accept()
         data = b""
+        packets = []
         with connection:
             data = connection.recv(1024)
             loaded_json = pops.bytearray_to_json(data)
-            self._retrieve_feed_controller.handle(loaded_json["username"])
+            res = self._retrieve_feed_controller.handle(loaded_json["username"])
+            packets = pops.slice_bytearray(pops.get_bytearray_from_file(res,no_path=True))
             
+        for packet in packets:
+            self.send_piece(packet,socket)
+        self.send_piece(b"CONN_END",socket)
+
     def create_post(self, socket):
         packets = []
         data = None
