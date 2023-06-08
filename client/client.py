@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode = True
+
 import socket
 import packet_ops as pops
 import json
@@ -6,7 +9,7 @@ import base64
 class Client:
 	def __init__(self):
 		self.HOST = '127.0.0.1'
-		self.PORT = 42069
+		self.PORT = 42062
 		self.socket = None
 		self.token = None
 		self.username = None
@@ -144,20 +147,20 @@ if __name__ == "__main__":
 	x = Client()
 	try:
 		print("> Starting client operations")
-		#x.register_user("sapoboi","boisapo")
-		x.login("sapoboi","boisapo")
+		x.register_user("teste12","abacate")
+		# x.login("sapoboi","boisapo")
 		#print(x.token,x.username)
-		x.send_image("image.png")
+		# x.send_image("image.png")
 		#x.register_user("helio_kitty","mistoquente")
 		#x.login("helio_kitty","mistoquente")
 		#x.send_image("image.png")
-		x.follow_user("thaix")
+		# x.follow_user("thaix")
 		#x.send_image("image.png")
 		#x.login("icaro","icaro")
 		#x.register_user("gaaaalego","portugues")
 		#x.send_image("image.png","imagem supimpa. daora demais")
 		#x.login("thaix","minax")
 		#x.follow_user("icaro")
-		x.retrieve_feed()
+		# x.retrieve_feed()
 	except KeyboardInterrupt:
 		x.socket.close()

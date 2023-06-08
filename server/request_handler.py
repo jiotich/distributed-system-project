@@ -50,8 +50,15 @@ class RequestHandler():
             data = connection.recv(1024)
 
             loaded_json = pops.bytearray_to_json(data)
-		
-            return_code = self._create_user_controller.handle(loaded_json["username"],loaded_json["password"])
+
+            #TODO: passar o json com a descrição 
+
+            return_code = self._create_user_controller.handle(
+                loaded_json["username"],
+                loaded_json["password"],
+                "descrição placeholder"
+            )
+            
             connection.sendall(b"%s" % return_code.encode())
     
     def follow_user(self, socket):

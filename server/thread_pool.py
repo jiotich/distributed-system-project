@@ -11,13 +11,17 @@ class NewThread(Thread):
 
     def run(self):
         self.result = self.procedure(*self.args, **self.kwargs)
-        self.callback(self.result)
+        print(self.result)
+        # self.callback(self.result)
+        self.callback()
 
 class ThreadPool():
     def __init__(self):
         pass
-    def response_worker_thread(self, value):
-        print(f"work_done, value: {value}")
+    # def response_worker_thread(self, value):
+        # print(f"work_done, value: {value}")
+    def response_worker_thread(selfe):
+        print(f"work_done")
 
     def create_worker_thread(self, procedure, data):
         thread = NewThread(procedure, self.response_worker_thread, data)
