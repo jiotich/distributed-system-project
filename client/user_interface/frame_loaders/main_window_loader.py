@@ -1,11 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
-from frame_loaders.feed_loader import *
-from frame_loaders.self_profile_loader import *
-from frame_loaders.publish_loader import *
-from frame_loaders.search_loader import *
-from frame_loaders.profile_loader import *
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
+from user_interface.frame_loaders.feed_loader import *
+from user_interface.frame_loaders.self_profile_loader import *
+from user_interface.frame_loaders.publish_loader import *
+from user_interface.frame_loaders.search_loader import *
+from user_interface.frame_loaders.profile_loader import *
 
 def change_to_main_window(window):
     window.main_window = QtWidgets.QMainWindow()

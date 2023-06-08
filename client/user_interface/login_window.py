@@ -157,7 +157,7 @@ class Ui_login_window(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Noto Serif\'; font-size:18pt; font-weight:600; font-style:italic;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Imago</p></body></html>"))
-import images_rc
+import user_interface.images_rc
 
 
 if __name__ == "__main__":

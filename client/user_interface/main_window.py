@@ -792,7 +792,7 @@ class Ui_main_window(object):
 "</style></head><body style=\" font-family:\'Ubuntu\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Comment</p></body></html>"))
         self.post_comment_button.setText(_translate("main_window", "Post Comment"))
-import images_rc
+import user_interface.images_rc
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
-from frame_loaders.profile_loader import *
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
+from user_interface.frame_loaders.profile_loader import *
 
 def clear_feed(window):
     for frame in window.feed_posts:
