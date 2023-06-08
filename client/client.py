@@ -167,7 +167,11 @@ class Client:
 		# token, descricao, likes, data, hora, dados, dono
 		for item in all_images:
 			image_jsons.append(json.loads("{\"dados\":%s}" % item))
-		print(image_jsons[0]["dados"][6])
+		#print(image_jsons[0]["dados"][6])
+		for item in image_jsons:
+			imbytes = base64.b64decode(item["dados"][5])
+			pops.get_file_from_bytearray(imbytes,random=True,type="png")
+
 	def fix_quotes(self,message):
 		# obviamente tem um jeito melhor de fazer isso
 		# mas estou sem tempo

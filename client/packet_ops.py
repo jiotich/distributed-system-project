@@ -1,5 +1,7 @@
 import json
 import base64
+import random
+import string
 
 def get_bytearray_from_file(path, encode=False, no_path=False):
 	if no_path:
@@ -28,9 +30,15 @@ def bytearray_to_json(ba):
 	res = json.loads(ba)
 	return res
 
-def get_file_from_bytearray(ba):
-	with open("newImage.png", "wb") as im:
+def get_file_from_bytearray(ba, name="newImage.png", random=False, type="jpg"):
+	if random:
+		name = f"{randomword()}.{type}"
+	with open(name, "wb") as im:
 		im.write(ba)
+
+def randomword():
+	res = "".join(random.choice(string.ascii_lowercase) for i in range(9))
+	return res
 
 if __name__ == "__main__":
 	step1 = get_bytearray_from_file("image.png")

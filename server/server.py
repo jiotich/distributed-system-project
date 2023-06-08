@@ -6,9 +6,6 @@ import packet_ops as pops
 import json
 import base64
 from os import path
-
-
-
 from request_handler import RequestHandler
 from thread_pool 	 import ThreadPool
 
