@@ -35,6 +35,7 @@ def get_file_from_bytearray(ba, name="newImage.png", random=False, type="jpg"):
 		name = f"{randomword()}.{type}"
 	with open(name, "wb") as im:
 		im.write(ba)
+	return name
 
 def randomword():
 	res = "".join(random.choice(string.ascii_lowercase) for i in range(9))

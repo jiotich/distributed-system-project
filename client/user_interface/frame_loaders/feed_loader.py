@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
-from frame_loaders.profile_loader import *
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
+from user_interface.frame_loaders.profile_loader import *
 
 def clear_feed(window):
     for frame in window.feed_posts:
@@ -61,6 +61,7 @@ def create_feed_post(window, username, description, likes, post_id, is_liked, im
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
     window.post_image_frame.setStyleSheet("image: url("+img_path+");")
+    #TODO: APAGAR A IMAGEM
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")

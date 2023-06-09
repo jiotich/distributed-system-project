@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
 
 def clear_self_profile(window):
     for frame in window.self_posts:
