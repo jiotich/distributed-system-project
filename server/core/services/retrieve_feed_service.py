@@ -2,6 +2,8 @@ from core.repositories import PostRepository
 from core.repositories import UserRepository
 from core.repositories import RelationshipRepository
 
+from misc.sort  import Sort
+
 #TODO: fazer os posts virem em ordem de data
 
 class RetrieveFeedService:
@@ -10,7 +12,9 @@ class RetrieveFeedService:
         user_repository         = UserRepository()
         post_repository         = PostRepository()
         relationship_repository = RelationshipRepository()
-        
+
+        sort = Sort()
+
         user_exist = user_repository.find_one(username)
         
         if (user_exist):
@@ -36,7 +40,9 @@ class RetrieveFeedService:
                 else:
                     posts = response[0]
 
-                return posts
+                ordered_posts = sort.order_by_date(posts)
+
+                return ordered_posts
             else:
                 return False
         else:

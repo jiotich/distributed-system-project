@@ -11,3 +11,4 @@ class UpdateUserController:
 
         else:
             return json.dumps({"status_code": "400"})
+        
