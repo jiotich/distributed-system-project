@@ -9,7 +9,7 @@ import base64
 class Client:
 	def __init__(self):
 		self.HOST = '127.0.0.1'
-		self.PORT = 42062
+		self.PORT = 42069
 		self.socket = None
 		self.token = None
 		self.username = None
@@ -140,7 +140,6 @@ class Client:
 
 		packets = []
 		while True:
-			print(1)
 			resp = self.send_to_server(message)
 			if resp == b"CONN_END":
 				break
@@ -148,7 +147,6 @@ class Client:
 
 		feed = pops.join_sliced_bytearrays(packets).decode()
 		feed = str(feed).replace("\\","")
-		#print(x)
 		depth = 0
 		all_images = []
 		image_jsons = []
@@ -174,6 +172,71 @@ class Client:
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
 		return posts
 
+	def follows_user(self, username):
+		response_bytes = self.send_to_server(b'{"operation_request":"verify_follow"}')
+		response = json.loads(response_bytes)
+
+		if response["response"] == -1:
+			print("> Server refused veirfy follow.")
+			return
+		
+		message = {
+			"username": username
+		}
+
+
+	def retrieve_profile(self,username):
+		response_bytes = self.send_to_server(b'{"operation_request":"retrieve_profile"}')
+		response = json.loads(response_bytes)
+		print("Recieved operation token: ", response["response"])
+		
+		if response["response"] == -1:
+			print("> Server refused retrieve feed.")
+			return
+		
+		message = {
+			"operation": response["response"],
+			"username": username
+		}
+
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
+
+		packets = []
+		while True:
+			resp = self.send_to_server(message)
+			if resp == b"CONN_END":
+				break
+			packets.append(resp)
+
+		feed = pops.join_sliced_bytearrays(packets).decode()
+		feed = str(feed).replace("\\","")
+
+		depth = 0
+		all_images = []
+		image_jsons = []
+		current_image = ""
+		for letter in feed:
+			if letter == "[":
+				depth+=1
+			if depth == 2:
+				current_image += letter
+			if letter == "]" and depth == 2:
+				depth-=1
+				all_images.append(current_image)
+				current_image = ""
+
+		# id_img, descricao, likes, data, hora, dados, dono
+		posts = []
+		for item in all_images:
+			image_jsons.append(json.loads("{\"dados\":%s}" % item))
+		#print(image_jsons[0]["dados"][6])
+		for item in image_jsons:
+			imbytes = base64.b64decode(item["dados"][5])
+			img_path = pops.get_file_from_bytearray(imbytes,random=True)
+			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
+		return posts
+
 	def fix_quotes(self,message):
 		# obviamente tem um jeito melhor de fazer isso
 		# mas estou sem tempo
@@ -187,7 +250,8 @@ if __name__ == "__main__":
 		#x.register_user("honey","qwerty")
 		#x.register_user("marcelo","qwerty")
 		#x.register_user("jones","qwerty")
-		x.login("manovrau","qwerty")
+		x.login("honey","qwerty")
+		x.retrieve_profile("manovrau")
 		#x.follow_user("manovrau")
 		#x.send_image("image.png")
 		#x.register_user("teste12","abacate")
@@ -204,7 +268,7 @@ if __name__ == "__main__":
 		#x.send_image("image.png","imagem supimpa. daora demais")
 		#x.login("thaix","minax")
 		#x.follow_user("icaro")
-		x.retrieve_feed()
+		#x.retrieve_feed()
 	
 	except KeyboardInterrupt:
 		x.socket.close()

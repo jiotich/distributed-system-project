@@ -12,7 +12,7 @@ from thread_pool 	 import ThreadPool
 class Server:
 	def __init__(self):
 		self.HOST = '127.0.0.1'
-		self.PORT = 42062
+		self.PORT = 42069
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self.socket.bind((self.HOST, self.PORT))
@@ -38,48 +38,59 @@ class Server:
 				self.current_connections[address[0]] = operation
 				connection.sendall(b'{"code":"OK",\n "response":1234}')
 
-				# dicionario dentro de dicionario
-				if self.current_connections[address[0]]["operation_request"] == "send_image":
-					print(f"> Realizando operacao de recepcao de imagem para {address[0]}")
-					self.request_handler.create_post(self.socket)
-						
-					self.operation_finish(address[0])
-    
-				elif self.current_connections[address[0]]["operation_request"] == "login":
-					print(f"Logando usuario: {address[0]}")
-					try:
+				try:
+					# dicionario dentro de dicionario
+					if self.current_connections[address[0]]["operation_request"] == "send_image":
+						print(f"> Realizando operacao de recepcao de imagem para {address[0]}")
+						self.request_handler.create_post(self.socket)
+							
+						self.operation_finish(address[0])
+		
+					elif self.current_connections[address[0]]["operation_request"] == "login":
+						print(f"Logando usuario: {address[0]}")
+						try:
+							self.thread_pool.create_worker_thread(
+								self.request_handler.auth_user, 
+								self.socket
+							)
+						except:
+							print("> Erro no login")
+						self.operation_finish(address[0])
+					
+					elif self.current_connections[address[0]]["operation_request"] == "register_user":
+						print(f"Registrando novo usuario: {address[0]}")
+
 						self.thread_pool.create_worker_thread(
-							self.request_handler.auth_user, 
+							self.request_handler.create_user, 
 							self.socket
 						)
-					except:
-						print("> Erro no login")
-					self.operation_finish(address[0])
+						self.operation_finish(address[0])
+
+					elif self.current_connections[address[0]]["operation_request"] == "follow_user":
+						print("> Recebida operacao de follow")
+
+						self.thread_pool.create_worker_thread(
+							self.request_handler.follow_user, 
+							self.socket
+						)
+						self.operation_finish(address[0])
+
+					elif self.current_connections[address[0]]["operation_request"] == "retrieve_feed":
+						print("> Recebida requisicao por captura do feed")					
+						self.request_handler.retrieve_feed(self.socket)
+						self.operation_finish(address[0])
+
+					elif self.current_connections[address[0]]["operation_request"] == "retrieve_profile":
+						print("> Recebida requisicao de profile")
+						self.request_handler.retrieve_profile(self.socket)
+						self.operation_finish(address[0])
 				
-				elif self.current_connections[address[0]]["operation_request"] == "register_user":
-					print(f"Registrando novo usuario: {address[0]}")
+					elif self.current_connections[address[0]]["operation_request"] == "verify_follow":
+						self.request_handler.verify_follow()
+						self.operation_finish(address[0])
 
-					self.thread_pool.create_worker_thread(
-						self.request_handler.create_user, 
-						self.socket
-					)
-					self.operation_finish(address[0])
-
-				elif self.current_connections[address[0]]["operation_request"] == "follow_user":
-					print("> Recebida operacao de follow")
-
-					self.thread_pool.create_worker_thread(
-						self.request_handler.follow_user, 
-						self.socket
-					)
-					self.operation_finish(address[0])
-
-				elif self.current_connections[address[0]]["operation_request"] == "retrieve_feed":
-					print("> Recebida requisicao por captura do feed")					
-					self.request_handler.retrieve_feed(self.socket)
-					self.operation_finish(address[0])
-
-
+				except KeyError:
+					print("> Key error no loop principal do servidor. Adoraria saber pq isso acontece.")
 				data = connection.recv(1024)
 				if data == b"CONN_END":
 					connection.sendall(bytes("> Transaction ended",encoding='utf-8'))

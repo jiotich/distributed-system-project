@@ -5,6 +5,7 @@ from core.controller import FollowUserController
 from core.controller import RetrieveFeedController
 from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
+from core.controller import RetrieveUserPostsController
 
 from core.middlewares import EnsureAuthenticated
 
@@ -21,7 +22,7 @@ class RequestHandler():
         self._retrieve_feed_controller   = RetrieveFeedController()
         self._remove_follower_controller = RemoveFollowerController()
         self._remove_followed_controller = RemoveFollowedController()
-        
+        self._retrieve_user_posts_controller = RetrieveUserPostsController()
         self._ensure_authenticated       = EnsureAuthenticated()
         
         self.authed_users = {}
@@ -102,12 +103,47 @@ class RequestHandler():
         with connection:
             data = connection.recv(1024)
             loaded_json = pops.bytearray_to_json(data)
-            res = self._retrieve_feed_controller.handle(loaded_json["username"])
-            packets = pops.slice_bytearray(pops.get_bytearray_from_file(res,no_path=True))
-            
+            res = self._retrieve_user_posts_controller.handle(loaded_json["username"])
+            depth = 0
+            current_post = ""
+            all_posts = []
+            all_jsons = {"data":[]}
+            for letter in res:
+                if letter == "[":
+                    depth += 1
+                if depth == 2:
+                    current_post += letter
+                if letter == "]" and depth == 2:
+                    depth -= 1
+                    #print(current_post)
+                    all_posts.append(current_post)
+                    current_post = ""
+
+            for post in all_posts:
+                all_jsons["data"].append(json.loads("{\"data\":%s}" % post))
+            packets = pops.slice_bytearray(pops.get_bytearray_from_file(json.dumps(all_jsons),no_path=True))
+        print(packets)
         for packet in packets:
             self.send_piece(packet,socket)
         self.send_piece(b"CONN_END",socket)
+
+        
+    def verify_follow(self,username):
+        connection, address, = socket.accept()
+        
+        data = b""
+
+        with connection:
+            print(f'> Buscando usuario para {address}')
+            data = connection.recv(1024)
+
+            loaded_json = pops.bytearray_to_json(data)
+
+            return_code = self._create_user_controller.handle(
+                loaded_json["username"],
+            )
+            
+            connection.sendall(b"%s" % return_code.encode())
 
     def create_post(self, socket):
         packets = []
