@@ -1,11 +1,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
-from frame_loaders.feed_loader import *
-from frame_loaders.self_profile_loader import *
-from frame_loaders.publish_loader import *
-from frame_loaders.search_loader import *
-from frame_loaders.profile_loader import *
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
+from user_interface.frame_loaders.feed_loader import *
+from user_interface.frame_loaders.self_profile_loader import *
+from user_interface.frame_loaders.publish_loader import *
+from user_interface.frame_loaders.search_loader import *
+from user_interface.frame_loaders.profile_loader import *
 
 def change_to_main_window(window):
     window.main_window = QtWidgets.QMainWindow()
@@ -59,7 +59,7 @@ def home(window):
     window.ui.stackedWidget.setCurrentIndex(0)
     posts = mh.home_click(window)
     for post in posts:
-        create_feed_post(window, post[0], post[1], post[2], post[3], post[4], post[5])
+        create_feed_post(window, post[0], post[1], post[2], "1", False, post[3])
 
 def self_profile(window):
     clear_self_profile(window)

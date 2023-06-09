@@ -6,9 +6,6 @@ import packet_ops as pops
 import json
 import base64
 from os import path
-
-
-
 from request_handler import RequestHandler
 from thread_pool 	 import ThreadPool
 
@@ -22,7 +19,6 @@ class Server:
 		self.socket.listen()
 		self.current_connections = {}
 
-  
 		self.request_handler = RequestHandler()
 		self.thread_pool	 = ThreadPool()
 
@@ -36,7 +32,7 @@ class Server:
 				if address[0] not in self.current_connections.keys():
 					print(f"> Realizando a primera conexao para {address[0]}")
 					self.current_connections[address[0]] = None
-
+				
 				data = connection.recv(1024)
 				operation = json.loads(data.decode())
 				self.current_connections[address[0]] = operation
@@ -45,20 +41,19 @@ class Server:
 				# dicionario dentro de dicionario
 				if self.current_connections[address[0]]["operation_request"] == "send_image":
 					print(f"> Realizando operacao de recepcao de imagem para {address[0]}")
-
-					self.thread_pool.create_worker_thread(
-						self.request_handler.create_post, 
-						self.socket
-					)
+					self.request_handler.create_post(self.socket)
+						
 					self.operation_finish(address[0])
     
 				elif self.current_connections[address[0]]["operation_request"] == "login":
 					print(f"Logando usuario: {address[0]}")
-
-					self.thread_pool.create_worker_thread(
-						self.request_handler.auth_user, 
-						self.socket
-					)
+					try:
+						self.thread_pool.create_worker_thread(
+							self.request_handler.auth_user, 
+							self.socket
+						)
+					except:
+						print("> Erro no login")
 					self.operation_finish(address[0])
 				
 				elif self.current_connections[address[0]]["operation_request"] == "register_user":
@@ -80,19 +75,14 @@ class Server:
 					self.operation_finish(address[0])
 
 				elif self.current_connections[address[0]]["operation_request"] == "retrieve_feed":
-					print("> Recebida requisicao por captura do feed")
-					
-					self.thread_pool.create_worker_thread(
-						self.request_handler.retrieve_feed, 
-						self.socket
-					)
+					print("> Recebida requisicao por captura do feed")					
+					self.request_handler.retrieve_feed(self.socket)
 					self.operation_finish(address[0])
 
 
 				data = connection.recv(1024)
 				if data == b"CONN_END":
 					connection.sendall(bytes("> Transaction ended",encoding='utf-8'))
-					# breakestablish_follow
 
 
 	def operation_finish(self,ip):

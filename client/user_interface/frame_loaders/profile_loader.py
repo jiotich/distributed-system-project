@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
-from main_window import *
-import event_handlers.main_handler as mh
+from user_interface.main_window import *
+import user_interface.event_handlers.main_handler as mh
 
 def clear_profile(window):
     for frame in window.user_posts:

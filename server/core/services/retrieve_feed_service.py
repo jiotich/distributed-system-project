@@ -20,7 +20,7 @@ class RetrieveFeedService:
             followed_users = relationship_repository.find(user_id)
             
             for index in range(len(followed_users)):
-                response.append(post_repository.find(followed_users[index][0]))
+                response.append(post_repository.find(followed_users[0][index]))
             
             if (response):
                 return response[0]

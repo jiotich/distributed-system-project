@@ -8,23 +8,23 @@ def search_click(user, search):
     users.append(["Username3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."])
     return users
 
-def home_click(user):
+def home_click(window):
     #FAZ REQUISIÇÃO DOS POSTS PARA O FEED
     #ABAIXO UM PLACEHOLDER
-    posts = []
+    posts = window.client.retrieve_feed()
     #[username de quem postou, descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
-    posts.append(["Username1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Username2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Username3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+    #posts.append(["Username1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
+                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+    #posts.append(["Username2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
+                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+    #posts.append(["Username3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
+                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     return posts
 
-def publish_click(user, image_path, description):
+def publish_click(window, image_path, description):
     #USUÁRIO FAZ PUBLICAÇÃO
+    window.client.send_image(image_path, description)
     print("Description: ", description, "Path: ", image_path)
-    pass
     
 def self_profile_click(username):
     #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO
@@ -33,11 +33,11 @@ def self_profile_click(username):
     posts = []
     #[descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     return [description, posts]
 
 def change_user_description(username, description):
@@ -52,11 +52,11 @@ def profile_click(user, username):
     posts = []
     #[descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  "/home/user/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     return [description, is_followed, posts]
 
 def follow_user(user, username):
