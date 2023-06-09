@@ -182,6 +182,31 @@ class RelationshipRepository:
             return False
         else:
             return retrived_data
+        
+    def findfollowed(self, follower_id, followed_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            cursor.execute(
+                queries.VERIFY_IF_FOLLOW, 
+                [
+                    str(follower_id),
+                    str(followed_id)
+                    
+                ]
+            )
+            
+            connection.commit_operation()
+            
+            retrived_data = cursor.fetchall()
+
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
     
     def delete(self, followed_id, follower_id):
         try:

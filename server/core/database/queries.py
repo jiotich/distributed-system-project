@@ -53,6 +53,14 @@ FETCH_RELATIONSHIPS = """
     WHERE fk_relationship_user_follower = (?)
 """
 
+VERIFY_IF_FOLLOW = """ 
+    SELECT 
+        fk_relationship_user_followed
+    FROM 
+        follow_relationship 
+    WHERE fk_relationship_user_follower = (?) AND fk_relationship_user_followed = (?)
+"""
+
 FETCH_POSTS = """ 
     SELECT 
         post.id, 

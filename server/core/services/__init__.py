@@ -7,3 +7,4 @@ from .remove_follower_service     import RemoveFollowerService
 from .remove_followed_service     import RemoveFollowedService
 from .update_user_service         import UpdateUserService
 from .retrieve_user_posts_service import RetrieveUserPostsService
+from .verify_if_follow_service    import VerifyIfFollow
