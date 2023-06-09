@@ -15,11 +15,9 @@ class RetrieveUserPostsService:
             user_id  = user_exist[0]
 
             response = post_repository.find(user_id)
-            
-            print(response)
 
             if (response):
-                return response[0]
+                return response
             else:
                 return False
         else:

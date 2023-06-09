@@ -12,7 +12,7 @@ from thread_pool 	 import ThreadPool
 class Server:
 	def __init__(self):
 		self.HOST = '127.0.0.1'
-		self.PORT = 42062
+		self.PORT = 42069
 		self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self.socket.bind((self.HOST, self.PORT))
@@ -79,6 +79,10 @@ class Server:
 					self.request_handler.retrieve_feed(self.socket)
 					self.operation_finish(address[0])
 
+				elif self.current_connections[address[0]]["operation_request"] == "retrieve_profile":
+					print("> Recebida requisicao de profile")
+					self.request_handler.retrieve_profile(self.socket)
+					pass
 
 				data = connection.recv(1024)
 				if data == b"CONN_END":
