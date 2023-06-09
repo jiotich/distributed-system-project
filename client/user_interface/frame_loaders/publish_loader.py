@@ -9,7 +9,7 @@ def load_publish_page(window):
     window.ui.publish_button.clicked.connect(lambda: post_button(window))
 
 def open_browser(window):
-    info = QFileDialog.getOpenFileName(filter="Images (*.png *.jpg)")
+    info = QFileDialog.getOpenFileName(filter="Images (*.jpg *.jpeg)")
     window.image_path = info[0]
     window.ui.image_url_browser.setPlainText(window.image_path)
 
