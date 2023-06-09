@@ -5,7 +5,7 @@ from core.repositories import RelationshipRepository
 #TODO: fazer os posts virem em ordem de data
 
 class RetrieveFeedService:
-    def execute(self, username):
+    def execute(self, username, posts_limit):
         
         user_repository         = UserRepository()
         post_repository         = PostRepository()
@@ -15,6 +15,7 @@ class RetrieveFeedService:
         
         if (user_exist):
             response = []
+            posts = []
             user_id  = user_exist[0]
 
             followed_users = relationship_repository.find(user_id)
@@ -23,7 +24,13 @@ class RetrieveFeedService:
                 response.append(post_repository.find(followed_users[0][index]))
             
             if (response):
-                return response[0]
+                if (posts_limit != 0):
+                    for index in range(posts_limit):
+                        posts.append(response[0][index])
+                else:
+                    posts = response[0]
+
+                return posts
             else:
                 return False
         else:
