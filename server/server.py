@@ -48,13 +48,8 @@ class Server:
 		
 					elif self.current_connections[address[0]]["operation_request"] == "login":
 						print(f"Logando usuario: {address[0]}")
-						try:
-							self.thread_pool.create_worker_thread(
-								self.request_handler.auth_user, 
-								self.socket
-							)
-						except:
-							print("> Erro no login")
+						self.request_handler.auth_user(self.socket)
+						print("> Erro no login")
 						self.operation_finish(address[0])
 					
 					elif self.current_connections[address[0]]["operation_request"] == "register_user":
@@ -91,6 +86,7 @@ class Server:
 
 				except KeyError:
 					print("> Key error no loop principal do servidor. Adoraria saber pq isso acontece.")
+					self.current_connections[address[0]] = None
 				data = connection.recv(1024)
 				if data == b"CONN_END":
 					connection.sendall(bytes("> Transaction ended",encoding='utf-8'))
