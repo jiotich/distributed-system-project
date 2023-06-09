@@ -7,3 +7,4 @@ from .remove_follower_controller     import RemoveFollowerController
 from .remove_followed_controller     import RemoveFollowedController
 from .retrieve_user_posts_controller import RetrieveUserPostsController
 from .verify_if_follow_controller    import VerifyIfFollowController
+from .find_user_controller           import FindUserController
