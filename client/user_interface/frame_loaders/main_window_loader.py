@@ -59,7 +59,7 @@ def home(window):
     window.ui.stackedWidget.setCurrentIndex(0)
     posts = mh.home_click(window)
     for post in posts:
-        create_feed_post(window, post[0], post[1], post[2], post[3], post[4], post[5])
+        create_feed_post(window, post[0], post[1], post[2], "1", False, post[3])
 
 def self_profile(window):
     clear_self_profile(window)
