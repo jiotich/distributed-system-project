@@ -86,7 +86,7 @@ class Server:
 						self.operation_finish(address[0])
 				
 					elif self.current_connections[address[0]]["operation_request"] == "verify_follow":
-						self.request_handler.verify_follow()
+						self.request_handler.verify_follow(self.socket)
 						self.operation_finish(address[0])
 
 				except KeyError:

@@ -172,17 +172,25 @@ class Client:
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
 		return posts
 
-	def follows_user(self, username):
+	def verify_follow(self, username):
 		response_bytes = self.send_to_server(b'{"operation_request":"verify_follow"}')
 		response = json.loads(response_bytes)
-
+		
 		if response["response"] == -1:
 			print("> Server refused veirfy follow.")
 			return
 		
 		message = {
-			"username": username
+			"username": self.username,
+			"to_check": username
 		}
+
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
+
+		result = self.send_to_server(message)
+		result = json.loads(result)
+		return True if result["status_code"] == "200" else False
 
 
 	def retrieve_profile(self,username):
@@ -235,7 +243,7 @@ class Client:
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
-		return posts
+		return [posts,self.verify_follow(username)]
 
 	def fix_quotes(self,message):
 		# obviamente tem um jeito melhor de fazer isso
@@ -251,7 +259,8 @@ if __name__ == "__main__":
 		#x.register_user("marcelo","qwerty")
 		#x.register_user("jones","qwerty")
 		x.login("honey","qwerty")
-		x.retrieve_profile("manovrau")
+		print(x.verify_follow("manovrau"))
+		#x.retrieve_profile("manovrau")
 		#x.follow_user("manovrau")
 		#x.send_image("image.png")
 		#x.register_user("teste12","abacate")
