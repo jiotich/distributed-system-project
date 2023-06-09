@@ -21,10 +21,10 @@ def home_click(window):
                   #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
     return posts
 
-def publish_click(user, image_path, description):
+def publish_click(window, image_path, description):
     #USUÁRIO FAZ PUBLICAÇÃO
+    window.client.send_image(image_path, description)
     print("Description: ", description, "Path: ", image_path)
-    pass
     
 def self_profile_click(username):
     #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO

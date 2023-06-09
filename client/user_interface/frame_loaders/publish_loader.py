@@ -18,4 +18,4 @@ def post_button(window):
         window.pop_up("All fields must be filled.             ")
     else:
         window.pop_up("Published!                                    ")
-        mh.publish_click(window.username, window.image_path, window.ui.publish_description_browser.toPlainText())
+        mh.publish_click(window, window.image_path, window.ui.publish_description_browser.toPlainText())
