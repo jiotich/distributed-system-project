@@ -95,6 +95,20 @@ class RequestHandler():
             self.send_piece(packet,socket)
         self.send_piece(b"CONN_END",socket)
 
+    def retrieve_profile(self, socket):
+        connection, address, = socket.accept()
+        data = b""
+        packets = []
+        with connection:
+            data = connection.recv(1024)
+            loaded_json = pops.bytearray_to_json(data)
+            res = self._retrieve_feed_controller.handle(loaded_json["username"])
+            packets = pops.slice_bytearray(pops.get_bytearray_from_file(res,no_path=True))
+            
+        for packet in packets:
+            self.send_piece(packet,socket)
+        self.send_piece(b"CONN_END",socket)
+
     def create_post(self, socket):
         packets = []
         data = None

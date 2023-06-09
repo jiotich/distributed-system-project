@@ -170,7 +170,7 @@ class Client:
 		#print(image_jsons[0]["dados"][6])
 		for item in image_jsons:
 			imbytes = base64.b64decode(item["dados"][5])
-			img_path = pops.get_file_from_bytearray(imbytes,random=True,type="png")
+			img_path = pops.get_file_from_bytearray(imbytes,random=True)
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
 		return posts
 
