@@ -61,6 +61,7 @@ def create_feed_post(window, username, description, likes, post_id, is_liked, im
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
     window.post_image_frame.setStyleSheet("image: url("+img_path+");")
+    #TODO: APAGAR A IMAGEM
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")
