@@ -84,6 +84,10 @@ class Server:
 						self.request_handler.verify_follow(self.socket)
 						self.operation_finish(address[0])
 
+					elif self.current_connections[address[0]]["operation_request"] == "search_user":
+						self.request_handler.find_user(self.socket)
+						self.operation_finish(address[0])
+						
 				except KeyError:
 					print("> Key error no loop principal do servidor. Adoraria saber pq isso acontece.")
 					self.current_connections[address[0]] = None

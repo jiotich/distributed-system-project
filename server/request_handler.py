@@ -7,6 +7,7 @@ from core.controller import RemoveFollowerController
 from core.controller import RemoveFollowedController
 from core.controller import RetrieveUserPostsController
 from core.controller import VerifyIfFollowController
+from core.controller import FindUserController
 
 from core.middlewares import EnsureAuthenticated
 
@@ -25,6 +26,7 @@ class RequestHandler():
         self._remove_followed_controller = RemoveFollowedController()
         self._retrieve_user_posts_controller = RetrieveUserPostsController()
         self._verify_if_follow_controller = VerifyIfFollowController()
+        self._find_user_controller = FindUserController()
         self._ensure_authenticated       = EnsureAuthenticated()
         
         self.authed_users = {}
@@ -144,6 +146,23 @@ class RequestHandler():
             return_code = self._verify_if_follow_controller.handle(
                 loaded_json["username"],
                 loaded_json["to_check"]
+            )
+
+            connection.sendall(b"%s" % return_code.encode())
+
+    def find_user(self,socket):
+        connection, address, = socket.accept()
+        
+        data = b""
+
+        with connection:
+            print(f'> Buscando usuario para {address}')
+            data = connection.recv(1024)
+            print(data)
+            loaded_json = pops.bytearray_to_json(data)
+
+            return_code = self._find_user_controller.handle(
+                loaded_json["username"],
             )
 
             connection.sendall(b"%s" % return_code.encode())

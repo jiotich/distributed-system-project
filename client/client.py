@@ -192,6 +192,25 @@ class Client:
 		result = json.loads(result)
 		return True if result["status_code"] == "200" else False
 
+	def search(self,username):
+		response_bytes = self.send_to_server(b'{"operation_request":"search_user"}')
+		response = json.loads(response_bytes)
+		
+		if response["response"] == -1:
+			print("> Server refused veirfy follow.")
+			return
+		
+		message = {
+			"username": username,
+		}
+
+		message = bytearray(f"{message}",encoding='utf-8')
+		message = self.fix_quotes(message)
+
+		result = self.send_to_server(message)
+		result = json.loads(result)
+
+		return result
 
 	def retrieve_profile(self,username):
 		response_bytes = self.send_to_server(b'{"operation_request":"retrieve_profile"}')
@@ -259,7 +278,8 @@ if __name__ == "__main__":
 		#x.register_user("marcelo","qwerty")
 		#x.register_user("jones","qwerty")
 		x.login("honey","qwerty")
-		print(x.retrieve_profile("manovrau"))
+		#print(x.retrieve_profile("manovrau"))
+		x.search("honey")
 		#x.follow_user("manovrau")
 		#x.send_image("image.png")
 		#x.register_user("teste12","abacate")
