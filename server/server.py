@@ -47,11 +47,13 @@ class Server:
     
 				elif self.current_connections[address[0]]["operation_request"] == "login":
 					print(f"Logando usuario: {address[0]}")
-
-					self.thread_pool.create_worker_thread(
-						self.request_handler.auth_user, 
-						self.socket
-					)
+					try:
+						self.thread_pool.create_worker_thread(
+							self.request_handler.auth_user, 
+							self.socket
+						)
+					except:
+						print("> Erro no login")
 					self.operation_finish(address[0])
 				
 				elif self.current_connections[address[0]]["operation_request"] == "register_user":

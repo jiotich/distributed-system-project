@@ -146,7 +146,6 @@ class Client:
 				break
 			packets.append(resp)
 
-		print()
 		feed = pops.join_sliced_bytearrays(packets).decode()
 		feed = str(feed).replace("\\","")
 		#print(x)
