@@ -169,7 +169,7 @@ class Client:
 		for item in image_jsons:
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
-			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
+			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], f"temp/{img_path}"])
 		return posts
 
 	def verify_follow(self, username):
@@ -242,7 +242,7 @@ class Client:
 		for item in image_jsons:
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
-			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
+			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], f"temp/{img_path}"])
 		return [posts,self.verify_follow(username)]
 
 	def fix_quotes(self,message):
@@ -259,8 +259,7 @@ if __name__ == "__main__":
 		#x.register_user("marcelo","qwerty")
 		#x.register_user("jones","qwerty")
 		x.login("honey","qwerty")
-		print(x.verify_follow("manovrau"))
-		#x.retrieve_profile("manovrau")
+		print(x.retrieve_profile("manovrau"))
 		#x.follow_user("manovrau")
 		#x.send_image("image.png")
 		#x.register_user("teste12","abacate")

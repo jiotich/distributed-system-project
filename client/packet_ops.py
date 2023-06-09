@@ -33,7 +33,7 @@ def bytearray_to_json(ba):
 def get_file_from_bytearray(ba, name="newImage.png", random=False, type="jpg"):
 	if random:
 		name = f"{randomword()}.{type}"
-	with open(name, "wb") as im:
+	with open(f"temp/{name}", "wb") as im:
 		im.write(ba)
 	return name
 
