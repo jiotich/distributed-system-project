@@ -169,14 +169,15 @@ def load_profile_post(window, username, description, likes, post_id, is_liked, i
 
 def follow(window, username):
     if(window.is_followed):
-        mh.unfollow_user(window.username, username)
-        window.is_followed = False
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        window.ui.add_button.setIcon(icon)
-        window.ui.add_button.setText("Follow")
+        #mh.unfollow_user(window.username, username)
+        #window.is_followed = False
+        #icon = QtGui.QIcon()
+        #icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        #window.ui.add_button.setIcon(icon)
+        #window.ui.add_button.setText("Follow")
+        pass
     else:
-        mh.follow_user(window.username, username)
+        mh.follow_user(window, username)
         window.is_followed = True
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/images/images/cross.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

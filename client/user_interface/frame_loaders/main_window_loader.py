@@ -51,7 +51,8 @@ def close(window):
     window.main_window.close()
     files = os.listdir("temp")
     for file in files:
-        os.remove(f"temp/{file}") # delete all files
+        if (file != ".conf"):
+            os.remove(f"temp/{file}") # delete all files
 
 def maximize(window):
     if (window.is_maximized):

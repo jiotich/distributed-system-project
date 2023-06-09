@@ -70,7 +70,7 @@ class Client:
 
 		answer = self.send_to_server(message)
 		loaded_json = json.loads(answer)
-		self.token = loaded_json["token"]
+		self.token = loaded_json["token"] if loaded_json["token"] != "-1" else None
 		self.username = username
 
 	def register_user(self,username,password):
@@ -209,8 +209,12 @@ class Client:
 
 		result = self.send_to_server(message)
 		result = json.loads(result)
-
-		return result
+		print(result)
+		if(result["status_code"] == "200"):
+			user = [result["data"][1], result["data"][3]]
+		else:
+			user = None
+		return user
 
 	def retrieve_profile(self,username):
 		response_bytes = self.send_to_server(b'{"operation_request":"retrieve_profile"}')
