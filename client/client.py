@@ -172,6 +172,19 @@ class Client:
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], img_path])
 		return posts
 
+	def follows_user(self, username):
+		response_bytes = self.send_to_server(b'{"operation_request":"verify_follow"}')
+		response = json.loads(response_bytes)
+
+		if response["response"] == -1:
+			print("> Server refused veirfy follow.")
+			return
+		
+		message = {
+			"username": username
+		}
+
+
 	def retrieve_profile(self,username):
 		response_bytes = self.send_to_server(b'{"operation_request":"retrieve_profile"}')
 		response = json.loads(response_bytes)
@@ -213,7 +226,7 @@ class Client:
 				all_images.append(current_image)
 				current_image = ""
 
-		# token, descricao, likes, data, hora, dados, dono
+		# id_img, descricao, likes, data, hora, dados, dono
 		posts = []
 		for item in all_images:
 			image_jsons.append(json.loads("{\"dados\":%s}" % item))

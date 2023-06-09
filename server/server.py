@@ -84,6 +84,11 @@ class Server:
 						print("> Recebida requisicao de profile")
 						self.request_handler.retrieve_profile(self.socket)
 						self.operation_finish(address[0])
+				
+					elif self.current_connections[address[0]]["operation_request"] == "verify_follow":
+						self.request_handler.verify_follow()
+						self.operation_finish(address[0])
+
 				except KeyError:
 					print("> Key error no loop principal do servidor. Adoraria saber pq isso acontece.")
 				data = connection.recv(1024)

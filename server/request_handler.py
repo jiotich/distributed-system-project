@@ -127,6 +127,24 @@ class RequestHandler():
             self.send_piece(packet,socket)
         self.send_piece(b"CONN_END",socket)
 
+        
+    def verify_follow(self,username):
+        connection, address, = socket.accept()
+        
+        data = b""
+
+        with connection:
+            print(f'> Buscando usuario para {address}')
+            data = connection.recv(1024)
+
+            loaded_json = pops.bytearray_to_json(data)
+
+            return_code = self._create_user_controller.handle(
+                loaded_json["username"],
+            )
+            
+            connection.sendall(b"%s" % return_code.encode())
+
     def create_post(self, socket):
         packets = []
         data = None
