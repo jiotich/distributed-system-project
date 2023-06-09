@@ -1,6 +1,8 @@
 from core.repositories import PostRepository
 from core.repositories import UserRepository
 
+from misc.sort         import Sort
+
 #TODO: fazer os posts virem em ordem de data
 
 class RetrieveUserPostsService:
@@ -15,9 +17,13 @@ class RetrieveUserPostsService:
             user_id  = user_exist[0]
 
             response = post_repository.find(user_id)
-
+            
             if (response):
-                return response
+                
+                sort = Sort()
+                ordered_responde = sort.order_by_date(response)
+
+                return ordered_responde
             else:
                 return False
         else:
