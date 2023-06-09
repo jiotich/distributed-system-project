@@ -61,7 +61,8 @@ FETCH_POSTS = """
         post.created_date, 
         post.created_time,
         image.data,
-        user.username
+        user.username,
+        user.description
     FROM 
         post 
     INNER JOIN image ON image.id = post.fk_post_image
