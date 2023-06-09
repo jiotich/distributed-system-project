@@ -13,11 +13,13 @@ def load_search_page(window, search):
     clear_search_page(window)
     window.ui.label_2.setText("Searching for '"+search+"'")
     window.ui.search_text.setText("")
-    users = mh.search_click(window.username, search)
-    for user in users:
-        load_search_results(window, user[0], user[1])
+    user = mh.search_click(window, search)
+    #for user in users:
+    print(user)
+    if (user != None):
+        load_search_results(window=window, username=user[0], description=user[1])
 
-def load_search_results(window, username, description):
+def load_search_results(window, username, description=""):
     window.search_user_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_search)
     window.search_user_frame.setMinimumSize(QtCore.QSize(0, 100))
     window.search_user_frame.setMaximumSize(QtCore.QSize(16777215, 100))
