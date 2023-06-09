@@ -26,38 +26,21 @@ def publish_click(window, image_path, description):
     window.client.send_image(image_path, description)
     print("Description: ", description, "Path: ", image_path)
     
-def self_profile_click(username):
+def self_profile_click(window, username):
     #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO
     #ABAIXO UM PLACEHOLDER
-    description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    posts = []
-    #[descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    return [description, posts]
+    info = window.client.retrieve_profile(username)
+    return ["", info[0]]
 
 def change_user_description(username, description):
     #FAZ A REQUISIÇÃO DE MUDANÇA DE DESCRIÇÃO DO PERFIL
     print("Mudança de descrição: ", description)
 
-def profile_click(user, username):
+def profile_click(window, username):
     #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO
     #ABAIXO UM PLACEHOLDER
-    description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    is_followed = False
-    posts = []
-    #[descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    posts.append(["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  "/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    return [description, is_followed, posts]
+    info = window.client.retrieve_profile(username)
+    return ["", info[1], info[0]]
 
 def follow_user(user, username):
     #O USER (QUE ESTÁ USANDO O CLIENTE) VAI DAR FOLLOW NO USERNAME

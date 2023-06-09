@@ -6,6 +6,7 @@ from user_interface.frame_loaders.self_profile_loader import *
 from user_interface.frame_loaders.publish_loader import *
 from user_interface.frame_loaders.search_loader import *
 from user_interface.frame_loaders.profile_loader import *
+import os
 
 def change_to_main_window(window):
     window.main_window = QtWidgets.QMainWindow()
@@ -23,7 +24,7 @@ def change_to_main_window(window):
     #Maximize window button
     window.ui.maximize_button.clicked.connect(lambda: maximize(window))
     #Close window button
-    window.ui.close_button.clicked.connect(lambda: window.main_window.close())
+    window.ui.close_button.clicked.connect(lambda: close(window))
     #Search button
     window.ui.search_button.clicked.connect(lambda: search(window))
     #Home button
@@ -45,7 +46,13 @@ def change_to_main_window(window):
     window.ui.textEdit.setReadOnly(True)
     window.main_window.show()
     home(window)
-        
+
+def close(window):
+    window.main_window.close()
+    files = os.listdir("temp")
+    for file in files:
+        os.remove(f"temp/{file}") # delete all files
+
 def maximize(window):
     if (window.is_maximized):
         window.main_window.showNormal()
@@ -64,12 +71,12 @@ def home(window):
 def self_profile(window):
     clear_self_profile(window)
     window.ui.stackedWidget.setCurrentIndex(1)
-    info = mh.self_profile_click(window.username)
+    info = mh.self_profile_click(window, window.username)
     window.description = info[0]
     window.ui.textEdit.setText(window.description)
     posts = info[1]
     for post in posts:
-        load_self_profile(window, post[0], post[1], post[2], post[3], post[4])
+        load_self_profile(window, post[1], post[2], "1", False, post[3])
 
 def publish_page(window):
     window.ui.stackedWidget.setCurrentIndex(3)

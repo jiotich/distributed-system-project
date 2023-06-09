@@ -15,7 +15,7 @@ def load_profile(window, username):
     window.ui.profile_username.setText(username)
     window.other_user = username
     window.ui.stackedWidget.setCurrentIndex(2)
-    info = mh.profile_click(window.username, username)
+    info = mh.profile_click(window, username)
     description = info[0]
     window.is_followed = info[1]
     posts = info[2]
@@ -31,7 +31,7 @@ def load_profile(window, username):
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Follow")
     for post in posts:
-        load_profile_post(window, window.other_user, post[0], post[1], post[2], post[3], post[4])
+        load_profile_post(window, window.other_user, post[1], post[2], "1", False, post[3])
         
 def load_profile_post(window, username, description, likes, post_id, is_liked, img_path):
     current_index = window.user_post_number

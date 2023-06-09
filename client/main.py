@@ -7,6 +7,7 @@ from user_interface.main_window import *
 import user_interface.event_handlers.login_handler as lh
 from user_interface.frame_loaders.main_window_loader import change_to_main_window
 from client import Client
+import os
 
 class Window(QMainWindow):
     
