@@ -1,7 +1,7 @@
 import json
 from core.services import VerifyIfFollow
 
-class UpdateUserController:
+class VerifyIfFollowController:
     def handle(self, follower_username, followed_username):
         verify_if_follow = VerifyIfFollow()
         response = verify_if_follow.execute(follower_username, followed_username)
