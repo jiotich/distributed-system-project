@@ -91,6 +91,10 @@ class Server:
 				except KeyError:
 					print("> Key error no loop principal do servidor. Adoraria saber pq isso acontece.")
 					self.current_connections[address[0]] = None
+				
+				except Exception as e:
+					print(e)
+					
 				data = connection.recv(1024)
 				if data == b"CONN_END":
 					connection.sendall(bytes("> Transaction ended",encoding='utf-8'))

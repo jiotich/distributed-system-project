@@ -76,7 +76,7 @@ class RequestHandler():
             
             print(f'> {loaded_json["origin"]} requisita seguir {loaded_json["username"]}')
             # TODO: a operacao abaixo deveria retornar um JSON como resposta do banco
-            return_code = self._follow_user_controller.handle(loaded_json["origin"],loaded_json["username"])
+            return_code = self._follow_user_controller.handle(loaded_json["username"],loaded_json["origin"])
             connection.sendall(b"%s" % return_code.encode())
     
 
@@ -115,9 +115,9 @@ class RequestHandler():
             for letter in res:
                 if letter == "[":
                     depth += 1
-                if depth == 2:
+                if depth == 3:
                     current_post += letter
-                if letter == "]" and depth == 2:
+                if letter == "]" and depth == 3:
                     depth -= 1
                     #print(current_post)
                     all_posts.append(current_post)
@@ -126,6 +126,7 @@ class RequestHandler():
             for post in all_posts:
                 all_jsons["data"].append(json.loads("{\"data\":%s}" % post))
             packets = pops.slice_bytearray(pops.get_bytearray_from_file(json.dumps(all_jsons),no_path=True))
+
         print(packets)
         for packet in packets:
             self.send_piece(packet,socket)
@@ -147,7 +148,7 @@ class RequestHandler():
                 loaded_json["username"],
                 loaded_json["to_check"]
             )
-
+            print("AQUIUIQUQUAQAU",return_code)
             connection.sendall(b"%s" % return_code.encode())
 
     def find_user(self,socket):
@@ -164,7 +165,6 @@ class RequestHandler():
             return_code = self._find_user_controller.handle(
                 loaded_json["username"],
             )
-
             connection.sendall(b"%s" % return_code.encode())
 
     def create_post(self, socket):

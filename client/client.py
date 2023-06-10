@@ -168,6 +168,7 @@ class Client:
 		#print(image_jsons[0]["dados"][6])
 		
 		for item in image_jsons:
+			print(item["dados"][5])
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], f"temp/{img_path}"])
@@ -193,7 +194,7 @@ class Client:
 
 		result = self.send_to_server(message)
 		result = json.loads(result)
-
+		print(f"\n\n\n\n\n{result}")
 		return True if result["status_code"] == "200" else False
 
 	def search(self,username):
