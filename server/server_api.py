@@ -49,7 +49,7 @@ def route_not_found(error):
             "message": message, 
             "status_code": "404"
         }
-    )
+    ), 404
 
 
 
@@ -60,8 +60,7 @@ def route_not_found(error):
 def register():
     if (request.method == "POST"):
         
-        request_parsed = request.get_json()
-        
+        request_parsed = request.get_json() 
         username    = request_parsed["username"]
         password    = request_parsed["password"]
         description = request_parsed["description"]

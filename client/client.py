@@ -284,8 +284,7 @@ if __name__ == "__main__":
 		#x.register_user("icaro","qwerty")
 		#x.register_user("vinicius","qwerty")
 		#x.register_user("manovrau","qwerty")
-		x.login("joao","qwerty")
-		x.follow_user("icaro")
+		x.login("joao","batata")
 		x.retrieve_feed()
 	except KeyboardInterrupt:
 		x.socket.close()
