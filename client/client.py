@@ -160,7 +160,7 @@ class Client:
 				all_images.append(current_image_b64)
 				current_image_b64 = ""
 				depth-=1
-		print("Heyo: ",all_images[0])
+		print(feed)
 		# token, descricao, likes, data, hora, dados, dono
 		posts = []
 		for item in all_images:
@@ -170,6 +170,8 @@ class Client:
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
 			posts.append([item["dados"][6], item["dados"][1], item["dados"][2], f"temp/{img_path}"])
+		
+		
 		return posts
 
 	def verify_follow(self, username):
@@ -190,6 +192,7 @@ class Client:
 
 		result = self.send_to_server(message)
 		result = json.loads(result)
+
 		return True if result["status_code"] == "200" else False
 
 	def search(self,username):
@@ -281,6 +284,8 @@ if __name__ == "__main__":
 		#x.register_user("icaro","qwerty")
 		#x.register_user("vinicius","qwerty")
 		#x.register_user("manovrau","qwerty")
-	
+		x.login("joao","qwerty")
+		x.follow_user("icaro")
+		x.retrieve_feed()
 	except KeyboardInterrupt:
 		x.socket.close()
