@@ -93,3 +93,19 @@ REMOVE_FOLLOWER = """
     AND
         fk_relationship_user_follower = (?) 
 """
+
+LIST_FOLLOWERS = """
+    SELECT 
+        fk_relationship_user_follower
+    FROM 
+        follow_relationship 
+    WHERE fk_relationship_user_followed = (?)
+"""
+
+LIST_FOLLOWEDS = """
+    SELECT 
+        fk_relationship_user_followed
+    FROM 
+        follow_relationship 
+    WHERE fk_relationship_user_follower = (?)
+"""

@@ -10,9 +10,9 @@ class FindUserService:
         
         user_repository = UserRepository()
         
-        user_exist = user_repository.find_one(username)
+        user = user_repository.find_one(username)
         
-        if (user_exist):
-            return user_exist
+        if (user):
+            return user
         else:
             return False
