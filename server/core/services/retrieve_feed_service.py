@@ -23,22 +23,22 @@ class RetrieveFeedService:
             user_id  = user_exist[0]
 
             followed_users = relationship_repository.find(user_id)
-            
+
             for index in range(len(followed_users)):
-                response.append(post_repository.find(followed_users[index][0]))
-            
+                user_id = followed_users[index][0]
+                response.append(post_repository.find(user_id))
+
             if (response):
                 if (posts_limit != 0):
-
-                    if (len(response[0]) < posts_limit):
-                        limit = len(response[0])
+                    if (len(response) < posts_limit):
+                        limit = len(response)
                     else:
                         limit = posts_limit
 
                     for index in range(limit):
-                        posts.append(response[0][index])
+                        posts.append(response[index])
                 else:
-                    posts = response[0]
+                    posts = response
 
                 ordered_posts = sort.order_by_date(posts)
 
