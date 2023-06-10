@@ -20,10 +20,10 @@ class RetrieveUserPostsService:
             
             if (response):
                 
-                sort = Sort()
-                ordered_responde = sort.order_by_date(response)
+                # sort = Sort()
+                # ordered_responde = sort.order_by_date(response)
 
-                return ordered_responde
+                return response
             else:
                 return False
         else:

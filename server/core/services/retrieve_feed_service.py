@@ -28,6 +28,8 @@ class RetrieveFeedService:
                 user_id = followed_users[index][0]
                 response.append(post_repository.find(user_id))
 
+            # print(response[0])
+
             if (response):
                 if (posts_limit != 0):
                     if (len(response) < posts_limit):
@@ -40,9 +42,9 @@ class RetrieveFeedService:
                 else:
                     posts = response
 
-                ordered_posts = sort.order_by_date(posts)
+                # ordered_posts = sort.order_by_date(posts)
 
-                return ordered_posts
+                return posts
             else:
                 return False
         else:
