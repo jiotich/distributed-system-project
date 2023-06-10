@@ -154,18 +154,19 @@ class Client:
 		for letter in feed:
 			if letter == "[":
 				depth+=1
-			if depth == 2:
+			if depth == 3:
 				current_image_b64 += letter
-			if letter == "]" and depth == 2:
+			if letter == "]" and depth == 3:
 				all_images.append(current_image_b64)
 				current_image_b64 = ""
 				depth-=1
-		print(feed)
+
 		# token, descricao, likes, data, hora, dados, dono
 		posts = []
 		for item in all_images:
 			image_jsons.append(json.loads("{\"dados\":%s}" % item))
 		#print(image_jsons[0]["dados"][6])
+		
 		for item in image_jsons:
 			imbytes = base64.b64decode(item["dados"][5])
 			img_path = pops.get_file_from_bytearray(imbytes,random=True)
@@ -253,9 +254,9 @@ class Client:
 		for letter in feed:
 			if letter == "[":
 				depth+=1
-			if depth == 2:
+			if depth == 3:
 				current_image += letter
-			if letter == "]" and depth == 2:
+			if letter == "]" and depth == 3:
 				depth-=1
 				all_images.append(current_image)
 				current_image = ""
