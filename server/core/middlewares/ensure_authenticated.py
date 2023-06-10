@@ -13,7 +13,7 @@ class EnsureAuthenticated:
                 algorithms=self._jwt_algorithm
             )
 
-            username = decoded[1]
+            # print(decoded)
         except jwt.PyJWTError:
             return False
         else:
