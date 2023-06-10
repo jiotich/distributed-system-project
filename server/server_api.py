@@ -86,7 +86,7 @@ def login():
             password
         )
 
-        return response
+        return response, json.loads(response)["status_code"]
 
 @APP.route("/user/update", methods = ["PUT"])
 def update_user():
@@ -107,9 +107,9 @@ def update_user():
                 column
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 @APP.route("/user/get", methods = ["GET"])
 def get_user():
@@ -126,9 +126,9 @@ def get_user():
                 username,
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
 # ================================ FOLLOW ROUTES ================================
@@ -153,9 +153,9 @@ def follow_user():
                 followed_username,
                 follower_username
             )
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 @APP.route("/follow_user/list/followers", methods = ["GET"])
 def list_followers():
@@ -172,9 +172,9 @@ def list_followers():
                 followed_username
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
     
 @APP.route("/follow_user/list/followeds", methods = ["GET"])
 def list_followeds():
@@ -191,9 +191,9 @@ def list_followeds():
                 follower_username
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 @APP.route("/follow_user/remove/follower", methods = ["DELETE"])
 def remove_follower():
@@ -213,9 +213,9 @@ def remove_follower():
                 follower_username
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
     
 @APP.route("/follow_user/remove/followed", methods = ["DELETE"])
 def remove_followed():
@@ -235,9 +235,9 @@ def remove_followed():
                 followed_username
             )
 
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
 # ================================ POST ROUTES ================================
@@ -264,9 +264,9 @@ def create_post():
                 description,
                 image
             )
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 @APP.route("/post/list", methods = ["GET"])
 def list_post():
@@ -282,9 +282,9 @@ def list_post():
             response = list_post_controller.handle(
                 username
             )
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
 
@@ -307,9 +307,9 @@ def retrieve_feed():
                 username,
                 limit
             )
-            return response
+            return response, json.loads(response)["status_code"]
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"})
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
 
