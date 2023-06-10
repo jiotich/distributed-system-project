@@ -7,8 +7,12 @@ class FollowUserController:
         response = follow_user_service.execute(followed_username, follower_username)
         
         if (response):
-            return json.dumps({"status_code": "200"})
+            return json.dumps({
+               "message": "success", "status_code": 200 
+            })
             
         else:
-            return json.dumps({"status_code": "400"})
+            return json.dumps({
+                "message": "failed", "status_code": 400 
+            })
             

@@ -1,6 +1,7 @@
 import sys
 sys.dont_write_bytecode = True
 
+from flask import jsonify
 from flask              import Flask
 from flask              import request
 from flask_cors         import CORS
@@ -71,7 +72,7 @@ def register():
             description
         )
 
-        return response
+        return response, json.loads(response)["status_code"]
 
 @APP.route("/user/login", methods = ["GET"])
 def login():
@@ -313,4 +314,4 @@ def retrieve_feed():
 
 
 if (__name__ == "__main__"):
-    APP.run(debug=True, port=5005)
+    APP.run(debug=True, port=5006)

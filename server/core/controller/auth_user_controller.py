@@ -10,12 +10,12 @@ class AuthUserController:
         if (response):
             return json.dumps({
                 "message": "success", 
-                "status_code": "200", 
-                "token": response
+                "token": response,
+                "status_code": 200
             })
         else:
             return json.dumps({
                 "message": "failed", 
-                "status_code": "400", 
-                "token": "-1"
+                "token": "-1",
+                "status_code": 400
             })
