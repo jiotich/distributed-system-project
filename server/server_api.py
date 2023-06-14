@@ -126,7 +126,14 @@ def update_user():
                 column
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "message": "success", "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -145,7 +152,14 @@ def get_user():
                 username,
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "data": "unexistent", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -172,7 +186,16 @@ def follow_user():
                 followed_username,
                 follower_username
             )
-            return response, json.loads(response)["status_code"]
+            
+            if (response):
+                return json.dumps({
+               "message": "success", "status_code": 200 
+            }), 200
+            
+            else:
+                return json.dumps({
+                    "message": "failed", "status_code": 400 
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -191,7 +214,14 @@ def list_followers():
                 followed_username
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
     
@@ -210,7 +240,15 @@ def list_followeds():
                 follower_username
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
+
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -232,7 +270,14 @@ def remove_follower():
                 follower_username
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "message": "success", "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
     
@@ -254,7 +299,15 @@ def remove_followed():
                 followed_username
             )
 
-            return response, json.loads(response)["status_code"]
+            if (response):
+                return json.dumps({
+                    "message": "success", "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "status_code": 400
+                }), 400
+
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -283,7 +336,17 @@ def create_post():
                 description,
                 image
             )
-            return response, json.loads(response)["status_code"]
+
+            if (response):
+                return json.dumps({
+                "message": "success",
+                "status_code": 200
+            }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", 
+                    "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -301,7 +364,15 @@ def list_posts():
             response = list_post_controller.handle(
                 username
             )
-            return response, json.loads(response)["status_code"]
+
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
@@ -326,7 +397,15 @@ def retrieve_feed():
                 username,
                 limit
             )
-            return response, json.loads(response)["status_code"]
+            
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 

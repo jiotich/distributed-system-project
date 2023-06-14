@@ -1,4 +1,3 @@
-import json
 from core.services import FindUserService
 
 class FindUserController:
@@ -11,12 +10,3 @@ class FindUserController:
         else:
             return False
         
-        # if (response):
-        #     return json.dumps({
-        #         "data": response, "status_code": 200
-        #     })
-        # else:
-        #     return json.dumps({
-        #         "data": "unexistent", "status_code": 400
-        #     })
-            

@@ -1,4 +1,3 @@
-import json
 from core.services import CreateUserService
 
 class CreateUserController:
@@ -7,4 +6,4 @@ class CreateUserController:
         response = create_user_service.execute(username, password, description)
         
         return response
-            
+    

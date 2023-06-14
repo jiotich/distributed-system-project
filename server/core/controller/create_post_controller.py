@@ -1,4 +1,3 @@
-import json
 from core.services import CreatePostService
 
 class CreatePostController:
@@ -7,15 +6,3 @@ class CreatePostController:
         response = create_post_service.execute(username, description, image)
         
         return response
-        
-        if (response):
-            return json.dumps({
-                "message": "success",
-                "status_code": 200
-            })
-
-        else:
-            return json.dumps({
-                "message": "failed", 
-                "status_code": 400
-            })

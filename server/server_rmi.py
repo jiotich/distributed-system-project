@@ -91,4 +91,28 @@ class UserRemoteObjectInterface:
         
 class PostRemoteObjectInterface:
     def __init__(self):
-        pass
+        self._create_post_controller   = CreatePostController()
+        self._list_posts_controller    = ListPostsController()
+        self._retrieve_feed_controller = RetrieveFeedController()
+
+    def create_post(self, username, description, image):
+        response = self._create_post_controller.handle(
+            username,
+            description,
+            image
+        )
+        return response
+
+    def list_posts(self, username):
+        response = self._list_posts_controller.handle(
+            username
+        )
+        return response
+    
+    def retrieve_feed(self, username, post_limit):
+        response = self._retrieve_feed_controller.handle(
+            username,
+            post_limit
+        )
+    
+        return response
