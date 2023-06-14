@@ -6,6 +6,8 @@ class CreatePostController:
         create_post_service = CreatePostService()
         response = create_post_service.execute(username, description, image)
         
+        return response
+        
         if (response):
             return json.dumps({
                 "message": "success",

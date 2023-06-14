@@ -7,11 +7,16 @@ class FindUserController:
         response = find_user_service.execute(username)
         
         if (response):
-            return json.dumps({
-                "data": response, "status_code": 200
-            })
+            return response
         else:
-            return json.dumps({
-                "data": "unexistent", "status_code": 400
-            })
+            return False
+        
+        # if (response):
+        #     return json.dumps({
+        #         "data": response, "status_code": 200
+        #     })
+        # else:
+        #     return json.dumps({
+        #         "data": "unexistent", "status_code": 400
+        #     })
             

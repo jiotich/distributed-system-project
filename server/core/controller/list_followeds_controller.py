@@ -7,10 +7,16 @@ class ListFollowedsController:
         response = list_followeds_service.execute(follower_username)
         
         if (response):
-            return json.dumps({
-                "message": "success", "data": response, "status_code": 200
-            })
+            return response
         else:
-            return json.dumps({
-                "message": "failed", "data": "", "status_code": 400
-            })
+            return False
+        
+        
+        # if (response):
+        #     return json.dumps({
+        #         "message": "success", "data": response, "status_code": 200
+        #     })
+        # else:
+        #     return json.dumps({
+        #         "message": "failed", "data": "", "status_code": 400
+        #     })

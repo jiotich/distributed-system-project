@@ -6,6 +6,8 @@ class FollowUserController:
         follow_user_service = FollowUserService()
         response = follow_user_service.execute(followed_username, follower_username)
         
+        return response
+        
         if (response):
             return json.dumps({
                "message": "success", "status_code": 200 

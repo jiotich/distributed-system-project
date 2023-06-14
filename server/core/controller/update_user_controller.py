@@ -6,12 +6,14 @@ class UpdateUserController:
         update_user_service = UpdateUserService()
         response = update_user_service.execute(username, data, column)
         
-        if (response):
-            return json.dumps({
-                "message": "success", "status_code": 200
-            })
-        else:
-            return json.dumps({
-                "message": "failed", "status_code": 400
-            })
+        return response
+        
+        # if (response):
+        #     return json.dumps({
+        #         "message": "success", "status_code": 200
+        #     })
+        # else:
+        #     return json.dumps({
+        #         "message": "failed", "status_code": 400
+        #     })
         
