@@ -87,6 +87,7 @@ def login():
 
         return response, json.loads(response)["status_code"]
 
+# TODO: não deixar a coluna para ser passada como parametro
 @APP.route("/user/update", methods = ["PUT"])
 def update_user():
 
@@ -133,7 +134,7 @@ def get_user():
 # ================================ FOLLOW ROUTES ================================
 
 
-@APP.route("/follow_user/new", methods = ["POST"])
+@APP.route("/follow_user", methods = ["POST"])
 def follow_user():
 
     auth = ensure_authenticated.handle(
@@ -268,7 +269,7 @@ def create_post():
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 @APP.route("/post/list", methods = ["GET"])
-def list_post():
+def list_posts():
 
     auth = ensure_authenticated.handle(
         request.headers["token"]
