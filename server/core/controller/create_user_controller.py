@@ -7,14 +7,4 @@ class CreateUserController:
         response = create_user_service.execute(username, password, description)
         
         return response
-        
-        if (response):
-            return json.dumps({ 
-                "message": "success", "status_code": 200 
-            })
-            
-        else:
-            return json.dumps({ 
-                "message": "failed", "status_code": 400 
-            })
             

@@ -70,8 +70,16 @@ def register():
             password, 
             description
         )
+        
+        if (response):
+            return json.dumps({ 
+                "message": "success", "status_code": 200 
+            })
+        else: 
+            return json.dumps({ 
+                "message": "failed", "status_code": 400 
+            })
 
-        return response, json.loads(response)["status_code"]
 
 @APP.route("/user/login", methods = ["GET"])
 def login():
@@ -85,7 +93,18 @@ def login():
             password
         )
 
-        return response, json.loads(response)["status_code"]
+        if (response):
+            return json.dumps({
+                "message": "success", 
+                "token": response,
+                "status_code": 200
+            }), 200
+        else:
+            return json.dumps({
+                "message": "failed", 
+                "token": "-1",
+                "status_code": 400
+            }), 400
 
 # TODO: não deixar a coluna para ser passada como parametro
 @APP.route("/user/update", methods = ["PUT"])
