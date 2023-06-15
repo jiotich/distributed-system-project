@@ -23,7 +23,15 @@ class AuthUserService:
             password_match = sha256_crypt.verify(secret=password, hash=password_hash)
             
             if (password_match):
-                token = jwt.encode({"id": id, "username": username}, self._jwt_secret, algorithm=self._jwt_algorithm)
+                token = jwt.encode(
+                    { 
+                        "id": id, 
+                        "username": username,
+                        "hash": password_hash
+                    }, 
+                    self._jwt_secret, 
+                    algorithm=self._jwt_algorithm
+                )
 
                 return token
             else:

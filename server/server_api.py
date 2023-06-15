@@ -111,7 +111,8 @@ def login():
 def update_user():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -141,7 +142,8 @@ def update_user():
 def get_user():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -171,7 +173,8 @@ def get_user():
 def follow_user():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["follower_user"]
     )
 
     if (auth):
@@ -203,7 +206,8 @@ def follow_user():
 def list_followers():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -229,7 +233,8 @@ def list_followers():
 def list_followeds():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -256,7 +261,8 @@ def list_followeds():
 def remove_follower():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["followed"]
     )
 
     if (auth):
@@ -285,7 +291,8 @@ def remove_follower():
 def remove_followed():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["followed"]
     )
 
     if (auth):
@@ -319,7 +326,8 @@ def remove_followed():
 def create_post():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -354,7 +362,8 @@ def create_post():
 def list_posts():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):
@@ -385,7 +394,8 @@ def list_posts():
 def retrieve_feed():
 
     auth = ensure_authenticated.handle(
-        request.headers["token"]
+        request.headers["token"],
+        request.headers["username"]
     )
 
     if (auth):

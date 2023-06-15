@@ -1,3 +1,13 @@
+import sys
+sys.dont_write_bytecode = True
+import socket
+import time
+
+from Pyro5 import api as API
+
+from nameserver import NameServer
+from thread_pool import ThreadPool
+
 from core.controller  import CreateUserController
 from core.controller  import CreatePostController
 from core.controller  import FollowUserController
@@ -13,8 +23,8 @@ from core.controller  import UpdateUserController
 
 from core.middlewares import EnsureAuthenticated
 
-
-class UserRemoteObjectInterface:
+@API.expose
+class UserRemoteObject:
     def __init__(self):
         self._create_user_controller     = CreateUserController()
         self._auth_user_controller       = AuthUserController()
@@ -88,8 +98,8 @@ class UserRemoteObjectInterface:
         )
         return response    
         
-        
-class PostRemoteObjectInterface:
+@API.expose      
+class PostRemoteObject:
     def __init__(self):
         self._create_post_controller   = CreatePostController()
         self._list_posts_controller    = ListPostsController()
@@ -116,3 +126,53 @@ class PostRemoteObjectInterface:
         )
     
         return response
+    
+if __name__ == "__main__":
+
+    thread_pool = ThreadPool()
+
+    HOSTNAME = socket.gethostname()
+
+    
+    user_remote_object_nameserver = NameServer()
+    # post_remote_object_nameserver = NameServer()
+
+
+    d = user_remote_object_nameserver.start(
+        remote_object=UserRemoteObject(),
+        name="user_remote_object",
+        port=49150,
+    )
+
+    def loopcondition():
+        print(time.asctime(), "Waiting for requests...")
+        return True
+
+
+    d.requestLoop()
+
+    # post_remote_object_nameserver.start(
+    #     remote_object=PostRemoteObject(),
+    #     name="post_remote_object",
+    #     port=49155,
+    # )
+
+
+
+
+
+
+# Inicie o daemon do Pyro5
+# Pyro5.api.daemon = Pyro5.api.Daemon()
+
+# user_remote_obj = UserRemoteObject()
+# post_remote_obj = PostRemoteObject()
+
+# user_remote_obj_interface_uri = Pyro5.api.daemon.register(user_remote_obj)
+# post_remote_obj_interface_uri = Pyro5.api.daemon.register(post_remote_obj)
+
+# Pyro5.api.start_ns()
+
+# print(user_remote_obj_interface_uri)
+# # Inicie o loop do servidor para aguardar chamadas
+# Pyro5.api.daemon.requestLoop()
