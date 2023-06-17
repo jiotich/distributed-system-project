@@ -1,4 +1,5 @@
 import jwt
+import datetime
 
 from passlib.hash import sha256_crypt
 
@@ -27,9 +28,10 @@ class AuthUserService:
                     { 
                         "id": id, 
                         "username": username,
-                        "hash": password_hash
+                        "hash": password_hash,
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24)
                     }, 
-                    self._jwt_secret, 
+                    key=self._jwt_secret, 
                     algorithm=self._jwt_algorithm
                 )
 

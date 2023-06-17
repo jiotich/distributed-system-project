@@ -10,3 +10,6 @@ from .list_posts_service          import ListPostsService
 from .find_user_service           import FindUserService
 from .list_followeds_service      import ListFollowedsService
 from .list_followers_service      import ListFollowersService
+from .coment_post_service         import ComentPostService
+from .like_post_service           import LikePostsService
+from .unlike_post_service         import UnlikePostsService

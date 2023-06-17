@@ -10,3 +10,5 @@ from .list_followers_controller  import ListFollowersController
 from .list_followeds_controller  import ListFollowedsController
 from .find_user_controller       import FindUserController
 from .update_user_controller     import UpdateUserController
+from .coment_post_controller     import ComentPostService
+from .like_post_controller       import LikePostController

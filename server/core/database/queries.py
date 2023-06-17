@@ -69,7 +69,7 @@ CREATE_RELATIONSHIP = """
     VALUES (?,?,?)
 """
     
-REMOVE_FOLLOWER = """
+DELETE_RELATIONSHIP = """
     DELETE FROM 
         follow_relationship
     WHERE
@@ -92,4 +92,32 @@ LIST_FOLLOWEDS = """
     FROM 
         follow_relationship 
     WHERE fk_relationship_user_follower = (?)
+"""
+
+CREATE_COMENTARY = """
+    INSERT INTO post_comentary (
+        id,
+        fk_comentary_post,
+        fk_comentary_user,
+        created_date,
+        created_time,
+        content
+    ) VALUES (?,?,?,?)
+"""
+
+LIKE_POST = """
+    INSERT INTO post_like (
+        id,
+        fk_like_post,
+        fk_like_user
+    ) VALUES (?,?,?)
+"""
+
+UNLIKE_POST = """
+    DELETE FROM
+        post_like
+    WHERE 
+        fk_like_user = (?)
+    AND
+        fk_like_post = (?)
 """
