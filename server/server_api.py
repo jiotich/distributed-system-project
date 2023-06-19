@@ -1,12 +1,12 @@
 import sys
 sys.dont_write_bytecode = True
-
-from flask import jsonify
-from flask              import Flask
-from flask              import request
-from flask_cors         import CORS
-
 import json
+
+
+from flask            import jsonify
+from flask            import Flask
+from flask            import request
+from flask_cors       import CORS
 
 from core.controller  import CreateUserController
 from core.controller  import CreatePostController
@@ -20,6 +20,9 @@ from core.controller  import ListFollowersController
 from core.controller  import ListFollowedsController
 from core.controller  import FindUserController
 from core.controller  import UpdateUserController
+from core.controller  import ComentPostController
+from core.controller  import LikePostController
+from core.controller  import UnlikePostController
 
 from core.middlewares import EnsureAuthenticated
 
@@ -35,6 +38,9 @@ list_followers_controller  = ListFollowersController()
 list_followeds_controller  = ListFollowedsController()
 find_user_controller       = FindUserController()
 upade_user_controller      = UpdateUserController()
+coment_post_controller     = ComentPostController()
+like_post_controller       = LikePostController()
+unlike_post_controller     = UnlikePostController()
 
 ensure_authenticated       = EnsureAuthenticated()
 
@@ -55,7 +61,6 @@ def route_not_found(error):
 
 # ================================ USER ROUTES ================================
 
-
 @APP.route("/user/register", methods = ["POST"])
 def register():
     if (request.method == "POST"):
@@ -74,11 +79,11 @@ def register():
         if (response):
             return json.dumps({ 
                 "message": "success", "status_code": 200 
-            })
+            }), 200
         else: 
             return json.dumps({ 
                 "message": "failed", "status_code": 400 
-            })
+            }), 400
 
 
 @APP.route("/user/login", methods = ["GET"])
@@ -167,7 +172,6 @@ def get_user():
 
 
 # ================================ FOLLOW ROUTES ================================
-
 
 @APP.route("/follow_user", methods = ["POST"])
 def follow_user():
@@ -321,7 +325,6 @@ def remove_followed():
 
 # ================================ POST ROUTES ================================
 
-
 @APP.route("/post/new", methods = ["POST"])
 def create_post():
 
@@ -385,10 +388,97 @@ def list_posts():
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
+@APP.route("post/like", methods = ["POST"])
+def like_post():
+    
+    auth = ensure_authenticated.handle(
+        request.headers["token"],
+        request.headers["username"]
+    )
+
+    if (auth):
+        if (request.method == "POST"):
+            username = request.headers["username"]
+            post_id  = request.headers["postId"]
+
+            response = like_post_controller.handle(
+                username,
+                post_id
+            )
+
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
+    else:
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+
+@APP.route("post/unlike", methods = ["POST"])
+def like_post():
+    
+    auth = ensure_authenticated.handle(
+        request.headers["token"],
+        request.headers["username"]
+    )
+
+    if (auth):
+        if (request.method == "POST"):
+            username = request.headers["username"]
+            post_id  = request.headers["postId"]
+
+            response = unlike_post_controller.handle(
+                username,
+                post_id
+            )
+
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
+    else:
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+
+@APP.route("post/coment", methods = ["POST"])
+def like_post():
+    
+    auth = ensure_authenticated.handle(
+        request.headers["token"],
+        request.headers["username"]
+    )
+
+    if (auth):
+        if (request.method == "GET"):
+            username  = request.headers["username"]
+            post_id   = request.headers["postId"]
+            comentary = request.headers["comentary"]
+
+            response = coment_post_controller.handle(
+                username,
+                post_id,
+                comentary
+            )
+
+            if (response):
+                return json.dumps({
+                    "message": "success", "data": response, "status_code": 200
+                }), 200
+            else:
+                return json.dumps({
+                    "message": "failed", "data": "", "status_code": 400
+                }), 400
+    else:
+        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
 # ================================ FEED ROUTES ================================
-
 
 @APP.route("/feed/retrieve", methods = ["GET"])
 def retrieve_feed():
