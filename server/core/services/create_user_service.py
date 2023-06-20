@@ -1,24 +1,29 @@
 import uuid
 
-from passlib.hash      import sha256_crypt
-
-from core.repositories import UserRepository
-from core.entities     import User
+from passlib.hash         import sha256_crypt
+from misc.username_filter import UsernameFilter
+from core.repositories    import UserRepository
+from core.entities        import User
 
 class CreateUserService:
     def execute(self, username, password, description):
         
-        user_repository = UserRepository()
+        username_filter = UsernameFilter()
         
-        id = uuid.uuid4()
-        password_hash = sha256_crypt.hash(password)
+        if (username_filter.filter(username)):
         
-        new_user = User(id, username, password_hash, description)
-        
-        user_already_exists = user_repository.find_one(username)
-        
-        if (user_already_exists):
-            return False
+            user_repository = UserRepository()
+            
+            id = uuid.uuid4()
+            password_hash = sha256_crypt.hash(password)
+            
+            new_user = User(id, username, password_hash, description)
+            user_already_exists = user_repository.find_one(username)
+            
+            if (user_already_exists):
+                return False
+            else:
+                user_repository.create(new_user)
+                return True
         else:
-            user_repository.create(new_user)
-            return True
+            return False
