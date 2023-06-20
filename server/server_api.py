@@ -161,11 +161,11 @@ def get_user():
 
             if (response):
                 return json.dumps({
-                    "data": response, "status_code": 200
+                    "message": "success" ,"data": response, "status_code": 200
                 }), 200
             else:
                 return json.dumps({
-                    "data": "unexistent", "status_code": 400
+                    "message": "failed" ,"data": "unexistent", "status_code": 400
                 }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
