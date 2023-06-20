@@ -8,6 +8,13 @@ class FindUserService:
         user = user_repository.find_one(username)
         
         if (user):
-            return user
+            #removendo o hash da senha para retornar o usuário
+            user_id          = user[0]
+            user_name        = user[1]
+            user_description = user[3]
+        
+            filtered_user = (user_id, user_name, user_description)
+            
+            return filtered_user
         else:
             return False

@@ -5,7 +5,7 @@ class ListFollowedsController:
         list_followeds_service = ListFollowedsService()
         response = list_followeds_service.execute(follower_username)
         
-        if (response):
+        if (isinstance(response, list)):
             return response
         else:
             return False

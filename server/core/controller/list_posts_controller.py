@@ -5,7 +5,7 @@ class ListPostsController:
         list_posts_service = ListPostsService()
         response = list_posts_service.execute(username)
         
-        if (response):
+        if (isinstance(response, list)):
             return response
         else:
             return False

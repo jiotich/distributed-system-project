@@ -153,7 +153,7 @@ def get_user():
 
     if (auth):
         if (request.method == "GET"):
-            username = request.headers["username"]
+            username = request.headers["requested-user"]
 
             response = find_user_controller.handle(
                 username,
@@ -178,7 +178,7 @@ def follow_user():
 
     auth = ensure_authenticated.handle(
         request.headers["token"],
-        request.headers["follower_user"]
+        request.headers["username"]
     )
 
     if (auth):
@@ -222,7 +222,7 @@ def list_followers():
                 followed_username
             )
 
-            if (response):
+            if (isinstance(response, list)):
                 return json.dumps({
                     "message": "success", "data": response, "status_code": 200
                 }), 200
@@ -249,7 +249,7 @@ def list_followeds():
                 follower_username
             )
 
-            if (response):
+            if (isinstance(response, list)):
                 return json.dumps({
                     "message": "success", "data": response, "status_code": 200
                 }), 200
@@ -266,14 +266,16 @@ def remove_follower():
 
     auth = ensure_authenticated.handle(
         request.headers["token"],
-        request.headers["followed"]
+        request.headers["username"]
     )
 
     if (auth):
         if (request.method == "DELETE"):
-
-            followed_username = request.headers["followed"]
-            follower_username = request.headers["follower"]
+            
+            request_parsed = request.get_json()
+            
+            followed_username = request.headers["username"]
+            follower_username = request_parsed["follower"]
 
             response = remove_follower_controller.handle(
                 followed_username,
@@ -296,15 +298,17 @@ def remove_followed():
 
     auth = ensure_authenticated.handle(
         request.headers["token"],
-        request.headers["followed"]
+        request.headers["username"]
     )
 
     if (auth):
         if (request.method == "DELETE"):
             
-            follower_username = request.headers["follower"]
-            followed_username = request.headers["followed"]
-
+            request_parsed = request.get_json()
+            
+            follower_username = request.headers["username"]
+            followed_username = request_parsed["followed"]
+            
             response = remove_followed_controller.handle(
                 follower_username,
                 followed_username
@@ -377,7 +381,7 @@ def list_posts():
                 username
             )
 
-            if (response):
+            if (isinstance(response, list)):
                 return json.dumps({
                     "message": "success", "data": response, "status_code": 200
                 }), 200
@@ -388,7 +392,7 @@ def list_posts():
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
-@APP.route("post/like", methods = ["POST"])
+@APP.route("/post/like", methods = ["POST"])
 def like_post():
     
     auth = ensure_authenticated.handle(
@@ -417,8 +421,8 @@ def like_post():
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
-@APP.route("post/unlike", methods = ["POST"])
-def like_post():
+@APP.route("/post/unlike", methods = ["POST"])
+def unlike_post():
     
     auth = ensure_authenticated.handle(
         request.headers["token"],
@@ -446,8 +450,8 @@ def like_post():
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
-@APP.route("post/coment", methods = ["POST"])
-def like_post():
+@APP.route("/post/coment", methods = ["POST"])
+def coment_post():
     
     auth = ensure_authenticated.handle(
         request.headers["token"],
@@ -512,4 +516,5 @@ def retrieve_feed():
 
 
 if (__name__ == "__main__"):
+    print("> Starting server at http://localhost:5006")
     APP.run(debug=True, port=5006)

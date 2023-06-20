@@ -17,7 +17,7 @@ class ListPostsService:
 
             response = post_repository.find(user_id)
             
-            if (response):
+            if (isinstance(response, list)):
                 
                 # sort = Sort()
                 # ordered_responde = sort.order_by_date(response)

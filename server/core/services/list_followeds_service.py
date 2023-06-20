@@ -13,7 +13,7 @@ class ListFollowedsService:
 
             response = relationship_repository.list_followeds(user_id)
 
-            if (response):
+            if (isinstance(response, list)):
                 return response
             else:
                 return False

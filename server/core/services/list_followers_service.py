@@ -13,7 +13,8 @@ class ListFollowersService:
 
             response = relationship_repository.list_followers(user_id)
 
-            if (response):
+            # verifica se é uma lista, pois mesmo se vazia a requisição devera retornar sucesso
+            if (isinstance(response, list)):
                 return response
             else:
                 return False
