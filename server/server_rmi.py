@@ -192,12 +192,10 @@ class PostRemoteObject:
             )
             return response
         else:
-            return False
+            return
+    
 
-
-
-
-if (__name__ == "__main__"):
+if __name__ == "__main__":
 
     thread_pool = ThreadPool()
 

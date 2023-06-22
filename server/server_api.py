@@ -2,7 +2,6 @@ import sys
 sys.dont_write_bytecode = True
 import json
 
-
 from flask            import jsonify
 from flask            import Flask
 from flask            import request
@@ -514,4 +513,4 @@ def retrieve_feed():
 
 if (__name__ == "__main__"):
     print("> Starting server at http://localhost:5006")
-    APP.run(debug=True, port=5006)
+    APP.run(debug=False, port=8080)
