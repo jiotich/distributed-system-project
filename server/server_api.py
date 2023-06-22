@@ -57,8 +57,6 @@ def route_not_found(error):
         }
     ), 404
 
-
-
 # ================================ USER ROUTES ================================
 
 @APP.route("/user/register", methods = ["POST"])
@@ -482,7 +480,7 @@ def coment_post():
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
-# ================================ FEED ROUTES ================================
+# ================ ================ FEED ROUTES ================================
 
 @APP.route("/feed/retrieve", methods = ["GET"])
 def retrieve_feed():
@@ -512,7 +510,6 @@ def retrieve_feed():
                 }), 400
     else:
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
-
 
 
 if (__name__ == "__main__"):

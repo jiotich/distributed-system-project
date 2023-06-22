@@ -35,8 +35,11 @@ class UserRemoteObject:
         self._list_followeds_controller  = ListFollowedsController()
         self._remove_follower_controller = RemoveFollowerController()
         self._remove_followed_controller = RemoveFollowedController()
+
+        self._ensure_authenticated       = EnsureAuthenticated()
     
     def create_user(self, username, passord, description):
+
         response = self._create_user_controller.handle(
             username,
             passord,
@@ -51,52 +54,97 @@ class UserRemoteObject:
         )
         return response
     
-    def find_user(self, username):
-        response = self._find_user_controller.handle(
-            username
-        )
-        return response
-        
-    def update_user_description(self, username, new_description):
-        response = self._update_user_controller.handle(
-            username,
-            new_description,
-            column="description"
-        )
-        return response
-    
-    def follow_user(self, followed_username, follower_username):
-        response = self._follow_user_controller.handle(
-            followed_username,
-            follower_username
-        )
-        return response
+    def find_user(self, username, token):
 
-    def list_user_followers(self, followed_username):
-        response = self._list_followers_controller.handle(
-            followed_username
-        )
-        return response
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._find_user_controller.handle(
+                username
+            )
+            return response
+        else:
+            return False
+        
+    def update_user_description(self, username, new_description, token):
+            
+        authed = self._ensure_authenticated(token, username)
+            
+        if (authed):
+            response = self._update_user_controller.handle(
+                username,
+                new_description,
+                column="description"
+            )
+            return response
+        else:
+            return False
     
-    def list_user_followeds(self, follower_controller):
-        response = self._list_followeds_controller.handle(
-            follower_controller
-        )
-        return response
+    def follow_user(self, followed_username, follower_username, token):
+
+        authed = self._ensure_authenticated(token, followed_username)
+
+        if (authed):
+            response = self._follow_user_controller.handle(
+                followed_username,
+                follower_username
+            )
+            return response
+        else:
+            return False
+
+    def list_user_followers(self, followed_username, token):
+
+        authed = self._ensure_authenticated.handle(token, followed_username)
+
+        if (authed):
+            response = self._list_followers_controller.handle(
+                followed_username
+            )
+            return response
+        else:
+            return False 
     
-    def remove_user_follower(self, followed_username, follower_username):
-        response = self._remove_follower_controller.handle(
-            followed_username,
+    def list_user_followeds(self, follower_username, token):
+
+        authed = self._ensure_authenticated.handle(
+            token,
             follower_username
         )
-        return response
+
+        if (authed):
+            response = self._list_followeds_controller.handle(
+                follower_username
+            )
+            return response
+        else:
+            return False
+
+    def remove_user_follower(self, followed_username, follower_username, token):
+        
+        authed = self._ensure_authenticated.handle(token, followed_username)
+
+        if (authed):
+            response = self._remove_follower_controller.handle(
+                followed_username,
+                follower_username
+            )
+            return response
+        else:
+            return False
     
-    def remove_user_followed(self, followed_username, follower_username):
-        response = self._remove_followed_controller.handle(
-            follower_username,
-            followed_username
-        )
-        return response    
+    def remove_user_followed(self, followed_username, follower_username, token):
+
+        authed = self._ensure_authenticated.handle(token, follower_username)
+
+        if (authed):
+            response = self._remove_followed_controller.handle(
+                follower_username,
+                followed_username
+            )
+            return response 
+        return False
+       
         
 @API.expose      
 class PostRemoteObject:
@@ -105,29 +153,51 @@ class PostRemoteObject:
         self._list_posts_controller    = ListPostsController()
         self._retrieve_feed_controller = RetrieveFeedController()
 
-    def create_post(self, username, description, image):
-        response = self._create_post_controller.handle(
-            username,
-            description,
-            image
-        )
-        return response
+        self._ensure_authenticated     = EnsureAuthenticated()
 
-    def list_posts(self, username):
-        response = self._list_posts_controller.handle(
-            username
-        )
-        return response
+    def create_post(self, username, description, image, token):
+
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._create_post_controller.handle(
+                username,
+                description,
+                image
+            )
+            return response
+        else:
+            return False
+
+    def list_posts(self, username, token):
+
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._list_posts_controller.handle(
+                username
+            )
+            return response
+        else:
+            return False
     
-    def retrieve_feed(self, username, post_limit):
-        response = self._retrieve_feed_controller.handle(
-            username,
-            post_limit
-        )
-    
-        return response
-    
-if __name__ == "__main__":
+    def retrieve_feed(self, username, post_limit, token):
+
+        authed = self._ensure_authenticated.handle()
+
+        if (authed):
+            response = self._retrieve_feed_controller.handle(
+                username,
+                post_limit
+            )
+            return response
+        else:
+            return False
+
+
+
+
+if (__name__ == "__main__"):
 
     thread_pool = ThreadPool()
 
@@ -156,10 +226,6 @@ if __name__ == "__main__":
     #     name="post_remote_object",
     #     port=49155,
     # )
-
-
-
-
 
 
 # Inicie o daemon do Pyro5
