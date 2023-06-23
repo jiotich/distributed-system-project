@@ -2,6 +2,8 @@ import sys
 sys.dont_write_bytecode = True
 import json
 
+from misc.error_codes import *
+
 from flask            import jsonify
 from flask            import Flask
 from flask            import request
@@ -73,13 +75,17 @@ def register():
             description
         )
         
-        if (response):
+        if (response == OK):
             return json.dumps({ 
                 "message": "success", "status_code": 200 
             }), 200
-        else: 
+        elif (response == UserExists): 
             return json.dumps({ 
-                "message": "failed", "status_code": 400 
+                "message": "user already exist", "status_code": UserExists 
+            }), 400
+        elif (response == InvalidUsername):
+            return json.dumps({ 
+                "message": "invalid username", "status_code": InvalidUsername 
             }), 400
 
 
@@ -479,7 +485,7 @@ def coment_post():
         return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
 
 
-# ================ ================ FEED ROUTES ================================
+# ================================ FEED ROUTES ================================
 
 @APP.route("/feed/retrieve", methods = ["GET"])
 def retrieve_feed():

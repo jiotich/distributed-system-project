@@ -1,7 +1,10 @@
 import uuid
 
 from passlib.hash         import sha256_crypt
+
+from misc.error_codes     import *
 from misc.username_filter import UsernameFilter
+
 from core.repositories    import UserRepository
 from core.entities        import User
 
@@ -21,9 +24,9 @@ class CreateUserService:
             user_already_exists = user_repository.find_one(username)
             
             if (user_already_exists):
-                return False
+                return UserExists
             else:
                 user_repository.create(new_user)
-                return True
+                return OK
         else:
-            return False
+            return InvalidUsername
