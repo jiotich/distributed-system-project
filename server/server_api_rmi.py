@@ -1,12 +1,10 @@
 import sys
 sys.dont_write_bytecode = True
 import socket
-import time
 
-from Pyro5 import api as API
-
-from nameserver import NameServer
-from thread_pool import ThreadPool
+from Pyro5            import api as API
+from nameserver       import NameServer
+from thread_pool      import ThreadPool
 
 from core.controller  import CreateUserController
 from core.controller  import CreatePostController
@@ -20,6 +18,9 @@ from core.controller  import ListFollowersController
 from core.controller  import ListFollowedsController
 from core.controller  import FindUserController
 from core.controller  import UpdateUserController
+from core.controller  import ComentPostController
+from core.controller  import LikePostController
+from core.controller  import UnlikePostController
 
 from core.middlewares import EnsureAuthenticated
 
@@ -145,9 +146,6 @@ class UserRemoteObject:
             return response 
         return False
     
-    def test1(self, x, y):
-        return x+y
-       
         
 @API.expose      
 class PostRemoteObject:
@@ -155,11 +153,13 @@ class PostRemoteObject:
         self._create_post_controller   = CreatePostController()
         self._list_posts_controller    = ListPostsController()
         self._retrieve_feed_controller = RetrieveFeedController()
+        self._coment_post_controller   = ComentPostController()
+        self._like_post_controller     = LikePostController()
+        self._unlike_post_controller   = UnlikePostController()
 
         self._ensure_authenticated     = EnsureAuthenticated()
 
     def create_post(self, username, description, image, token):
-
         authed = self._ensure_authenticated.handle(token, username)
 
         if (authed):
@@ -173,7 +173,6 @@ class PostRemoteObject:
             return False
 
     def list_posts(self, username, token):
-
         authed = self._ensure_authenticated.handle(token, username)
 
         if (authed):
@@ -185,8 +184,7 @@ class PostRemoteObject:
             return False
     
     def retrieve_feed(self, username, post_limit, token):
-
-        authed = self._ensure_authenticated.handle()
+        authed = self._ensure_authenticated.handle(token, username)
 
         if (authed):
             response = self._retrieve_feed_controller.handle(
@@ -195,9 +193,47 @@ class PostRemoteObject:
             )
             return response
         else:
-            return
-    def test2(self, x, y):
-        return x+y
+            return False
+    
+    def coment_post(self, username, post_id, comentary, token):
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._coment_post_controller.handle(
+                username,
+                post_id,
+                comentary
+            )
+            
+            return response
+        else:
+            return False
+    
+    def like_post(self, username, post_id, token):
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._like_post_controller.handle(
+                username, 
+                post_id
+            )
+            
+            return response
+        else:
+            return False
+    
+    def unlike_post(self, username, post_id, token):
+        authed = self._ensure_authenticated.handle(token, username)
+
+        if (authed):
+            response = self._unlike_post_controller.handle(
+                username, 
+                post_id
+            )
+            
+            return response
+        else:
+            return False
     
 
 if __name__ == "__main__":
@@ -221,34 +257,4 @@ if __name__ == "__main__":
         name="post_remote_object"
     )
     
-    remote_object_nameserver.loop()
-    
-    
-    #def loopcondition():
-        #print(time.asctime(), "Waiting for requests...")
-        #return True
-
-
-    #d.requestLoop()
-
-    # post_remote_object_nameserver.start(
-    #     remote_object=PostRemoteObject(),
-    #     name="post_remote_object",
-    #     port=49155,
-    # )
-
-
-# Inicie o daemon do Pyro5
-# Pyro5.api.daemon = Pyro5.api.Daemon()
-
-# user_remote_obj = UserRemoteObject()
-# post_remote_obj = PostRemoteObject()
-
-# user_remote_obj_interface_uri = Pyro5.api.daemon.register(user_remote_obj)
-# post_remote_obj_interface_uri = Pyro5.api.daemon.register(post_remote_obj)
-
-# Pyro5.api.start_ns()
-
-# print(user_remote_obj_interface_uri)
-# # Inicie o loop do servidor para aguardar chamadas
-# Pyro5.api.daemon.requestLoop()
+    remote_object_nameserver.loop() 
