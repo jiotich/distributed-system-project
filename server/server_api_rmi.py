@@ -144,6 +144,9 @@ class UserRemoteObject:
             )
             return response 
         return False
+    
+    def test1(self, x, y):
+        return x+y
        
         
 @API.expose      
@@ -193,6 +196,8 @@ class PostRemoteObject:
             return response
         else:
             return
+    def test2(self, x, y):
+        return x+y
     
 
 if __name__ == "__main__":
@@ -202,22 +207,29 @@ if __name__ == "__main__":
     HOSTNAME = socket.gethostname()
 
     
-    user_remote_object_nameserver = NameServer()
-    # post_remote_object_nameserver = NameServer()
-
-
-    d = user_remote_object_nameserver.start(
+    remote_object_nameserver = NameServer()
+    
+    remote_object_nameserver.start(port=9090)
+    
+    remote_object_nameserver.add_remote_object(
         remote_object=UserRemoteObject(),
-        name="user_remote_object",
-        port=49150,
+        name="user_remote_object"
     )
+    
+    remote_object_nameserver.add_remote_object(
+        remote_object=PostRemoteObject(),
+        name="post_remote_object"
+    )
+    
+    remote_object_nameserver.loop()
+    
+    
+    #def loopcondition():
+        #print(time.asctime(), "Waiting for requests...")
+        #return True
 
-    def loopcondition():
-        print(time.asctime(), "Waiting for requests...")
-        return True
 
-
-    d.requestLoop()
+    #d.requestLoop()
 
     # post_remote_object_nameserver.start(
     #     remote_object=PostRemoteObject(),
