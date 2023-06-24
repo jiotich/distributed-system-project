@@ -69,7 +69,7 @@ class UserRemoteObject:
         
     def update_user_description(self, username, new_description, token):
             
-        authed = self._ensure_authenticated(token, username)
+        authed = self._ensure_authenticated.handle(token, username)
             
         if (authed):
             response = self._update_user_controller.handle(
@@ -83,7 +83,7 @@ class UserRemoteObject:
     
     def follow_user(self, followed_username, follower_username, token):
 
-        authed = self._ensure_authenticated(token, followed_username)
+        authed = self._ensure_authenticated.handle(token, followed_username)
 
         if (authed):
             response = self._follow_user_controller.handle(

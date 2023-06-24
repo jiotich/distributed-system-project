@@ -188,7 +188,6 @@ class UserRepository:
             cursor.execute(
                 queries.UPDATE_USER_COLUMNS, 
                 [
-                    str(column), 
                     str(new_value), 
                     str(user_id),
                 ]

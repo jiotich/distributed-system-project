@@ -10,7 +10,7 @@ CREATE_USER = """
 UPDATE_USER_COLUMNS = """
     UPDATE user
     SET 
-        (?) = (?)
+        description = (?)
     WHERE
         username = (?)
 """
@@ -44,6 +44,8 @@ CREATE_POST = """
     ) VALUES 
         (?,?,?,?,?,?,?)
 """
+
+# TODO: Retornar os comentarios na query
 
 FETCH_POSTS = """ 
     SELECT 
