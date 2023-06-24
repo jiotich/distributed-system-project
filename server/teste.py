@@ -9,7 +9,3 @@
 
 # with Proxy("PYRO:obj_ca6e6a650459487593a2865596b3846e@JDBOP:65121") as proxy:
 #     print(proxy.create_user("branco", "pyro", "pyro"))
-
-
-if (isinstance([], list)):
-    print("listga")

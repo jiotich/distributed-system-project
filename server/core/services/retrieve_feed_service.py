@@ -2,7 +2,7 @@ from core.repositories import PostRepository
 from core.repositories import UserRepository
 from core.repositories import RelationshipRepository
 
-from misc.sort  import Sort
+from misc.sort         import Sort
 
 #TODO: fazer os posts virem em ordem de data
 
