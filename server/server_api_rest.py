@@ -127,12 +127,11 @@ def update_user():
         if (request.method == "PUT"):
             username = request.headers["username"]
             data     = request.headers["data"]
-            column   = request.headers["column"]
+        
 
             response = upade_user_controller.handle(
                 username,
-                data,
-                column
+                data
             )
 
             if (response):

@@ -180,10 +180,9 @@ class UserRepository:
         else:
             return True
     
-    def update(self, user_id, column, new_value):
+    def update(self, user_id, new_value):
         try:
             connection = DatabaseConnection()
-        
             cursor = connection.start_connection()
             cursor.execute(
                 queries.UPDATE_USER_COLUMNS, 

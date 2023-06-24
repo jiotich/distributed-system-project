@@ -75,7 +75,6 @@ class UserRemoteObject:
             response = self._update_user_controller.handle(
                 username,
                 new_description,
-                column="description"
             )
             return response
         else:

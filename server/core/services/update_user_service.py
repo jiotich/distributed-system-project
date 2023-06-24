@@ -1,7 +1,7 @@
 from core.repositories import UserRepository
 
 class UpdateUserService:
-    def execute(self, username, data, column):
+    def execute(self, username, data):
         
         user_repository = UserRepository()
         user_exist = user_repository.find_one(username)
@@ -11,7 +11,6 @@ class UpdateUserService:
     
             response = user_repository.update(
                 user_id=user_id,
-                column=column,
                 new_value=data
             )
             

@@ -12,7 +12,7 @@ UPDATE_USER_COLUMNS = """
     SET 
         description = (?)
     WHERE
-        username = (?)
+        id = (?)
 """
 
 VERIFY_USER_EXISTS = """ 
