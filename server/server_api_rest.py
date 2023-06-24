@@ -519,4 +519,4 @@ def retrieve_feed():
 
 if (__name__ == "__main__"):
     print("> Starting server at http://localhost:5006")
-    APP.run(debug=False, port=8080)
+    APP.run(debug=False, port=5006)

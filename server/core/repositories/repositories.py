@@ -151,7 +151,6 @@ class UserRepository:
             connection.commit_operation()
             
             retrived_data = cursor.fetchone()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
@@ -267,6 +266,28 @@ class RelationshipRepository:
         else:
             return retrived_data
 
+    def find(self, follower_id, followed_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            cursor.execute(
+                queries.VERIFY_ALREADY_FOLLOW, 
+                [
+                    str(followed_id),
+                    str(follower_id)
+                ]
+            )
+            
+            connection.commit_operation()
+            retrived_data = cursor.fetchall()
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
+        
     def delete(self, followed_id, follower_id):
         try:
             connection = DatabaseConnection()

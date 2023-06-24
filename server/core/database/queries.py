@@ -94,6 +94,17 @@ LIST_FOLLOWEDS = """
     WHERE fk_relationship_user_follower = (?)
 """
 
+VERIFY_ALREADY_FOLLOW = """
+    SELECT 
+        id
+    FROM 
+        follow_relationship
+    WHERE 
+        fk_relationship_user_followed = (?)
+    AND 
+        fk_relationship_user_follower = (?)
+"""
+
 CREATE_COMENTARY = """
     INSERT INTO post_comentary (
         id,
