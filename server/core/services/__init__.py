@@ -13,4 +13,3 @@ from .list_followers_service      import ListFollowersService
 from .coment_post_service         import ComentPostService
 from .like_post_service           import LikePostsService
 from .unlike_post_service         import UnlikePostsService
-from .verify_liked_post_service   import VerifyLikedPostService
