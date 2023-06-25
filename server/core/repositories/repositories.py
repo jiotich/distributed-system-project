@@ -65,10 +65,7 @@ class PostRepository:
         except SQL.IntegrityError:
             return False
         else:
-            if (len(retrived_data) == 0):
-                return False
-            else:
-                return retrived_data
+            return retrived_data
     
     def coment(self, comentary: PostComentary):
         try:
@@ -108,6 +105,13 @@ class PostRepository:
                     user_id
                 ]
             )
+            
+            cursor.execute(
+                queries.INCREMENT_UPVOTE,
+                [
+                    post_id
+                ]
+            )
 
             connection.commit_operation()
             connection.finish_connection()
@@ -122,9 +126,16 @@ class PostRepository:
 
             cursor = connection.start_connection()
             cursor.execute(
-                queries.UNLIKE_POST,
+                queries.VERIFY_IF_LIKED,
                 [
                     user_id,
+                    post_id
+                ]
+            )
+            
+            cursor.execute(
+                queries.DELETE_RELATIONSHIP,
+                [
                     post_id
                 ]
             )
@@ -136,6 +147,30 @@ class PostRepository:
         else: 
             return True
 
+    def verify_if_liked(self, user_id, post_id):
+        try:
+            connection = DatabaseConnection()
+
+            cursor = connection.start_connection()
+            cursor.execute(
+                queries.VERIFY_IF_LIKED,
+                [
+                    user_id,
+                    post_id
+                ]
+            )
+
+            retrived_data = cursor.fetchone()
+            
+            connection.commit_operation()
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else: 
+            if (retrived_data):
+                return True
+            else:
+                return False
 class UserRepository:
     def find_one(self, username):
         try:
@@ -148,10 +183,11 @@ class UserRepository:
                     str(username)
                 ]
             )
-            connection.commit_operation()
             
+            connection.commit_operation()
             retrived_data = cursor.fetchone()
             connection.finish_connection()
+            
         except SQL.IntegrityError:
             return False
         else:
