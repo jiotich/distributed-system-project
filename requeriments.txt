@@ -1,7 +1,7 @@
-pip install passlib==1.7.4 
-pip install pyjwt==2.7.0
-pip install flask==2.3.2
-pip install flask_jwt_extended==4.5.2
-pip install flask_cors==3.0.10
-pip install Pyro5==5.14
-pip install --upgrade watchdog
+passlib==1.7.4 
+pyjwt==2.7.0
+flask==2.3.2
+flask_jwt_extended==4.5.2
+flask_cors==3.0.10
+Pyro5==5.14
+--upgrade watchdog

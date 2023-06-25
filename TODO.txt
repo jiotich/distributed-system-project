@@ -1,0 +1,4 @@
+No processo de retornar um post, duas abordagens para verificar se o usuario que requeriu
+curtiu o post, usando uma função para acessar o banco e verificar se existe uma tabela
+POST_LIKE, que vincula se o usuario curtiu o post. Ou ao retornar o post fazer uma query
+que verifica se tem uma relação dessas com o usuário que requisitou o post
