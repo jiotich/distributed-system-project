@@ -14,11 +14,13 @@ class ListPostsService:
         target_user_exist = user_repository.find_one(target_username)
         
         if (user_exist and target_username):
+            caller_user_id = user_exist[0]
             target_user_id = target_user_exist[0]
 
-            response = post_repository.find(target_user_id)
-            
-            print(response)
+            response = post_repository.find(
+                caller_user_id,
+                target_user_id
+            )
             
             if (isinstance(response, list)):
                 

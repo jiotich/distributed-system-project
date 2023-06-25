@@ -2,7 +2,7 @@ import sys
 sys.dont_write_bytecode = True
 import json
 
-# from misc.error_codes import *
+from misc.status_code import StatusCode
 
 from flask            import jsonify
 from flask            import Flask
@@ -38,13 +38,14 @@ list_post_controller       = ListPostsController()
 list_followers_controller  = ListFollowersController()
 list_followeds_controller  = ListFollowedsController()
 find_user_controller       = FindUserController()
-upade_user_controller      = UpdateUserController()
+update_user_controller      = UpdateUserController()
 coment_post_controller     = ComentPostController()
 like_post_controller       = LikePostController()
 unlike_post_controller     = UnlikePostController()
 
 ensure_authenticated       = EnsureAuthenticated()
 
+status_code = StatusCode()
 
 APP = Flask(__name__)
 
@@ -75,17 +76,17 @@ def register():
             description
         )
         
-        if (response == OK):
+        if (response == status_code.OK):
             return json.dumps({ 
                 "message": "success", "status_code": 200 
             }), 200
-        elif (response == UserExists): 
+        elif (response == status_code.UserExists): 
             return json.dumps({ 
-                "message": "user already exist", "status_code": UserExists 
+                "message": "user already exist", "status_code": status_code.UserExists 
             }), 400
-        elif (response == InvalidUsername):
+        elif (response == status_code.InvalidUsername):
             return json.dumps({ 
-                "message": "invalid username", "status_code": InvalidUsername 
+                "message": "invalid username", "status_code": status_code.InvalidUsername 
             }), 400
 
 
@@ -129,7 +130,7 @@ def update_user():
             data     = request.headers["data"]
         
 
-            response = upade_user_controller.handle(
+            response = update_user_controller.handle(
                 username,
                 data
             )
@@ -506,7 +507,7 @@ def retrieve_feed():
                 int(limit)
             )
             
-            if (response):
+            if (isinstance(response, list)):
                 return json.dumps({
                     "message": "success", "data": response, "status_code": 200
                 }), 200

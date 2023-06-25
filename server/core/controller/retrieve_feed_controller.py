@@ -5,7 +5,7 @@ class RetrieveFeedController:
         retrieve_feed_service = RetrieveFeedService()
         response = retrieve_feed_service.execute(username, posts_limit)
         
-        if (response):
+        if (isinstance(response, list)):
             return response
         else:
             return False

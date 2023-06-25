@@ -47,7 +47,25 @@ CREATE_POST = """
 
 # TODO: Retornar os comentarios na query
 
-FETCH_POSTS = """ 
+# FETCH_POSTS = """ 
+#     SELECT 
+#         post.id, 
+#         post.description, 
+#         post.up_votes, 
+#         post.created_date, 
+#         post.created_time,
+#         image.data,
+#         user.username,
+#         user.description
+#     FROM 
+#         post 
+#     INNER JOIN image ON image.id = post.fk_post_image
+#     INNER JOIN user  ON user.id = post.fk_post_user
+#     WHERE 
+#         fk_post_user = (?) 
+# """
+    
+FETCH_POSTS = """
     SELECT 
         post.id, 
         post.description, 
@@ -56,14 +74,19 @@ FETCH_POSTS = """
         post.created_time,
         image.data,
         user.username,
-        user.description
+        user.description,
+        (SELECT COUNT(*) FROM post_like WHERE fk_like_user = (?) AND fk_like_post = post.id) AS is_liked
     FROM 
         post 
     INNER JOIN image ON image.id = post.fk_post_image
-    INNER JOIN user  ON user.id = post.fk_post_user
+    INNER JOIN user ON user.id = post.fk_post_user
     WHERE 
-        fk_post_user = (?) 
+        post.fk_post_user = (?);
+
+
 """
+    
+    
     
 CREATE_RELATIONSHIP = """ 
     INSERT INTO 

@@ -47,7 +47,7 @@ class PostRepository:
         else: 
             return True
 
-    def find(self, user_id):
+    def find(self, caller_user_id, target_user_id):
         try:
             connection = DatabaseConnection()
         
@@ -55,7 +55,8 @@ class PostRepository:
             cursor.execute(
                 queries.FETCH_POSTS, 
                 [
-                    str(user_id)
+                    str(caller_user_id),
+                    str(target_user_id)
                 ]
             )
             connection.commit_operation()
