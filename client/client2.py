@@ -117,9 +117,15 @@ class Client:
                 post_limit,
                 self.token
             )
-        #for post in response:
-            #img_path = 
-        return response
+        if not response:
+            return response
+        else:
+            posts = []
+            for post in response:
+                fixed_json = self.fix_quotes(post[5])
+                img_path = get_file_from_bytearray(base64.b64decode(json.loads(fixed_json)['data']), random=True)
+                posts.append([post[6], post[1], post[2], f"temp/{img_path}"])
+            return posts
     
     def like_post(self, username, post_id):
         with Proxy("PYRONAME:post_remote_object") as proxy:
@@ -148,6 +154,9 @@ if __name__ == "__main__":
     #image = get_bytearray_from_file("/home/vinicius/Pictures/neon.jpg")
     #print(image)
     client = Client()
-    print(client.auth_user("joseph", "joseph"))
+    #print(client.auth_user("joseph", "joseph"))
+    print(client.auth_user("admin", "admin"))
     #print(client.create_post("joseph", "Description2", "/home/vinicius/Pictures/neon.jpg"))
-    print(client.list_posts("joseph"))
+    print(client.follow_user("joseph", "admin"))
+    print(client.retrieve_feed("admin", 30))
+    #print(client.list_posts("joseph"))
