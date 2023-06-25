@@ -16,8 +16,8 @@ def load_search_page(window, search):
     user = mh.search_click(window, search)
     #for user in users:
     print(user)
-    if (user != None):
-        load_search_results(window=window, username=user[0], description=user[1])
+    if (user):
+        load_search_results(window=window, username=user[1], description=user[2])
 
 def load_search_results(window, username, description=""):
     window.search_user_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_search)

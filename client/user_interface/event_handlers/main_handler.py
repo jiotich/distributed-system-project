@@ -1,54 +1,33 @@
 def search_click(window, search):
-    #FAZ REQUISIÇÃO DO(S) USUÁRIO(S) QUE TEM MATCH COM A STRING SEARCH
-    #RETORNA UMA LISTA DE USUÁRIOS
-    #ABAIXO UM PLACEHOLDER
-    user = window.client.search(search)
+    user = window.client.find_user(search)
     return user
 
 def home_click(window):
-    #FAZ REQUISIÇÃO DOS POSTS PARA O FEED
-    #ABAIXO UM PLACEHOLDER
-    posts = window.client.retrieve_feed()
-    #[username de quem postou, descrição, numero de likes, id do post, se o usuário deu like no post, path da imagem]
-    #posts.append(["Username1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "1", False,
-                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    #posts.append(["Username2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "2", False,
-                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
-    #posts.append(["Username3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 0, "3", False,
-                  #"/home/vinicius/Documents/SD/distributed-system-project/client/user_interface/teste.jpg"])
+    posts = window.client.retrieve_feed(window.username)
     return posts
 
 def publish_click(window, image_path, description):
-    #USUÁRIO FAZ PUBLICAÇÃO
-    window.client.send_image(image_path, description)
-    print("Description: ", description, "Path: ", image_path)
+    return window.client.create_post(window.username, description, image_path)
     
 def self_profile_click(window, username):
-    #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO
-    #ABAIXO UM PLACEHOLDER
-    info = window.client.retrieve_profile(username)
-    return ["", info[0]]
+    posts = window.client.list_posts(username)
+    description = window.client.find_user(username)[2]
+    return [description, posts]
 
-def change_user_description(username, description):
-    #FAZ A REQUISIÇÃO DE MUDANÇA DE DESCRIÇÃO DO PERFIL
-    print("Mudança de descrição: ", description)
+def change_user_description(window, username, description):
+    window.client.update_user_description(username, description)
 
 def profile_click(window, username):
-    #FAZ REQUISIÇÃO DOS POSTS DO USUÁRIO
-    #ABAIXO UM PLACEHOLDER
-    info = window.client.retrieve_profile(username)
-    return ["", info[1], info[0]]
+    posts = window.client.list_posts(username)
+    description = window.client.find_user(username)[2]
+    is_followed = window.client.check_if_follows(window.username, username)
+    return [description, is_followed, posts]
 
 def follow_user(window, username):
-    #O USER (QUE ESTÁ USANDO O CLIENTE) VAI DAR FOLLOW NO USERNAME
-    #FAZER REQUISIÇÃO AO SERVIDOR
-    window.client.follow_user(username)
+    window.client.follow_user(username, window.username)
 
-def unfollow_user(user, username):
-    #O USER (QUE ESTÁ USANDO O CLIENTE) VAI DAR UNFOLLOW NO USERNAME
-    #FAZER REQUISIÇÃO AO SERVIDOR
-    print(user, "deu unfollow no ",username)
-    pass
+def unfollow_user(window, username):
+    window.client.remove_user_followed(username, window.username)
 
 def liked_post(user, post_id):
     print(user,"liked post ", post_id)

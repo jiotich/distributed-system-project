@@ -155,7 +155,7 @@ def confirm_edit(window):
     window.ui.cancel_edit_button.setEnabled(False)
     window.ui.textEdit.setReadOnly(True)
     window.description = window.ui.textEdit.toPlainText()
-    mh.change_user_description(window.username, window.description)
+    mh.change_user_description(window, window.username, window.description)
     window.ui.textEdit.setPlainText(window.description)
 
 def cancel_edit(window):

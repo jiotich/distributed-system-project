@@ -30,8 +30,9 @@ def load_profile(window, username):
         icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Follow")
-    for post in posts:
-        load_profile_post(window, window.other_user, post[1], post[2], "1", False, post[3])
+    if posts:
+        for post in posts:
+            load_profile_post(window, window.other_user, post[1], post[2], "1", False, post[3])
         
 def load_profile_post(window, username, description, likes, post_id, is_liked, img_path):
     current_index = window.user_post_number
@@ -169,12 +170,12 @@ def load_profile_post(window, username, description, likes, post_id, is_liked, i
 
 def follow(window, username):
     if(window.is_followed):
-        #mh.unfollow_user(window.username, username)
-        #window.is_followed = False
-        #icon = QtGui.QIcon()
-        #icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #window.ui.add_button.setIcon(icon)
-        #window.ui.add_button.setText("Follow")
+        mh.unfollow_user(window, username)
+        window.is_followed = False
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        window.ui.add_button.setIcon(icon)
+        window.ui.add_button.setText("Follow")
         pass
     else:
         mh.follow_user(window, username)

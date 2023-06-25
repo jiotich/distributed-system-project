@@ -16,6 +16,8 @@ class Client:
                 passord,
                 description
             )
+        if response == 700:
+            return False
         return response
     
     def auth_user(self, username, password):
@@ -110,7 +112,7 @@ class Client:
                 posts.append([post[6], post[1], post[2], f"temp/{img_path}"])
             return posts
     
-    def retrieve_feed(self, username, post_limit):
+    def retrieve_feed(self, username, post_limit=30):
         with Proxy("PYRONAME:post_remote_object") as proxy:
             response = proxy.retrieve_feed(
                 username,
@@ -157,6 +159,4 @@ if __name__ == "__main__":
     #print(client.auth_user("joseph", "joseph"))
     print(client.auth_user("admin", "admin"))
     #print(client.create_post("joseph", "Description2", "/home/vinicius/Pictures/neon.jpg"))
-    print(client.follow_user("joseph", "admin"))
-    print(client.retrieve_feed("admin", 30))
-    #print(client.list_posts("joseph"))
+    print(client.find_user("jacob"))
