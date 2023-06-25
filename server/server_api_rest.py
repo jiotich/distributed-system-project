@@ -2,7 +2,7 @@ import sys
 sys.dont_write_bytecode = True
 import json
 
-from misc.error_codes import *
+# from misc.error_codes import *
 
 from flask            import jsonify
 from flask            import Flask
@@ -377,10 +377,12 @@ def list_posts():
 
     if (auth):
         if (request.method == "GET"):
-            username = request.headers["username"]
+            username        = request.headers["username"]
+            target_username = request.headers["target-username"]
 
             response = list_post_controller.handle(
-                username
+                username,
+                target_username
             )
 
             if (isinstance(response, list)):

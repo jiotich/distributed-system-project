@@ -21,6 +21,7 @@ from core.controller  import UpdateUserController
 from core.controller  import ComentPostController
 from core.controller  import LikePostController
 from core.controller  import UnlikePostController
+# from core.controller  import Verify
 
 from core.middlewares import EnsureAuthenticated
 
@@ -171,12 +172,13 @@ class PostRemoteObject:
         else:
             return False
 
-    def list_posts(self, username, token):
+    def list_posts(self, username, target_username, token):
         authed = self._ensure_authenticated.handle(token, username)
 
         if (authed):
             response = self._list_posts_controller.handle(
-                username
+                username,
+                target_username
             )
             return response
         else:

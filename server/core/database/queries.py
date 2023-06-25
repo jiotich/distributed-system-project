@@ -134,3 +134,33 @@ UNLIKE_POST = """
     AND
         fk_like_post = (?)
 """
+
+VERIFY_IF_LIKED = """
+    SELECT EXISTS (
+        SELECT 1 
+        FROM 
+            post_like 
+        WHERE 
+            fk_like_user = (?)
+        AND
+            fk_like_post = (?)
+    ) AS exists_record; 
+"""
+
+INCREMENT_UPVOTE = """
+    UPDATE 
+        post
+    SET 
+        upvotes = upvotes + 1
+    WHERE 
+        id = (?);
+"""
+
+DECREMENT_UPVOTE = """
+    UPDATE 
+        post
+    SET 
+        upvotes = upvotes - 1
+    WHERE 
+        id = (?);
+"""
