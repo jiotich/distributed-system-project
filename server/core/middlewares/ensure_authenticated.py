@@ -14,7 +14,7 @@ class EnsureAuthenticated:
             )
 
             if (username != decoded["username"]):
-                yield jwt.PyJWKError
+                raise jwt.PyJWKError
 
         except jwt.PyJWTError:
             return False
