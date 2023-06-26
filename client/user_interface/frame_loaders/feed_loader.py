@@ -158,13 +158,13 @@ def feed_like_button(window, index, current_like_button, post_id):
     icon2 = QtGui.QIcon()
     icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     if(window.feed_likes[index][0]):
-        mh.unliked_post(window.username, post_id)
+        mh.unliked_post(window, window.username, post_id)
         window.feed_likes[index][0] = False
         current_like_button.setIcon(icon1)
         window.feed_likes[index][1] -= 1
         current_like_button.setText(str(window.feed_likes[index][1]))
     else:
-        mh.liked_post(window.username, post_id)
+        mh.liked_post(window, window.username, post_id)
         window.feed_likes[index][0] = True
         current_like_button.setIcon(icon2)
         window.feed_likes[index][1] += 1

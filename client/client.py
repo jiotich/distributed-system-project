@@ -96,10 +96,11 @@ class Client:
             )
         return response
     
-    def list_posts(self, username):
+    def list_posts(self, username, target_username):
         with Proxy("PYRONAME:post_remote_object") as proxy:
             response = proxy.list_posts(
                 username,
+                target_username,
                 self.token
             )
         if not response:
@@ -109,7 +110,8 @@ class Client:
             for post in response:
                 fixed_json = self.fix_quotes(post[5])
                 img_path = get_file_from_bytearray(base64.b64decode(json.loads(fixed_json)['data']), random=True)
-                posts.append([post[6], post[1], post[2], f"temp/{img_path}"])
+                is_liked = True if post[8] == 1 else False
+                posts.append([post[6], post[1], post[2], post[0], is_liked, f"temp/{img_path}"])
             return posts
     
     def retrieve_feed(self, username, post_limit=30):
@@ -126,7 +128,8 @@ class Client:
             for post in response:
                 fixed_json = self.fix_quotes(post[5])
                 img_path = get_file_from_bytearray(base64.b64decode(json.loads(fixed_json)['data']), random=True)
-                posts.append([post[6], post[1], post[2], f"temp/{img_path}"])
+                is_liked = True if post[8] == 1 else False
+                posts.append([post[6], post[1], post[2], post[0], is_liked, f"temp/{img_path}" ])
             return posts
     
     def like_post(self, username, post_id):
@@ -157,6 +160,6 @@ if __name__ == "__main__":
     #print(image)
     client = Client()
     #print(client.auth_user("joseph", "joseph"))
-    print(client.auth_user("admin", "admin"))
+    #print(client.auth_user("joseph", "joseph"))
     #print(client.create_post("joseph", "Description2", "/home/vinicius/Pictures/neon.jpg"))
-    print(client.find_user("jacob"))
+    #print(client.list_posts("joseph", "joseph"))

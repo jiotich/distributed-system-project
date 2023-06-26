@@ -15,7 +15,6 @@ def load_search_page(window, search):
     window.ui.search_text.setText("")
     user = mh.search_click(window, search)
     #for user in users:
-    print(user)
     if (user):
         load_search_results(window=window, username=user[1], description=user[2])
 
