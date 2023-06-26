@@ -407,8 +407,10 @@ def like_post():
 
     if (auth):
         if (request.method == "POST"):
+            request_parsed = request.get_json() 
+            
             username = request.headers["username"]
-            post_id  = request.headers["post-id"]
+            post_id  = request_parsed["post-id"]
 
             response = like_post_controller.handle(
                 username,
@@ -436,8 +438,10 @@ def unlike_post():
 
     if (auth):
         if (request.method == "POST"):
+            request_parsed = request.get_json() 
+            
             username = request.headers["username"]
-            post_id  = request.headers["postId"]
+            post_id  = request_parsed["post_id"]
 
             response = unlike_post_controller.handle(
                 username,
@@ -464,10 +468,13 @@ def coment_post():
     )
 
     if (auth):
-        if (request.method == "GET"):
-            username  = request.headers["username"]
-            post_id   = request.headers["postId"]
-            comentary = request.headers["comentary"]
+        if (request.method == "POST"):
+            
+            request_parsed = request.get_json()
+            
+            username  = request_parsed["username"]
+            post_id   = request_parsed["post_id"]
+            comentary = request_parsed["comentary"]
 
             response = coment_post_controller.handle(
                 username,
