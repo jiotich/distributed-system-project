@@ -408,7 +408,7 @@ def like_post():
     if (auth):
         if (request.method == "POST"):
             username = request.headers["username"]
-            post_id  = request.headers["postId"]
+            post_id  = request.headers["post-id"]
 
             response = like_post_controller.handle(
                 username,

@@ -101,16 +101,16 @@ class PostRepository:
             cursor.execute(
                 queries.LIKE_POST,
                 [
-                    id,
-                    post_id,
-                    user_id
+                    str(id),
+                    str(post_id),
+                    str(user_id)
                 ]
             )
             
             cursor.execute(
                 queries.INCREMENT_UPVOTE,
                 [
-                    post_id
+                    str(post_id)
                 ]
             )
 
