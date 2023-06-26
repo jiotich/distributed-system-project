@@ -46,24 +46,6 @@ CREATE_POST = """
 """
 
 # TODO: Retornar os comentarios na query
-
-# FETCH_POSTS = """ 
-#     SELECT 
-#         post.id, 
-#         post.description, 
-#         post.up_votes, 
-#         post.created_date, 
-#         post.created_time,
-#         image.data,
-#         user.username,
-#         user.description
-#     FROM 
-#         post 
-#     INNER JOIN image ON image.id = post.fk_post_image
-#     INNER JOIN user  ON user.id = post.fk_post_user
-#     WHERE 
-#         fk_post_user = (?) 
-# """
     
 FETCH_POSTS = """
     SELECT 
@@ -82,8 +64,6 @@ FETCH_POSTS = """
     INNER JOIN user ON user.id = post.fk_post_user
     WHERE 
         post.fk_post_user = (?);
-
-
 """
     
     
@@ -174,7 +154,7 @@ INCREMENT_UPVOTE = """
     UPDATE 
         post
     SET 
-        upvotes = upvotes + 1
+        up_votes = up_votes + 1
     WHERE 
         id = (?);
 """
@@ -183,7 +163,7 @@ DECREMENT_UPVOTE = """
     UPDATE 
         post
     SET 
-        upvotes = upvotes - 1
+        up_votes = up_votes - 1
     WHERE 
         id = (?);
 """

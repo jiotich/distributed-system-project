@@ -5,3 +5,6 @@ que verifica se tem uma relação dessas com o usuário que requisitou o post
 
 2 - [] Alterar os services que realizam varias consultas ao banco 
 criar uma conexão apenas para utilizar em todas
+
+3 - [] Editar os retornos de modo a formatar o JSON, nao deixando apenas os dados
+formatando de forma a dar um nome para ficar no formato key:value
