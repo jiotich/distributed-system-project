@@ -121,7 +121,7 @@ class PostRepository:
                 connection.finish_connection()
             else:
                 connection.finish_connection()
-                return False
+                raise SQL.IntegrityError
                 
         except SQL.IntegrityError:
             return False
@@ -153,7 +153,7 @@ class PostRepository:
                 connection.finish_connection()
             else:
                 connection.finish_connection()
-                return False
+                raise SQL.IntegrityError
             
         except SQL.IntegrityError:
             return False
