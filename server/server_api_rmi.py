@@ -56,13 +56,14 @@ class UserRemoteObject:
         )
         return response
     
-    def find_user(self, username, token):
+    def find_user(self, username, target_user, token):
 
         authed = self._ensure_authenticated.handle(token, username)
 
         if (authed):
             response = self._find_user_controller.handle(
-                username
+                username,
+                target_user
             )
             return response
         else:
