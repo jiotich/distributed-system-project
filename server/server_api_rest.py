@@ -269,7 +269,6 @@ def list_followeds():
                 return json.dumps({
                     "message": "failed", "data": "", "status_code": status_code.Error
                 }), status_code.Error
-
     else:
         return json.dumps({
             "message": "unauthorized", "status_code": status_code.Unauthorized
@@ -338,7 +337,6 @@ def remove_followed():
                 return json.dumps({
                     "message": "failed", "status_code": status_code.Error
                 }), status_code.Error
-
     else:
         return json.dumps({
             "message": "unauthorized", "status_code": status_code.Unauthorized
