@@ -78,21 +78,22 @@ def register():
         
         if (response == status_code.OK):
             return json.dumps({ 
-                "message": "success", "status_code": 200 
-            }), 200
+                "message": "success", "status_code": status_code.OK 
+            }), status_code.OK 
+            
         elif (response == status_code.UserExists): 
             return json.dumps({ 
                 "message": "user already exist", "status_code": status_code.UserExists 
-            }), 400
+            }), status_code.Error
+            
         elif (response == status_code.InvalidUsername):
             return json.dumps({ 
                 "message": "invalid username", "status_code": status_code.InvalidUsername 
-            }), 400
+            }), status_code.Error
 
 
 @APP.route("/user/login", methods = ["GET"])
 def login():
-
     if (request.method == "GET"):
         username = request.headers["username"]
         password = request.headers["password"]
@@ -104,16 +105,16 @@ def login():
 
         if (response):
             return json.dumps({
-                "message": "success", 
+                "message": "authenticated", 
                 "token": response,
-                "status_code": 200
-            }), 200
+                "status_code": status_code.OK
+            }), status_code.OK
         else:
             return json.dumps({
-                "message": "failed", 
+                "message": "authentication failed", 
                 "token": "-1",
-                "status_code": 400
-            }), 400
+                "status_code": status_code.Unauthorized
+            }), status_code.Unauthorized
 
 # TODO: não deixar a coluna para ser passada como parametro
 @APP.route("/user/update", methods = ["PUT"])
@@ -137,14 +138,16 @@ def update_user():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "status_code": 200
-                }), 200
+                    "message": "success", "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "status_code": 400
-                }), 400
+                    "message": "failed", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/user/get", methods = ["GET"])
 def get_user():
@@ -164,14 +167,16 @@ def get_user():
 
             if (response):
                 return json.dumps({
-                    "message": "success" ,"data": response, "status_code": 200
-                }), 200
+                    "message": "success" ,"data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed" ,"data": "unexistent", "status_code": 400
-                }), 400
+                    "message": "failed" ,"data": "unexistent", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 
 # ================================ FOLLOW ROUTES ================================
@@ -199,15 +204,17 @@ def follow_user():
             
             if (response):
                 return json.dumps({
-               "message": "success", "status_code": 200 
-            }), 200
+               "message": "success", "status_code": status_code.OK 
+            }), status_code.OK
             
             else:
                 return json.dumps({
-                    "message": "failed", "status_code": 400 
-                }), 400
+                    "message": "failed", "status_code": status_code.Error 
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/follow_user/list/followers", methods = ["GET"])
 def list_followers():
@@ -227,14 +234,16 @@ def list_followers():
 
             if (isinstance(response, list)):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
     
 @APP.route("/follow_user/list/followeds", methods = ["GET"])
 def list_followeds():
@@ -254,15 +263,16 @@ def list_followeds():
 
             if (isinstance(response, list)):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
-
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/follow_user/remove/follower", methods = ["DELETE"])
 def remove_follower():
@@ -287,14 +297,16 @@ def remove_follower():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "status_code": 200
-                }), 200
+                    "message": "success", "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "status_code": 400
-                }), 400
+                    "message": "failed", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
     
 @APP.route("/follow_user/remove/followed", methods = ["DELETE"])
 def remove_followed():
@@ -319,15 +331,16 @@ def remove_followed():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "status_code": 200
-                }), 200
+                    "message": "success", "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "status_code": 400
-                }), 400
-
+                    "message": "failed", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 
 # ================================ POST ROUTES ================================
@@ -358,15 +371,17 @@ def create_post():
             if (response):
                 return json.dumps({
                 "message": "success",
-                "status_code": 200
-            }), 200
+                "status_code": status_code.OK
+            }), status_code.OK
             else:
                 return json.dumps({
                     "message": "failed", 
-                    "status_code": 400
-                }), 400
+                    "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/post/list", methods = ["GET"])
 def list_posts():
@@ -388,14 +403,16 @@ def list_posts():
 
             if (isinstance(response, list)):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/post/like", methods = ["POST"])
 def like_post():
@@ -407,8 +424,10 @@ def like_post():
 
     if (auth):
         if (request.method == "POST"):
+            request_parsed = request.get_json() 
+            
             username = request.headers["username"]
-            post_id  = request.headers["post-id"]
+            post_id  = request_parsed["post_id"]
 
             response = like_post_controller.handle(
                 username,
@@ -417,14 +436,16 @@ def like_post():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/post/unlike", methods = ["POST"])
 def unlike_post():
@@ -436,8 +457,10 @@ def unlike_post():
 
     if (auth):
         if (request.method == "POST"):
+            request_parsed = request.get_json() 
+            
             username = request.headers["username"]
-            post_id  = request.headers["postId"]
+            post_id  = request_parsed["post_id"]
 
             response = unlike_post_controller.handle(
                 username,
@@ -446,14 +469,16 @@ def unlike_post():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 @APP.route("/post/coment", methods = ["POST"])
 def coment_post():
@@ -464,10 +489,13 @@ def coment_post():
     )
 
     if (auth):
-        if (request.method == "GET"):
-            username  = request.headers["username"]
-            post_id   = request.headers["postId"]
-            comentary = request.headers["comentary"]
+        if (request.method == "POST"):
+            
+            request_parsed = request.get_json()
+            
+            username  = request_parsed["username"]
+            post_id   = request_parsed["post_id"]
+            comentary = request_parsed["comentary"]
 
             response = coment_post_controller.handle(
                 username,
@@ -477,14 +505,16 @@ def coment_post():
 
             if (response):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 
 # ================================ FEED ROUTES ================================
@@ -509,14 +539,16 @@ def retrieve_feed():
             
             if (isinstance(response, list)):
                 return json.dumps({
-                    "message": "success", "data": response, "status_code": 200
-                }), 200
+                    "message": "success", "data": response, "status_code": status_code.OK
+                }), status_code.OK
             else:
                 return json.dumps({
-                    "message": "failed", "data": "", "status_code": 400
-                }), 400
+                    "message": "failed", "data": "", "status_code": status_code.Error
+                }), status_code.Error
     else:
-        return json.dumps({"message": "unauthorized", "status_code": "401"}), 401
+        return json.dumps({
+            "message": "unauthorized", "status_code": status_code.Unauthorized
+        }), status_code.Unauthorized
 
 
 if (__name__ == "__main__"):

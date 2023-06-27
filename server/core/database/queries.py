@@ -123,19 +123,18 @@ CREATE_COMENTARY = """
 
 LIKE_POST = """
     INSERT INTO post_like (
-        id,
-        fk_like_post,
+        id, 
+        fk_like_post, 
         fk_like_user
-    ) VALUES (?,?,?)
-"""
-
-UNLIKE_POST = """
-    DELETE FROM
-        post_like
-    WHERE 
-        fk_like_user = (?)
-    AND
-        fk_like_post = (?)
+    )
+    SELECT (?), (?), (?)
+    WHERE NOT EXISTS (
+        SELECT 1 FROM post_like
+        WHERE 
+            fk_like_post = (?) 
+        AND 
+            fk_like_user = (?)
+)
 """
 
 VERIFY_IF_LIKED = """
@@ -148,6 +147,15 @@ VERIFY_IF_LIKED = """
         AND
             fk_like_post = (?)
     ) AS exists_record; 
+"""
+
+UNLIKE_POST = """
+    DELETE FROM
+        post_like
+    WHERE 
+        fk_like_user = (?)
+    AND
+        fk_like_post = (?)
 """
 
 INCREMENT_UPVOTE = """
