@@ -410,7 +410,7 @@ def like_post():
             request_parsed = request.get_json() 
             
             username = request.headers["username"]
-            post_id  = request_parsed["post-id"]
+            post_id  = request_parsed["post_id"]
 
             response = like_post_controller.handle(
                 username,

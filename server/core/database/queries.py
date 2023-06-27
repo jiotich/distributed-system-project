@@ -137,28 +137,17 @@ LIKE_POST = """
 )
 """
 
-# LIKE_POST = """
-# BEGIN TRANSACTION;
-
-# SAVEPOINT savepoint;
-
-# INSERT INTO post_like (id, fk_like_post, fk_like_user)
-# SELECT ?, ?, ?
-# WHERE NOT EXISTS (
-#     SELECT 1 FROM post_like
-#     WHERE fk_like_post = ? AND fk_like_user = ?
-# );
-
-# IF (SELECT changes() = 0)
-# BEGIN
-#     ROLLBACK TO savepoint;
-#     SELECT RAISE(ABORT, 'Não foi possível inserir o registro.');
-# END;
-
-# RELEASE savepoint;
-
-# COMMIT;
-# """
+VERIFY_IF_LIKED = """
+    SELECT EXISTS (
+        SELECT 1 
+        FROM 
+            post_like 
+        WHERE 
+            fk_like_user = (?)
+        AND
+            fk_like_post = (?)
+    ) AS exists_record; 
+"""
 
 UNLIKE_POST = """
     DELETE FROM

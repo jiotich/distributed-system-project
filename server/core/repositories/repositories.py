@@ -98,7 +98,7 @@ class PostRepository:
             connection = DatabaseConnection()
 
             cursor = connection.start_connection()
-            print(cursor.rowcount)
+
             cursor.execute(
                 queries.LIKE_POST,
                 [
@@ -111,8 +111,6 @@ class PostRepository:
             )
             
             if (cursor.rowcount):
-                print(cursor.lastrowid)
-
                 cursor.execute(
                     queries.INCREMENT_UPVOTE,
                     [
@@ -124,7 +122,6 @@ class PostRepository:
             else:
                 connection.finish_connection()
                 return False
-
                 
         except SQL.IntegrityError:
             return False
@@ -136,23 +133,28 @@ class PostRepository:
             connection = DatabaseConnection()
 
             cursor = connection.start_connection()
+
             cursor.execute(
-                queries.VERIFY_IF_LIKED,
+                queries.UNLIKE_POST,
                 [
-                    user_id,
-                    post_id
+                    str(user_id),
+                    str(post_id)
                 ]
             )
             
-            cursor.execute(
-                queries.DELETE_RELATIONSHIP,
-                [
-                    post_id
-                ]
-            )
-
-            connection.commit_operation()
-            connection.finish_connection()
+            if (cursor.rowcount):
+                cursor.execute(
+                    queries.DECREMENT_UPVOTE,
+                    [
+                        str(post_id)
+                    ]
+                )
+                connection.commit_operation()
+                connection.finish_connection()
+            else:
+                connection.finish_connection()
+                return False
+            
         except SQL.IntegrityError:
             return False
         else: 
