@@ -17,6 +17,6 @@ class EnsureAuthenticated:
                 raise jwt.PyJWKError
 
         except jwt.PyJWTError:
-            return True
+            return False
         else:
             return True
