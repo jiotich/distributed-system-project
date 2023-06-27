@@ -62,7 +62,6 @@ class UserRemoteObject:
 
         if (authed):
             response = self._find_user_controller.handle(
-                username,
                 target_user
             )
             return response

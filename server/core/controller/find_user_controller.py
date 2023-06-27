@@ -1,9 +1,9 @@
 from core.services import FindUserService
 
 class FindUserController:
-    def handle(self, username, target_user):
+    def handle(self, username):
         find_user_service = FindUserService()
-        response = find_user_service.execute(username, target_user)
+        response = find_user_service.execute(username)
         
         if (response):
             return response
