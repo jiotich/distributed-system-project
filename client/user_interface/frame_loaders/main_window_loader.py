@@ -73,15 +73,7 @@ def home(window):
             create_feed_post(window, post[0], post[1], post[2], post[3], post[4], post[5])
 
 def self_profile(window):
-    clear_self_profile(window)
-    window.ui.stackedWidget.setCurrentIndex(1)
-    info = mh.self_profile_click(window, window.username)
-    window.description = info[0]
-    window.ui.textEdit.setText(window.description)
-    posts = info[1]
-    if posts:
-        for post in posts:
-            load_self_profile(window, post[1], post[2], post[3], post[4], post[5])
+    load_self_profile(window)
 
 def publish_page(window):
     window.ui.stackedWidget.setCurrentIndex(3)

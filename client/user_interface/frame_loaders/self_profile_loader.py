@@ -9,7 +9,18 @@ def clear_self_profile(window):
     window.self_post_number = 0
     window.self_profile_likes = []
 
-def load_self_profile(window, description, likes, post_id, is_liked, img_path):
+def load_self_profile(window):
+    clear_self_profile(window)
+    window.ui.stackedWidget.setCurrentIndex(1)
+    info = mh.self_profile_click(window, window.username)
+    window.description = info[0]
+    window.ui.textEdit.setText(window.description)
+    posts = info[1]
+    if posts:
+        for post in posts:
+            load_self_profile_posts(window, post[1], post[2], post[3], post[4], post[5])
+
+def load_self_profile_posts(window, description, likes, post_id, is_liked, img_path):
     current_index = window.self_post_number
     window.self_profile_likes.append([is_liked, likes])
     window.post_frame = QtWidgets.QFrame(window.ui.scrollAreaWidgetContents_3)
@@ -102,7 +113,7 @@ def load_self_profile(window, description, likes, post_id, is_liked, img_path):
     window.comments_button.setStyleSheet("color: rgb(255, 255, 255);")
     window.comments_button.setFlat(True)
     window.comments_button.setObjectName("comments_button")
-    window.comments_button.setText("See Comments")
+    window.comments_button.setText("")
     window.verticalLayout_21.addWidget(window.comments_button)
     window.horizontalLayout_10.addWidget(window.frame_17, 0, QtCore.Qt.AlignLeft)
     window.frame_18 = QtWidgets.QFrame(window.frame_16)

@@ -104,7 +104,7 @@ def create_feed_post(window, username, description, likes, post_id, is_liked, im
     window.comments_button.setStyleSheet("color: rgb(255, 255, 255);")
     window.comments_button.setFlat(True)
     window.comments_button.setObjectName("comments_button")
-    window.comments_button.setText("See Comments")
+    window.comments_button.setText("")
     window.verticalLayout_21.addWidget(window.comments_button)
     window.horizontalLayout_10.addWidget(window.frame_17, 0, QtCore.Qt.AlignLeft)
     window.frame_18 = QtWidgets.QFrame(window.frame_16)

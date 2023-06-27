@@ -1,5 +1,5 @@
 def search_click(window, search):
-    user = window.client.find_user(search)
+    user = window.client.find_user(window.username, search)
     return user
 
 def home_click(window):
@@ -11,7 +11,7 @@ def publish_click(window, image_path, description):
     
 def self_profile_click(window, username):
     posts = window.client.list_posts(username, username)
-    description = window.client.find_user(username)[2]
+    description = window.client.find_user(window.username, username)[2]
     return [description, posts]
 
 def change_user_description(window, username, description):
@@ -19,7 +19,7 @@ def change_user_description(window, username, description):
 
 def profile_click(window, username):
     posts = window.client.list_posts(window.username, username)
-    description = window.client.find_user(username)[2]
+    description = window.client.find_user(window.username, username)[2]
     is_followed = window.client.check_if_follows(window.username, username)
     return [description, is_followed, posts]
 

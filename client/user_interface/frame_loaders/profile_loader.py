@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 from user_interface.main_window import *
+from user_interface.frame_loaders.self_profile_loader import load_self_profile
 import user_interface.event_handlers.main_handler as mh
 
 def clear_profile(window):
@@ -11,6 +12,9 @@ def clear_profile(window):
     window.user_profile_likes = []
 
 def load_profile(window, username):
+    if(username == window.username):
+        load_self_profile(window)
+        return
     clear_profile(window)
     window.ui.profile_username.setText(username)
     window.other_user = username
@@ -127,7 +131,7 @@ def load_profile_post(window, username, description, likes, post_id, is_liked, i
     window.comments_button.setStyleSheet("color: rgb(255, 255, 255);")
     window.comments_button.setFlat(True)
     window.comments_button.setObjectName("comments_button")
-    window.comments_button.setText("See Comments")
+    window.comments_button.setText("")
     window.verticalLayout_21.addWidget(window.comments_button)
     window.horizontalLayout_10.addWidget(window.frame_17, 0, QtCore.Qt.AlignLeft)
     window.frame_18 = QtWidgets.QFrame(window.frame_16)

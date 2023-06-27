@@ -29,13 +29,14 @@ class Client:
         if not response:
             return response
         else:
-            self.token = response['data']
+            self.token = response
             return True
     
-    def find_user(self, username):
+    def find_user(self, username, target_username):
         with Proxy("PYRONAME:user_remote_object") as proxy:
             response = proxy.find_user(
                 username,
+                target_username,
                 self.token
             )
         return response
@@ -65,6 +66,7 @@ class Client:
                 self.token
             )
             followed_id = proxy.find_user(
+                follower_username,
                 followed_username,
                 self.token
             )[0]
