@@ -84,7 +84,7 @@ class UserRemoteObject:
     
     def follow_user(self, followed_username, follower_username, token):
 
-        authed = self._ensure_authenticated.handle(token, followed_username)
+        authed = self._ensure_authenticated.handle(token, follower_username)
 
         if (authed):
             response = self._follow_user_controller.handle(
@@ -124,7 +124,7 @@ class UserRemoteObject:
 
     def remove_user_follower(self, followed_username, follower_username, token):
         
-        authed = self._ensure_authenticated.handle(token, followed_username)
+        authed = self._ensure_authenticated.handle(token, follower_username)
 
         if (authed):
             response = self._remove_follower_controller.handle(
