@@ -15,7 +15,7 @@
     
     source ../imago_env/bin/activate
     
-    Em seguinda execute o comando: make run
+    Em seguinda execute o comando: make server
     Agora o server estará rodando, para fecha-lo basta pressionar ctrl+c
 
 # Client
@@ -25,4 +25,4 @@
     
     source ../imago_env/bin/activate
     
-    Em seguinda execute o comando: make run
+    Em seguinda execute o comando: make client
