@@ -8,6 +8,7 @@ from flask            import jsonify
 from flask            import Flask
 from flask            import request
 from flask_cors       import CORS
+from log              import LogREST
 
 from core.controller  import CreateUserController
 from core.controller  import CreatePostController
@@ -26,6 +27,8 @@ from core.controller  import LikePostController
 from core.controller  import UnlikePostController
 
 from core.middlewares import EnsureAuthenticated
+
+logREST                    = LogREST()
 
 create_user_controller     = CreateUserController()
 create_post_controller     = CreatePostController()
@@ -74,6 +77,17 @@ def register():
             username, 
             password, 
             description
+        )
+        
+        logREST.create(
+            request.remote_addr,
+            username,
+            "GET",
+            "/user/register",
+            200,
+            20,
+            20,
+            0
         )
         
         if (response == status_code.OK):

@@ -23,7 +23,6 @@ class UsernameFilter:
             return False
     
     def _character_filter(self, username: str):
-        print(username)
         for character in self.forbiden_characters:
             for name_character in username:
                 if (character == name_character):
