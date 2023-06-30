@@ -1,0 +1,18 @@
+{
+    "server": {
+        "ip_address": "192.168.0.1",
+        "port": 5006,
+        "debug": "False"
+    },
+    "log-server-connection": {
+        "ip_address": "127.0.0.1",
+        "port": 8080,
+        "routes": {
+            "create_rest_log": "/log/rest/new",
+            "create_rmi_log":  "/log/rmi/new"
+        }
+    },
+    "log-config": {
+        "timezone": "America/Sao_Paulo"
+    }
+}
