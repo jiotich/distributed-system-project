@@ -2,8 +2,8 @@ import datetime
 import pytz
 
 from misc.load_config          import Configs
-from log.log_server_connection import LogServerConnection
 from log.rest_log              import RESTLog
+from external_connection       import LogServerConnection
 
 class Logger:
     def __init__(self):
@@ -14,7 +14,7 @@ class Logger:
         utd_date = datetime.datetime.now(pytz.UTC)
 
         timezone_date = utd_date.astimezone(
-            pytz.timezone(self.config["log-config"]["timezone"])
+            pytz.timezone(self.config["server"]["timezone"])
         )
 
         timezone_shift = timezone_date.strftime('%z')
@@ -49,7 +49,7 @@ class Logger:
             http_status,
         )
         
-        self.log_server_connection.send_rest_log(
+        self.log_server_connection.create_rest_log(
             log
         )
     
