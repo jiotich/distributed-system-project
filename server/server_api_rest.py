@@ -73,8 +73,11 @@ def route_not_found(error):
 @APP.route("/user/register", methods = ["POST"])
 def register():
     if (request.method == "POST"):
+        begin = time.time()
         
+        content_size   = request.headers["Content-Length"]        
         request_parsed = request.get_json() 
+        
         username    = request_parsed["username"]
         password    = request_parsed["password"]
         description = request_parsed["description"]
@@ -85,22 +88,53 @@ def register():
             description
         )
         
-        
-        logger.new_rest_log(
-            request.remote_addr, username, 0, 0, 0, "GET", "/user/register", 200
-        )
-        
         if (response == status_code.OK):
+            
+            logger.new_rest_log(
+                user_ip_address = request.remote_addr, 
+                username        = username, 
+                bytes_sent      = 0, 
+                bytes_received  = content_size,
+                time_spent      = time.time() - begin,
+                http_method     = "POST", 
+                url             = "/user/register", 
+                http_status     = status_code.OK
+            )
+
             return json.dumps({ 
                 "message": "success", "status_code": status_code.OK 
             }), status_code.OK 
             
         elif (response == status_code.UserExists): 
+            
+            logger.new_rest_log(
+                user_ip_address = request.remote_addr, 
+                username        = username, 
+                bytes_sent      = 0, 
+                bytes_received  = content_size,
+                time_spent      = time.time() - begin,
+                http_method     = "POST", 
+                url             = "/user/register", 
+                http_status     = status_code.UserExists
+            )
+            
             return json.dumps({ 
                 "message": "user already exist", "status_code": status_code.UserExists 
             }), status_code.Error
             
         elif (response == status_code.InvalidUsername):
+            
+            logger.new_rest_log(
+                user_ip_address = request.remote_addr, 
+                username        = username, 
+                bytes_sent      = 0, 
+                bytes_received  = content_size,
+                time_spent      = time.time() - begin,
+                http_method     = "POST", 
+                url             = "/user/register", 
+                http_status     = status_code.InvalidUsername
+            )
+            
             return json.dumps({ 
                 "message": "invalid username", "status_code": status_code.InvalidUsername 
             }), status_code.Error
@@ -109,8 +143,11 @@ def register():
 @APP.route("/user/login", methods = ["GET"])
 def login():
     if (request.method == "GET"):
-        username = request.headers["username"]
-        password = request.headers["password"]
+        begin = time.time()
+        
+        content_size = request.headers["Content-Length"]  
+        username     = request.headers["username"]
+        password     = request.headers["password"]
 
         response = auth_user_controller.handle(
             username,
@@ -118,6 +155,18 @@ def login():
         )
 
         if (response):
+            
+            logger.new_rest_log(
+                user_ip_address = request.remote_addr, 
+                username        = username, 
+                bytes_sent      = 0, 
+                bytes_received  = content_size,
+                time_spent      = time.time() - begin,
+                http_method     = "GET", 
+                url             = "/user/login", 
+                http_status     = status_code.OK
+            )
+            
             return json.dumps({
                 "message": "authenticated", 
                 "token": response,

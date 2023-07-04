@@ -5,12 +5,16 @@ from log.rest_log     import RESTLog
 class LogServerConnection:
     def __init__(self):
         self.config = Configs().config
+        
+        self.IP_ADDRESS            = self.config["log-server-connection"]["ip_address"] 
+        self.PORT                  = self.config["log-server-connection"]["port"]
+        
+        self.CREATE_REST_LOG_ROUTE = self.config["log-server-connection"]["routes"]["create_rest_log"]
+        self.CREATE_RMI_LOG_ROUTE  = self.config["log-server-connection"]["routes"]["create_rmi_log"]
 
     def create_rest_log(self, log:RESTLog):
-        # url = self.config["log_server_connection"]["routes"]["create_rest_log"]
         
-        
-        url = "http://127.0.0.1:8080/log/rest/new"
+        url = f"http://{self.IP_ADDRESS}:{self.PORT}{self.CREATE_REST_LOG_ROUTE}"
 
         headers = {
             "Content-Type": "application/json"
@@ -30,10 +34,17 @@ class LogServerConnection:
             "http_status":       log.http_status
         }
 
-        response = requests.post(
-            url=url,
-            json=body,
-            headers=headers
-        )
-
-        print(response.status_code)
+        print("ok")
+        
+        try:
+            response = requests.post(
+                url=url,
+                json=body,
+                headers=headers
+            )
+        except requests.exceptions.ConnectionError:
+            print("deu erro")
+            return None
+        else:
+            print(response.status_code)
+            return None
