@@ -8,7 +8,4 @@ from Pyro5.api import Proxy
 #uri = ns
 
 with Proxy("PYRONAME:user_remote_object") as proxy:
-    print(proxy.test1(2, 2))
-    
-with Proxy("PYRONAME:post_remote_object") as proxy:
-    print(proxy.test2(2, 2))
+    proxy.create_user("blueblee", "aaaa", "aaaaaa")

@@ -17,8 +17,6 @@ class LogServerConnection:
 
     def create_rest_log(self, log:RESTLog):
         
-        # url = f"http://{self.IP_ADDRESS}:{self.PORT}{self.CREATE_REST_LOG_ROUTE}"
-
         url = "http://" + self.IP_ADDRESS + ":" + str(self.PORT) + self.CREATE_REST_LOG_ROUTE
 
         headers = {
@@ -46,15 +44,15 @@ class LogServerConnection:
                 headers=headers
             )
         except requests.exceptions.ConnectionError:
-            print("deu ruim")
-            return None
+            print(f"> REST log failure: {response.status_code}")
+            return True
         else:
-            print(response.status_code)
-            return None
+            print(f"> REST log created: {response.status_code}")
+            return False
         
     def create_rmi_log(self, log:RMILog):
         
-        url = f"http://{self.IP_ADDRESS}:{self.PORT}{self.CREATE_RMI_LOG_ROUTE}"
+        url = "http://" + self.IP_ADDRESS + ":" + str(self.PORT) + self.CREATE_RMI_LOG_ROUTE
 
         headers = {
             "Content-Type": "application/json"
@@ -82,9 +80,8 @@ class LogServerConnection:
                 headers=headers
             )
         except requests.exceptions.ConnectionError:
-            print("aaa")
-            return None
+            print(f"> RMI log failure: {response.status_code}")
+            return True
         else:
-            print(response.status_code)
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            return None
+            print(f"> RMI log created: {response.status_code}")
+            return False

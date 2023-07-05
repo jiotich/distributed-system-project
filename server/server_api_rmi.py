@@ -63,7 +63,7 @@ class UserRemoteObject:
             nameserver      = "nameserver",
             object_name     = self._object_name,
             object_method   = "create_user",
-            response_status = response
+            response_status = "response"
         )
         
         return response
