@@ -3,12 +3,12 @@ sys.dont_write_bytecode = True
 import json
 import time
 
-from misc.status_code import StatusCode
-from misc.load_config import Configs
-
 from flask            import Flask
 from flask            import request
-from log              import Logger
+
+from misc.status_code import StatusCode
+from misc.load_config import Configs
+from log.logger       import Logger
 
 from core.controller  import CreateUserController
 from core.controller  import CreatePostController

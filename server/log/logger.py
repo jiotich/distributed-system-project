@@ -5,11 +5,13 @@ from misc.load_config    import Configs
 from log.rest_log        import RESTLog
 from log.rmi_log         import RMILog
 from external_connection import LogServerConnection
+from thread_pool         import ThreadPool
 
 class Logger:
     def __init__(self):
         self.config = Configs().config
         self.log_server_connection = LogServerConnection()
+        self.thread_pool = ThreadPool()
         
     def _get_timestamp(self):
         utd_date = datetime.datetime.now(pytz.UTC)
@@ -35,23 +37,22 @@ class Logger:
         url,
         http_status
     ):
-        
-        log = RESTLog(
-            self._get_timestamp(),
-            user_ip_address,
-            username,
-            bytes_sent,
-            bytes_received,
-            time_spent,
-            self.config["server"]["ip_address"],
-            self.config["server"]["rest_port"],
-            http_method,
-            url,
-            http_status,
-        )
-        
-        self.log_server_connection.create_rest_log(
-            log
+             
+        self.thread_pool.create_worker_thread(
+            procedure = self.log_server_connection.create_rest_log,
+            data = RESTLog(
+                self._get_timestamp(),
+                user_ip_address,
+                username,
+                bytes_sent,
+                bytes_received,
+                time_spent,
+                self.config["server"]["ip_address"],
+                self.config["server"]["rest_port"],
+                http_method,
+                url,
+                http_status,
+            )
         )
     
     def new_rmi_log(
@@ -67,22 +68,21 @@ class Logger:
         response_status
     ):
         
-        log = RMILog(
-            self._get_timestamp(),
-            user_ip_address,
-            username,
-            bytes_sent,
-            bytes_received,
-            time_spent,
-            self.config["server"]["ip_address"],
-            self.config["server"]["rmi_port"],
-            nameserver,
-            object_name,
-            object_method,
-            response_status
-        )
-        
-        self.log_server_connection.create_rmi_log(
-            log
+        self.thread_pool.create_worker_thread(
+            procedure = self.log_server_connection.create_rmi_log,
+            data = RMILog(
+                self._get_timestamp(),
+                user_ip_address,
+                username,
+                bytes_sent,
+                bytes_received,
+                time_spent,
+                self.config["server"]["ip_address"],
+                self.config["server"]["rmi_port"],
+                nameserver,
+                object_name,
+                object_method,
+                response_status
+            )
         )
         

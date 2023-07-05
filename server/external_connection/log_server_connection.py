@@ -1,4 +1,5 @@
 import requests
+
 from misc.load_config import Configs
 from log.rest_log     import RESTLog
 from log.rmi_log      import RMILog
@@ -16,7 +17,9 @@ class LogServerConnection:
 
     def create_rest_log(self, log:RESTLog):
         
-        url = f"http://{self.IP_ADDRESS}:{self.PORT}{self.CREATE_REST_LOG_ROUTE}"
+        # url = f"http://{self.IP_ADDRESS}:{self.PORT}{self.CREATE_REST_LOG_ROUTE}"
+
+        url = "http://" + self.IP_ADDRESS + ":" + str(self.PORT) + self.CREATE_REST_LOG_ROUTE
 
         headers = {
             "Content-Type": "application/json"
