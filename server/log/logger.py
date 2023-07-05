@@ -1,9 +1,10 @@
 import datetime
 import pytz
 
-from misc.load_config          import Configs
-from log.rest_log              import RESTLog
-from external_connection       import LogServerConnection
+from misc.load_config    import Configs
+from log.rest_log        import RESTLog
+from log.rmi_log         import RMILog
+from external_connection import LogServerConnection
 
 class Logger:
     def __init__(self):
@@ -43,7 +44,7 @@ class Logger:
             bytes_received,
             time_spent,
             self.config["server"]["ip_address"],
-            self.config["server"]["port"],
+            self.config["server"]["rest_port"],
             http_method,
             url,
             http_status,
@@ -53,4 +54,35 @@ class Logger:
             log
         )
     
+    def new_rmi_log(
+        self,
+        user_ip_address,
+        username,
+        bytes_sent,
+        bytes_received,
+        time_spent,
+        nameserver,
+        object_name,
+        object_method,
+        response_status
+    ):
+        
+        log = RMILog(
+            self._get_timestamp(),
+            user_ip_address,
+            username,
+            bytes_sent,
+            bytes_received,
+            time_spent,
+            self.config["server"]["ip_address"],
+            self.config["server"]["rmi_port"],
+            nameserver,
+            object_name,
+            object_method,
+            response_status
+        )
+        
+        self.log_server_connection.create_rmi_log(
+            log
+        )
         
