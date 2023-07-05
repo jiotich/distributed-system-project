@@ -8,3 +8,5 @@ criar uma conexão apenas para utilizar em todas
 
 3 - [] Editar os retornos de modo a formatar o JSON, nao deixando apenas os dados
 formatando de forma a dar um nome para ficar no formato key:value
+
+4 - [] fazer o processo de log sem em outra thread para nao bloquear o retorno
