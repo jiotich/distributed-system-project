@@ -1,6 +1,6 @@
 {
     "server": {
-        "ip_address": "192.168.0.1",
+        "ip_address": "127.0.0.1",
         "rest_port": 8081,
         "rmi_port": 8080,
         "debug": true,

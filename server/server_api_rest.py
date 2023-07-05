@@ -1031,14 +1031,47 @@ def retrieve_feed():
             )
             
             if (isinstance(response, list)):
+                logger.new_rest_log(
+                    user_ip_address = request.remote_addr, 
+                    username        = request.headers["username"], 
+                    bytes_sent      = sys.getsizeof(response), 
+                    bytes_received  = content_size,
+                    time_spent      = time.time() - begin,
+                    http_method     = "GET", 
+                    url             = "/feed/retrieve", 
+                    http_status     = status_code.OK
+                )
+
                 return json.dumps({
                     "message": "success", "data": response, "status_code": status_code.OK
                 }), status_code.OK
             else:
+                logger.new_rest_log(
+                    user_ip_address = request.remote_addr, 
+                    username        = request.headers["username"], 
+                    bytes_sent      = sys.getsizeof(response), 
+                    bytes_received  = content_size,
+                    time_spent      = time.time() - begin,
+                    http_method     = "GET", 
+                    url             = "/feed/retrieve", 
+                    http_status     = status_code.OK
+                )
+
                 return json.dumps({
                     "message": "failed", "data": "", "status_code": status_code.Error
                 }), status_code.Error
     else:
+        logger.new_rest_log(
+            user_ip_address = request.remote_addr, 
+            username        = request.headers["username"], 
+            bytes_sent      = sys.getsizeof(response), 
+            bytes_received  = content_size,
+            time_spent      = time.time() - begin,
+            http_method     = "GET", 
+            url             = "/feed/retrieve", 
+            http_status     = status_code.Unauthorized
+        )
+
         return json.dumps({
             "message": "unauthorized", "status_code": status_code.Unauthorized
         }), status_code.Unauthorized
@@ -1048,8 +1081,9 @@ if (__name__ == "__main__"):
     
     port  = configs.config["server"]["rest_port"]
     debug = configs.config["server"]["debug"] 
+    ip    = configs.config["server"]["ip_address"]
     
-    print(f"> Starting server at http://localhost:{port}")
+    print(f"> Starting server at http://{ip}:{port}")
     
     APP.run(debug=debug, port=port)
     
