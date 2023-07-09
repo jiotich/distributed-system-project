@@ -15,7 +15,7 @@
     
     source ../imago_env/bin/activate
     
-    Em seguinda execute o comando: make server
+    Em seguida execute o comando: make server
     Agora o server estará rodando, para fecha-lo basta pressionar ctrl+c
 
 # Server API
@@ -25,7 +25,7 @@
     
     source ../imago_env/bin/activate
     
-    Em seguinda execute o comando: make api
+    Em seguida execute o comando: make api
     Agora o server de logs estará rodando, para fecha-lo basta pressionar ctrl+c
 
 # Client
@@ -35,4 +35,4 @@
     
     source ../imago_env/bin/activate
     
-    Em seguinda execute o comando: make client
+    Em seguida execute o comando: make client
