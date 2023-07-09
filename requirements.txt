@@ -1,0 +1,9 @@
+passlib==1.7.4 
+pyjwt==2.7.0
+flask==2.3.2
+flask_jwt_extended==4.5.2
+flask_cors==3.0.10
+Pyro5==5.14
+PyQt5==5.15.6
+pytz==2023.3
+requests==2.31.0
