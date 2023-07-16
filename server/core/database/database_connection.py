@@ -1,7 +1,8 @@
 import sqlite3 as SQL
+import os
 
 class DatabaseConnection:
-    def __init__(self, database="./core/database/database.db"):
+    def __init__(self, database= os.getcwd() + "/core/database/database.db"):
         self._database = database
         self._connection = None
         

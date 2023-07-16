@@ -1,0 +1,21 @@
+TESTADAS
+
+/user/get
+    realizei mudanças na parte de retornar os dados do usuári
+    mdifiquei de forma a nao retornar mais o hash da senha
+    pois era uma falha de segurança
+
+
+NAO TESTADAS 
+
+/post/new
+
+/post/list
+
+/post/like
+
+/post/unlike
+
+/post/coment
+
+/feed/retrieve

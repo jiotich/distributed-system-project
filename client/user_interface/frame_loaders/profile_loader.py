@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
 from user_interface.main_window import *
+from user_interface.frame_loaders.self_profile_loader import load_self_profile
 import user_interface.event_handlers.main_handler as mh
 
 def clear_profile(window):
@@ -11,6 +12,9 @@ def clear_profile(window):
     window.user_profile_likes = []
 
 def load_profile(window, username):
+    if(username == window.username):
+        load_self_profile(window)
+        return
     clear_profile(window)
     window.ui.profile_username.setText(username)
     window.other_user = username
@@ -30,8 +34,9 @@ def load_profile(window, username):
         icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         window.ui.add_button.setIcon(icon)
         window.ui.add_button.setText("Follow")
-    for post in posts:
-        load_profile_post(window, window.other_user, post[1], post[2], "1", False, post[3])
+    if posts:
+        for post in posts:
+            load_profile_post(window, window.other_user, post[1], post[2], post[3], post[4], post[5])
         
 def load_profile_post(window, username, description, likes, post_id, is_liked, img_path):
     current_index = window.user_post_number
@@ -126,7 +131,7 @@ def load_profile_post(window, username, description, likes, post_id, is_liked, i
     window.comments_button.setStyleSheet("color: rgb(255, 255, 255);")
     window.comments_button.setFlat(True)
     window.comments_button.setObjectName("comments_button")
-    window.comments_button.setText("See Comments")
+    window.comments_button.setText("")
     window.verticalLayout_21.addWidget(window.comments_button)
     window.horizontalLayout_10.addWidget(window.frame_17, 0, QtCore.Qt.AlignLeft)
     window.frame_18 = QtWidgets.QFrame(window.frame_16)
@@ -169,12 +174,12 @@ def load_profile_post(window, username, description, likes, post_id, is_liked, i
 
 def follow(window, username):
     if(window.is_followed):
-        #mh.unfollow_user(window.username, username)
-        #window.is_followed = False
-        #icon = QtGui.QIcon()
-        #icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #window.ui.add_button.setIcon(icon)
-        #window.ui.add_button.setText("Follow")
+        mh.unfollow_user(window, username)
+        window.is_followed = False
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/images/images/user-add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        window.ui.add_button.setIcon(icon)
+        window.ui.add_button.setText("Follow")
         pass
     else:
         mh.follow_user(window, username)
@@ -190,13 +195,13 @@ def user_profile_like_button(window, index, current_like_button, post_id):
     icon2 = QtGui.QIcon()
     icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     if(window.user_profile_likes[index][0]):
-        mh.unliked_post(window.username, post_id)
+        mh.unliked_post(window, window.username, post_id)
         window.user_profile_likes[index][0] = False
         current_like_button.setIcon(icon1)
         window.user_profile_likes[index][1] -= 1
         current_like_button.setText(str(window.user_profile_likes[index][1]))
     else:
-        mh.liked_post(window.username, post_id)
+        mh.liked_post(window, window.username, post_id)
         window.user_profile_likes[index][0] = True
         current_like_button.setIcon(icon2)
         window.user_profile_likes[index][1] += 1

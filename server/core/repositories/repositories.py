@@ -3,6 +3,7 @@ import sqlite3 as SQL
 from core.entities import Post
 from core.entities import User
 from core.entities import Relationship
+from core.entities import PostComentary
 
 from core.database import DatabaseConnection
 from core.database import queries
@@ -46,7 +47,7 @@ class PostRepository:
         else: 
             return True
 
-    def find(self, user_id):
+    def find(self, caller_user_id, target_user_id):
         try:
             connection = DatabaseConnection()
         
@@ -54,22 +55,111 @@ class PostRepository:
             cursor.execute(
                 queries.FETCH_POSTS, 
                 [
-                    str(user_id)
+                    str(caller_user_id),
+                    str(target_user_id)
                 ]
             )
             connection.commit_operation()
             
             retrived_data = cursor.fetchall()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
         else:
-            if (len(retrived_data) == 0):
-                return False
+            return retrived_data
+    
+    def coment(self, comentary: PostComentary):
+        try:
+            connection = DatabaseConnection()
+
+            cursor = connection.start_connection()
+            cursor.execute(
+                queries.CREATE_COMENTARY,
+                [
+                    comentary.id,
+                    comentary.post_id,
+                    comentary.user_id,
+                    comentary.created_date,
+                    comentary.created_time,
+                    comentary.content
+                ]
+            )
+
+            connection.commit_operation()
+            connection.finish_connection()
+
+        except SQL.IntegrityError:
+            return False
+        else:
+            return True
+
+    def like(self, id, user_id, post_id):
+        try:
+            connection = DatabaseConnection()
+
+            cursor = connection.start_connection()
+
+            cursor.execute(
+                queries.LIKE_POST,
+                [
+                    str(id),
+                    str(post_id),
+                    str(user_id),
+                    str(post_id),
+                    str(user_id)
+                ]
+            )
+            
+            if (cursor.rowcount):
+                cursor.execute(
+                    queries.INCREMENT_UPVOTE,
+                    [
+                        str(post_id)
+                    ]
+                )
+                connection.commit_operation()
+                connection.finish_connection()
             else:
-                return retrived_data
+                connection.finish_connection()
+                raise SQL.IntegrityError
+                
+        except SQL.IntegrityError:
+            return False
+        else: 
+            return True
         
+    def unlike(self, user_id, post_id):
+        try:
+            connection = DatabaseConnection()
+
+            cursor = connection.start_connection()
+
+            cursor.execute(
+                queries.UNLIKE_POST,
+                [
+                    str(user_id),
+                    str(post_id)
+                ]
+            )
+            
+            if (cursor.rowcount):
+                cursor.execute(
+                    queries.DECREMENT_UPVOTE,
+                    [
+                        str(post_id)
+                    ]
+                )
+                connection.commit_operation()
+                connection.finish_connection()
+            else:
+                connection.finish_connection()
+                raise SQL.IntegrityError
+            
+        except SQL.IntegrityError:
+            return False
+        else: 
+            return True
+
 class UserRepository:
     def find_one(self, username):
         try:
@@ -82,11 +172,11 @@ class UserRepository:
                     str(username)
                 ]
             )
-            connection.commit_operation()
             
+            connection.commit_operation()
             retrived_data = cursor.fetchone()
-
             connection.finish_connection()
+            
         except SQL.IntegrityError:
             return False
         else:
@@ -108,29 +198,26 @@ class UserRepository:
             )
 
             connection.commit_operation()
-
             connection.finish_connection()
+
         except SQL.IntegrityError:
             return False
         else:
             return True
     
-    def update(self, user_id, column, new_value):
+    def update(self, user_id, new_value):
         try:
             connection = DatabaseConnection()
-        
             cursor = connection.start_connection()
             cursor.execute(
                 queries.UPDATE_USER_COLUMNS, 
                 [
-                    str(column), 
                     str(new_value), 
                     str(user_id),
                 ]
             )
 
             connection.commit_operation()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
@@ -160,54 +247,70 @@ class RelationshipRepository:
         else:
             return True
         
-    def find(self, user_id):
+    def list_followers(self, followed_id):
         try:
             connection = DatabaseConnection()
         
             cursor = connection.start_connection()
             
             cursor.execute(
-                queries.FETCH_RELATIONSHIPS, 
+                queries.LIST_FOLLOWERS, 
                 [
-                    str(user_id)
+                    str(followed_id),
                 ]
             )
             
             connection.commit_operation()
-            
             retrived_data = cursor.fetchall()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
         else:
             return retrived_data
-        
-    def findfollowed(self, follower_id, followed_id):
+
+    def list_followeds(self, follower_id):
         try:
             connection = DatabaseConnection()
         
             cursor = connection.start_connection()
             
             cursor.execute(
-                queries.VERIFY_IF_FOLLOW, 
+                queries.LIST_FOLLOWEDS, 
                 [
                     str(follower_id),
-                    str(followed_id)
-                    
                 ]
             )
             
             connection.commit_operation()
-            
             retrived_data = cursor.fetchall()
-
             connection.finish_connection()
         except SQL.IntegrityError:
             return False
         else:
             return retrived_data
-    
+
+    def find(self, follower_id, followed_id):
+        try:
+            connection = DatabaseConnection()
+        
+            cursor = connection.start_connection()
+            
+            cursor.execute(
+                queries.VERIFY_ALREADY_FOLLOW, 
+                [
+                    str(followed_id),
+                    str(follower_id)
+                ]
+            )
+            
+            connection.commit_operation()
+            retrived_data = cursor.fetchall()
+            connection.finish_connection()
+        except SQL.IntegrityError:
+            return False
+        else:
+            return retrived_data
+        
     def delete(self, followed_id, follower_id):
         try:
             connection = DatabaseConnection()
@@ -215,7 +318,7 @@ class RelationshipRepository:
             cursor = connection.start_connection()
             
             cursor.execute(
-                queries.REMOVE_FOLLOWER, 
+                queries.DELETE_RELATIONSHIP, 
                 [
                     str(followed_id),
                     str(follower_id)

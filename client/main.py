@@ -58,8 +58,8 @@ class Window(QMainWindow):
             self.ui.login_username.setText("")
             self.ui.login_password.setText("")
             return
-        lh.login_clicked(self, username, password)
-        if (self.client.token != None):
+        response = lh.login_clicked(self, username, password)
+        if (response):
             self.username = username
             change_to_main_window(self)
         else:
@@ -77,14 +77,19 @@ class Window(QMainWindow):
         if (password != password_confirmation):
             self.pop_up("Password confirmation error.        ")
             return
-        lh.signin_clicked(self, username, password)
+        response = lh.signin_clicked(self, username, password)
+        print(response)
+        if response:
+            self.pop_up("User created.                         ")
+        else:
+            self.pop_up("This user already exists.             ")
 
     def pop_up(self, message):
         msg = QMessageBox(parent=self)
         msg.setWindowTitle("Message")
         msg.setText(message)
         msg.setIcon(QMessageBox.Warning)
-        msg.setStyleSheet("background-color: rgb(21, 21, 21);")
+        msg.setStyleSheet("background-color: rgb(21, 21, 21); color: rgb(255, 255, 255);")
         msg.exec()
 
 if __name__ == "__main__":

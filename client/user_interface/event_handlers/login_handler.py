@@ -1,14 +1,6 @@
 def login_clicked(window, username, password):
-    print("Login: ",username," ",password)
-    window.client.login(username, password)
-    #FAZ REQUISIÇÃO DE LOGIN
-    #ABAIXO UM PLACEHOLDER
-    #if (username == "admin" and password == "admin"):
-        #return True
-    #else:
-        #return False
+    return window.client.auth_user(username, password)
+    
 
 def signin_clicked(window, username, password):
-    window.client.register_user(username, password)
-    print("SignIn: ",username," ",password)
-    #FAZ REQUISIÇÃO DE REGISTRAR CONTA
+    return window.client.create_user(username, password)

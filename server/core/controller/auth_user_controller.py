@@ -1,5 +1,3 @@
-import json
-
 from core.services import AuthUserService
 
 class AuthUserController:
@@ -8,8 +6,6 @@ class AuthUserController:
         response = authUserService.execute(username, password)
         
         if (response):
-            print(response)
-            return json.dumps({"status_code": "200", "token": f"{response}"})
-
+            return response
         else:
-            return json.dumps({"status_code": "400", "token": "-1"})
+            return False

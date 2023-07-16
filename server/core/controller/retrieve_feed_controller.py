@@ -1,4 +1,3 @@
-import json
 from core.services import RetrieveFeedService
 
 class RetrieveFeedController:
@@ -6,7 +5,7 @@ class RetrieveFeedController:
         retrieve_feed_service = RetrieveFeedService()
         response = retrieve_feed_service.execute(username, posts_limit)
         
-        if (response):
-            return json.dumps({"data": response, "status_code": "200"})
+        if (isinstance(response, list)):
+            return response
         else:
-            return json.dumps({"data": "", "status_code": "400"})
+            return False

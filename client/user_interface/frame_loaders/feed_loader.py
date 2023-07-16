@@ -61,7 +61,6 @@ def create_feed_post(window, username, description, likes, post_id, is_liked, im
     window.post_image_frame.setMaximumSize(QtCore.QSize(16777215, 800))
     window.post_image_frame.setLayoutDirection(QtCore.Qt.LeftToRight)
     window.post_image_frame.setStyleSheet("image: url("+img_path+");")
-    #TODO: APAGAR A IMAGEM
     window.post_image_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
     window.post_image_frame.setFrameShadow(QtWidgets.QFrame.Raised)
     window.post_image_frame.setObjectName("post_image_frame")
@@ -105,7 +104,7 @@ def create_feed_post(window, username, description, likes, post_id, is_liked, im
     window.comments_button.setStyleSheet("color: rgb(255, 255, 255);")
     window.comments_button.setFlat(True)
     window.comments_button.setObjectName("comments_button")
-    window.comments_button.setText("See Comments")
+    window.comments_button.setText("")
     window.verticalLayout_21.addWidget(window.comments_button)
     window.horizontalLayout_10.addWidget(window.frame_17, 0, QtCore.Qt.AlignLeft)
     window.frame_18 = QtWidgets.QFrame(window.frame_16)
@@ -159,13 +158,13 @@ def feed_like_button(window, index, current_like_button, post_id):
     icon2 = QtGui.QIcon()
     icon2.addPixmap(QtGui.QPixmap(":/images/images/filled-heart.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
     if(window.feed_likes[index][0]):
-        mh.unliked_post(window.username, post_id)
+        mh.unliked_post(window, window.username, post_id)
         window.feed_likes[index][0] = False
         current_like_button.setIcon(icon1)
         window.feed_likes[index][1] -= 1
         current_like_button.setText(str(window.feed_likes[index][1]))
     else:
-        mh.liked_post(window.username, post_id)
+        mh.liked_post(window, window.username, post_id)
         window.feed_likes[index][0] = True
         current_like_button.setIcon(icon2)
         window.feed_likes[index][1] += 1

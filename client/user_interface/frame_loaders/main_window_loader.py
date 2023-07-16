@@ -43,6 +43,8 @@ def change_to_main_window(window):
     window.ui.cancel_edit_button.clicked.connect(lambda: cancel_edit(window))
     #User follow button
     window.ui.add_button.clicked.connect(lambda: follow(window, window.other_user))
+    window.ui.select_image_button.clicked.connect(lambda: open_browser(window))
+    window.ui.publish_button.clicked.connect(lambda: post_button(window))
     window.ui.textEdit.setReadOnly(True)
     window.main_window.show()
     home(window)
@@ -66,18 +68,12 @@ def home(window):
     clear_feed(window)
     window.ui.stackedWidget.setCurrentIndex(0)
     posts = mh.home_click(window)
-    for post in posts:
-        create_feed_post(window, post[0], post[1], post[2], "1", False, post[3])
+    if posts:
+        for post in posts:
+            create_feed_post(window, post[0], post[1], post[2], post[3], post[4], post[5])
 
 def self_profile(window):
-    clear_self_profile(window)
-    window.ui.stackedWidget.setCurrentIndex(1)
-    info = mh.self_profile_click(window, window.username)
-    window.description = info[0]
-    window.ui.textEdit.setText(window.description)
-    posts = info[1]
-    for post in posts:
-        load_self_profile(window, post[1], post[2], "1", False, post[3])
+    load_self_profile(window)
 
 def publish_page(window):
     window.ui.stackedWidget.setCurrentIndex(3)
